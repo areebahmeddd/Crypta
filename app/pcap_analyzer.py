@@ -4,7 +4,7 @@ import pandas as pd
 import os
 from typing import List, Dict, Any
 
-def analyze_pcap(pcap_file: str, output_dir: str) -> int:
+def scan_pcap(pcap_file: str, output_dir: str) -> int:
     """
     Analyzes a PCAP file and categorizes network packets into various protocols.
     Saves the analysis results into Excel and CSV files in the specified output directory.

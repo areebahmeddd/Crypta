@@ -63,6 +63,3 @@ def parse_log(line, pattern):
             content = match.group(3)
         return component, content
     return None, None
-
-if __name__ == '__main__':
-    scan_logs(r'yara-rules\error.yar', r'logs\system\windows.log', 'report.csv') # Change the log file path (windows.log or mac.log or linux.log)
