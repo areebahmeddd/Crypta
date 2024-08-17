@@ -1,11 +1,12 @@
 import yara
 import re
+import os
 import csv
 
 # Define log patterns for different operating systems
 WINDOWS_LOG_PATTERN = r'(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}:\d{2}), (\w+)\s+(\w+)\s+(.*)'
-MAC_LOG_PATTERN = r'(\w+ \d+ \d{2} \d{2}:\d{2}:\d{2}) [\w.-]+ (\w+)\[\d+\]: (.*)'
-LINUX_LOG_PATTERN = r'(\w+ \d+ \d{2} \d{2}:\d{2}:\d{2}) [\w-]+ ([\w\(\)]+): (.*)'
+MAC_LOG_PATTERN = r'(\w{3}\s+\d+\s+\d{2}:\d{2}:\d{2})\s+[\w.-]+\s+([\w.-]+)\[\d+\]:\s+(.*)'
+LINUX_LOG_PATTERN = r'(\w{3}\s+\d+\s+\d{2}:\d{2}:\d{2})\s+[\w.-]+\s+([\w().-]+)\[\d+\]:\s+(.*)'
 
 LOG_PATTERNS = {
     'windows': WINDOWS_LOG_PATTERN,
@@ -13,39 +14,53 @@ LOG_PATTERNS = {
     'linux': LINUX_LOG_PATTERN
 }
 
-def scan_log(rules_path, file_path, output_path):
-    # Compares log file against YARA rules
+def scan_log(rules_path, path):
+    # Compare log files against YARA rules
     rules = yara.compile(filepath=rules_path)
 
-    # Read first 10 lines of log file to detect log type
-    with open(file_path, 'r') as log_file:
-        sample_lines = [
-            log_file.readline()
-            for _ in range(10)
-        ]
+    if os.path.isdir(path):
+        # If path is a directory, process each log file in the folder
+        for log_filename in os.listdir(path):
+            log_filepath = os.path.join(path, log_filename)
+            if os.path.isfile(log_filepath):
+                process_log(rules, log_filepath)
+    elif os.path.isfile(path):
+        # If path is a single file, process that file
+        process_log(rules, path)
+    else:
+        print(f"The path '{path}' is not a valid file or directory.")
 
+def process_log(rules, log_filepath):
+    with open(log_filepath, 'r') as log_file:
+        # Read first 10 lines to detect log type
+        sample_lines = [log_file.readline() for _ in range(10)]
         detected_log_type = log_type(sample_lines)
+
         if detected_log_type is None:
-            print(f"Unable to detect log type for file '{file_path}'.")
+            print(f"Unable to detect log type for file '{log_filepath}'.")
             return
 
+        # Define log pattern and output filename based on detected log type
         pattern = LOG_PATTERNS[detected_log_type]
+        output_filename = f'{detected_log_type}_log.csv'
+        output_filepath = os.path.join(os.getcwd(), output_filename)
 
-        # Write results to CSV file with rule, component, and content columns
-        with open(output_path, 'w', newline='') as file:
+        with open(output_filepath, 'w', newline='') as file:
             csv_writer = csv.writer(file)
             csv_writer.writerow(['Rule', 'Component', 'Content'])
 
-            # Scan log file for matches with YARA rules
+            # Reset file pointer and scan log file against YARA rules
             log_file.seek(0)
             for line in log_file:
                 matches = rules.match(data=line)
+                # Write yara rule, component and content to csv file
                 if matches:
                     component, content = parse_log(line, pattern)
                     if component and content:
                         triggered_rules = ", ".join([match.rule for match in matches])
                         csv_writer.writerow([triggered_rules, component, content])
-            print(f"Log scan complete. Results saved to '{output_path}'.")
+
+        print(f"Log scan complete for '{os.path.basename(log_filepath)}'. Results saved to '{output_filepath}'.")
 
 def log_type(lines):
     # Check if log lines match any of the known log patterns

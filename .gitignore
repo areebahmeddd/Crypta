@@ -4,5 +4,5 @@ __pycache__/
 .env
 
 # Output related
-log_report.csv
-network_report/
+*.csv
+*_report/

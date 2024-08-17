@@ -3,26 +3,43 @@ import pandas as pd
 from scapy.all import rdpcap, Dot11, IP, TCP, UDP, DNS, ARP, ICMP, BOOTP, DHCP, SNMP, Ether
 from scapy.layers.http import HTTPRequest
 
-def scan_pcap(file_path, output_directory):
-    # Read packets from pcap file
-    packets = rdpcap(file_path)
+def scan_pcap(path):
+    if os.path.isdir(path):
+        # If path is a directory, process each pcap file in the folder
+        for file in os.listdir(path):
+            file_path = os.path.join(path, file)
+            output_directory = os.path.join(os.getcwd(), f'{os.path.splitext(file)[0]}_report')
+            packets = rdpcap(file_path)
+            processed_data = process_packet(packets)
+            save_result(processed_data, output_directory)
+    elif os.path.isfile(path):
+        # If path is a single file, process that file
+        output_directory = os.path.join(os.getcwd(), f'{os.path.splitext(os.path.basename(path))[0]}_report')
+        packets = rdpcap(path)
+        processed_data = process_packet(packets)
+        save_result(processed_data, output_directory)
+    else:
+        print(f"The path '{path}' is not a valid file or directory.")
 
-    # Initialize lists to store data for each protocol
-    control_frames = []
-    management_frames = []
-    http_requests = []
-    dns_queries = []
-    tcp_packets = []
-    udp_packets = []
-    arp_packets = []
-    icmp_packets = []
-    dhcp_packets = []
-    snmp_packets = []
-    ftp_packets = []
+def process_packet(packets):
+    # Initialize data dictionary
+    data = {
+        'Control Frames': [],
+        'Management Frames': [],
+        'HTTP Requests': [],
+        'DNS Queries': [],
+        'TCP Packets': [],
+        'UDP Packets': [],
+        'ARP Packets': [],
+        'ICMP Packets': [],
+        'DHCP Packets': [],
+        'SNMP Packets': [],
+        'FTP Packets': []
+    }
 
-    # Check each packet for supported protocols
+    # Process each packet in the pcap file
     for packet in packets:
-        # Check for 802.11 frame
+        # Dot11 Frame
         if packet.haslayer(Dot11):
             frame_data = {
                 'Frame Type': 'Unknown',
@@ -32,15 +49,15 @@ def scan_pcap(file_path, output_directory):
                 'Summary': packet.summary()
             }
 
+            # Determine frame type based on Dot11 subtype
             if packet.type == 0:
                 frame_data['Frame Type'] = 'Management'
-                management_frames.append(frame_data)
-
+                data['Management Frames'].append(frame_data)
             elif packet.type == 1:
                 frame_data['Frame Type'] = 'Control'
-                control_frames.append(frame_data)
+                data['Control Frames'].append(frame_data)
 
-        # Check for HTTP request
+        # HTTP Request
         if packet.haslayer(HTTPRequest):
             http_data = {
                 'Source IP': packet[IP].src,
@@ -50,9 +67,9 @@ def scan_pcap(file_path, output_directory):
                 'Path': packet[HTTPRequest].Path.decode(),
                 'Summary': packet.summary()
             }
-            http_requests.append(http_data)
+            data['HTTP Requests'].append(http_data)
 
-        # Check for DNS query packet
+        # DNS Query
         if packet.haslayer(DNS) and packet.haslayer(UDP):
             dns_data = {
                 'Source IP': packet[IP].src,
@@ -60,9 +77,9 @@ def scan_pcap(file_path, output_directory):
                 'Query Name': packet[DNS].qd.qname.decode() if packet[DNS].qd else None,
                 'Summary': packet.summary()
             }
-            dns_queries.append(dns_data)
+            data['DNS Queries'].append(dns_data)
 
-        # Check for TCP packet
+        # TCP Packet
         if packet.haslayer(TCP):
             tcp_data = {
                 'Source IP': packet[IP].src,
@@ -72,9 +89,9 @@ def scan_pcap(file_path, output_directory):
                 'Flags': packet[TCP].flags,
                 'Summary': packet.summary()
             }
-            tcp_packets.append(tcp_data)
+            data['TCP Packets'].append(tcp_data)
 
-        # Check for UDP packet
+        # UDP Packet
         if packet.haslayer(UDP) and not packet.haslayer(DNS):
             udp_data = {
                 'Source IP': packet[IP].src,
@@ -83,9 +100,9 @@ def scan_pcap(file_path, output_directory):
                 'Destination Port': packet[UDP].dport,
                 'Summary': packet.summary()
             }
-            udp_packets.append(udp_data)
+            data['UDP Packets'].append(udp_data)
 
-        # Check for ARP packet
+        # ARP Packet
         if packet.haslayer(ARP):
             arp_data = {
                 'Source IP': packet[ARP].psrc,
@@ -95,9 +112,9 @@ def scan_pcap(file_path, output_directory):
                 'Operation': packet[ARP].op,
                 'Summary': packet.summary()
             }
-            arp_packets.append(arp_data)
+            data['ARP Packets'].append(arp_data)
 
-        # Check for ICMP packet
+        # ICMP Packet
         if packet.haslayer(ICMP):
             icmp_data = {
                 'Source IP': packet[IP].src,
@@ -106,9 +123,9 @@ def scan_pcap(file_path, output_directory):
                 'Code': packet[ICMP].code,
                 'Summary': packet.summary()
             }
-            icmp_packets.append(icmp_data)
+            data['ICMP Packets'].append(icmp_data)
 
-        # Check for DHCP packet
+        # DHCP Packet
         if packet.haslayer(DHCP):
             dhcp_data = {
                 'Source MAC': packet[Ether].src,
@@ -120,9 +137,9 @@ def scan_pcap(file_path, output_directory):
                 'Gateway IP': packet[BOOTP].giaddr,
                 'Summary': packet.summary()
             }
-            dhcp_packets.append(dhcp_data)
+            data['DHCP Packets'].append(dhcp_data)
 
-        # Check for SNMP packet
+        # SNMP Packet
         if packet.haslayer(SNMP):
             snmp_data = {
                 'Source IP': packet[IP].src,
@@ -131,9 +148,9 @@ def scan_pcap(file_path, output_directory):
                 'PDU Type': packet[SNMP].PDU,
                 'Summary': packet.summary()
             }
-            snmp_packets.append(snmp_data)
+            data['SNMP Packets'].append(snmp_data)
 
-        # Check for FTP packet
+        # FTP Packet
         if packet.haslayer(TCP) and (packet[TCP].dport == 21 or packet[TCP].sport == 21):
             ftp_data = {
                 'Source IP': packet[IP].src,
@@ -143,50 +160,20 @@ def scan_pcap(file_path, output_directory):
                 'Flags': packet[TCP].flags,
                 'Summary': packet.summary()
             }
-            ftp_packets.append(ftp_data)
+            data['FTP Packets'].append(ftp_data)
 
-    # Create dataframes from collected data
-    df_control = pd.DataFrame(control_frames)
-    df_management = pd.DataFrame(management_frames)
-    df_http = pd.DataFrame(http_requests)
-    df_dns = pd.DataFrame(dns_queries)
-    df_tcp = pd.DataFrame(tcp_packets)
-    df_udp = pd.DataFrame(udp_packets)
-    df_arp = pd.DataFrame(arp_packets)
-    df_icmp = pd.DataFrame(icmp_packets)
-    df_dhcp = pd.DataFrame(dhcp_packets)
-    df_snmp = pd.DataFrame(snmp_packets)
-    df_ftp = pd.DataFrame(ftp_packets)
+    return data
 
-    # Save dataframes to Excel and CSV files
+def save_result(protocols, output_directory):
+    # Create output directory if it doesn't exist
     os.makedirs(output_directory, exist_ok=True)
-    excel_path = os.path.join(output_directory, 'network_protocols_analysis.xlsx')
-
+    excel_path = os.path.join(output_directory, 'network_traffic_summary.xlsx')
     with pd.ExcelWriter(excel_path) as writer:
-        # Write each dataframe to a separate sheet in the Excel file
-        df_control.to_excel(writer, sheet_name='Control Frames', index=False)
-        df_management.to_excel(writer, sheet_name='Management Frames', index=False)
-        df_http.to_excel(writer, sheet_name='HTTP Requests', index=False)
-        df_dns.to_excel(writer, sheet_name='DNS Queries', index=False)
-        df_tcp.to_excel(writer, sheet_name='TCP Packets', index=False)
-        df_udp.to_excel(writer, sheet_name='UDP Packets', index=False)
-        df_arp.to_excel(writer, sheet_name='ARP Packets', index=False)
-        df_icmp.to_excel(writer, sheet_name='ICMP Packets', index=False)
-        df_dhcp.to_excel(writer, sheet_name='DHCP Packets', index=False)
-        df_snmp.to_excel(writer, sheet_name='SNMP Packets', index=False)
-        df_ftp.to_excel(writer, sheet_name='FTP Packets', index=False)
+        # Save each protocol data to separate sheets in Excel file and CSV files
+        for name, entries in protocols.items():
+            if entries:
+                df = pd.DataFrame(entries)
+                df.to_excel(writer, sheet_name=name, index=False)
+                df.to_csv(os.path.join(output_directory, f'{name.lower().replace(" ", "_")}.csv'), index=False)
 
-    # Save dataframes to CSV files
-    df_control.to_csv(os.path.join(output_directory, 'control_frames.csv'), index=False)
-    df_management.to_csv(os.path.join(output_directory, 'management_frames.csv'), index=False)
-    df_http.to_csv(os.path.join(output_directory, 'http_requests.csv'), index=False)
-    df_dns.to_csv(os.path.join(output_directory, 'dns_queries.csv'), index=False)
-    df_tcp.to_csv(os.path.join(output_directory, 'tcp_packets.csv'), index=False)
-    df_udp.to_csv(os.path.join(output_directory, 'udp_packets.csv'), index=False)
-    df_arp.to_csv(os.path.join(output_directory, 'arp_packets.csv'), index=False)
-    df_icmp.to_csv(os.path.join(output_directory, 'icmp_packets.csv'), index=False)
-    df_dhcp.to_csv(os.path.join(output_directory, 'dhcp_packets.csv'), index=False)
-    df_snmp.to_csv(os.path.join(output_directory, 'snmp_packets.csv'), index=False)
-    df_ftp.to_csv(os.path.join(output_directory, 'ftp_packets.csv'), index=False)
-
-    print(f"Network scan complete. Results saved to '{output_directory}'.")
+    print(f"Network scan complete for '{os.path.basename(output_directory)}'. Results saved to '{output_directory}'.")
