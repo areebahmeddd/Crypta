@@ -1,7 +1,7 @@
 rule GeneralLogError {
     meta:
-        author = "Avantika"
-        description = "Detect general errors in the log file that might indicate issues or potential security incidents."
+        author = "Avantika Kesarwani"
+        description = "Detect general errors in the log file that might indicate issues or potential security incidents"
 
     strings:
         $warning = "Warning"
@@ -14,8 +14,8 @@ rule GeneralLogError {
 
 rule SoftwareQualityMetrics {
     meta:
-        author = "Avantika"
-        description = "Detection of unexpected SQM activity, which might indicate network issues or interference by malware."
+        author = "Avantika Kesarwani"
+        description = "Detection of unexpected SQM activity, which might indicate network issues or interference by malware"
 
     strings:
         $sqm_fail = "Failed to start upload"
@@ -27,13 +27,12 @@ rule SoftwareQualityMetrics {
 
 rule NTTransactionCreation {
     meta:
-        author = "Avantika"
-        description = "Detect the creation of NT transactions, which could be related to system modifications."
+        author = "Avantika Kesarwani"
+        description = "Detect the creation of NT transactions, which could be related to system modifications"
 
     strings:
         $transaction_create = "Creating NT transaction"
-        $transaction_result = "Created NT transaction"
 
     condition:
-        $transaction_create or $transaction_result
+        $transaction_create
 }
