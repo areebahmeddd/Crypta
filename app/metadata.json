@@ -1,26 +1,24 @@
 {
   "file_types": {
-    "text": [".txt", ".csv", ".log", ".xml", ".json", ".html", ".htm"],
+    "text": [".csv", ".html", ".htm", ".json", ".log", ".txt", ".xml"],
     "binary": [
-      ".exe",
-      ".dll",
-      ".bin",
-      ".dat",
-      ".iso",
-      ".png",
-      ".jpg",
-      ".jpeg",
-      ".gif",
       ".bmp",
-      ".tiff",
-      ".tif",
-      ".raw",
+      ".bin",
       ".dd",
+      ".dat",
       ".dmp",
-      ".mem"
+      ".gif",
+      ".iso",
+      ".jpeg",
+      ".jpg",
+      ".mem",
+      ".png",
+      ".raw",
+      ".tif",
+      ".tiff"
     ],
-    "script": [".sh", ".bat", ".py", ".js", ".pl"],
-    "database": [".sqlite", ".db"],
+    "script": [".bat", ".js", ".pl", ".py", ".sh"],
+    "database": [".db", ".sqlite"],
     "config": [".cfg", ".ini"]
   },
   "log_patterns": {

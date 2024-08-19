@@ -17,19 +17,20 @@ def process_packet(packets):
         'Control Frames': [],
         'HTTP Requests': [],
         'DNS Queries': [],
+        'ARP Packets': [],
+        'DHCP Packets': [],
         'TCP Packets': [],
         'FTP Packets': [],
         'UDP Packets': [],
-        'ARP Packets': [],
         'ICMP Packets': [],
-        'DHCP Packets': [],
         'SNMP Packets': []
     }
 
     # Process each packet in the pcap file and extract relevant information
     for packet in packets:
-        # Ethernet Frames and encapsulated protocols
+        # Ethernet Frames
         if packet.haslayer(Ether):
+            # ARP Packets
             if packet.haslayer(ARP):
                 arp_data = {
                     'Source IP': packet[ARP].psrc,
@@ -40,7 +41,9 @@ def process_packet(packets):
                     'Summary': packet.summary()
                 }
                 data['ARP Packets'].append(arp_data)
+
             elif packet.haslayer(DHCP):
+                # DHCP Packets
                 dhcp_data = {
                     'Source MAC': packet[Ether].src,
                     'Destination MAC': packet[Ether].dst,
@@ -53,7 +56,7 @@ def process_packet(packets):
                 }
                 data['DHCP Packets'].append(dhcp_data)
 
-        # HTTP Requests
+        # IP Layer
         if packet.haslayer(IP):
             # TCP Packets
             if packet.haslayer(TCP):
@@ -68,7 +71,7 @@ def process_packet(packets):
                 data['TCP Packets'].append(tcp_data)
 
                 # FTP Packets
-                if packet[TCP].dport == 21 or packet[TCP].sport == 21:
+                if packet[TCP].dport in [20, 21] or packet[TCP].sport in [20, 21]:
                     ftp_data = {
                         'Source IP': packet[IP].src,
                         'Destination IP': packet[IP].dst,
@@ -81,7 +84,15 @@ def process_packet(packets):
 
             # UDP Packets
             elif packet.haslayer(UDP):
-                if not packet.haslayer(DNS):
+                if packet.haslayer(DNS):
+                    dns_data = {
+                        'Source IP': packet[IP].src,
+                        'Destination IP': packet[IP].dst,
+                        'Query Name': packet[DNS].qd.qname.decode() if hasattr(packet[DNS], 'qd') and packet[DNS].qd else None,
+                        'Summary': packet.summary()
+                    }
+                    data['DNS Queries'].append(dns_data)
+                else:
                     udp_data = {
                         'Source IP': packet[IP].src,
                         'Destination IP': packet[IP].dst,
@@ -90,16 +101,6 @@ def process_packet(packets):
                         'Summary': packet.summary()
                     }
                     data['UDP Packets'].append(udp_data)
-
-                # DNS Queries
-                if packet.haslayer(DNS):
-                    dns_data = {
-                        'Source IP': packet[IP].src,
-                        'Destination IP': packet[IP].dst,
-                        'Query Name': packet[DNS].qd.qname.decode() if packet[DNS].qd else None,
-                        'Summary': packet.summary()
-                    }
-                    data['DNS Queries'].append(dns_data)
 
             # ICMP Packets
             elif packet.haslayer(ICMP):
@@ -122,7 +123,7 @@ def process_packet(packets):
                 'Summary': packet.summary()
             }
 
-            # Determine frame type based on Dot11 subtype
+            # Determine frame type based on the type field
             if packet.type == 0:
                 frame_data['Frame Type'] = 'Management'
                 data['Management Frames'].append(frame_data)
@@ -141,6 +142,18 @@ def process_packet(packets):
             }
             data['SNMP Packets'].append(snmp_data)
 
+        # HTTP Requests
+        if packet.haslayer(HTTPRequest):
+            http_data = {
+                'Source IP': packet[IP].src,
+                'Destination IP': packet[IP].dst,
+                'Method': packet[HTTPRequest].Method.decode(),
+                'Host': packet[HTTPRequest].Host.decode(),
+                'Path': packet[HTTPRequest].Path.decode(),
+                'Summary': packet.summary()
+            }
+            data['HTTP Requests'].append(http_data)
+
     return data
 
 def save_result(protocols, output_directory):
@@ -151,8 +164,9 @@ def save_result(protocols, output_directory):
         # Save each protocol data to separate sheets in Excel file and CSV files
         for name, entries in protocols.items():
             if entries:
+                print(f'[SUCCESS] {len(entries)} {name} found in network traffic for {os.path.basename(output_directory)}.')
                 df = pd.DataFrame(entries)
                 df.to_excel(writer, sheet_name=name, index=False)
                 df.to_csv(os.path.join(output_directory, f'{name.lower().replace(" ", "_")}.csv'), index=False)
-
-    print(f"[SUCCESS] Network traffic summary saved to '{os.path.basename(output_directory)}'.")
+            else:
+                print(f'[FAILURE] No {name} data found in network traffic for {os.path.basename(output_directory)}.')

@@ -111,5 +111,6 @@ def extract_info(line, pattern, patterns):
         elif pattern == patterns.get('windows'):
             component = match.group(4)
             content = match.group(5)
+
         return component, content
     return None, None
