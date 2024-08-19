@@ -62,10 +62,9 @@ def scan_file(file_path, rules_path, file_type):
                 csv_writer = csv.writer(file)
                 csv_writer.writerow(['Rule', 'Component', 'Content'])
                 csv_writer.writerows(matches_found)
-            print(f"[SUCCESS] YARA rule matches found in '{os.path.basename(file_path)}'.")
+            print(f"[SUCCESS] {len(matches_found)} YARA rule matches found in '{os.path.basename(file_path)}'.")
         else:
-            print(f"[FAILURE] No YARA rule matches found in '{os.path.basename(file_path)}'.")
-
+            print(f"[FAILURE] 0 YARA rule matches found in '{os.path.basename(file_path)}'.")
     except Exception as e:
         print(f"[ERROR] Error occurred while scanning '{os.path.basename(file_path)}': {e}")
 
