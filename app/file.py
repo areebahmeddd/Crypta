@@ -77,39 +77,29 @@ def identify_pattern(lines, patterns):
     return None
 
 def extract_info(line, pattern, patterns):
+    # Define a mapping of patterns to their respective group indices
+    group_indices = {
+        'android': (5, 6),
+        'apache': (2, 3),
+        'hadoop': (3, 4),
+        'hdfs': (3, 4),
+        'hpc': (6, 7),
+        'linux': (2, 3),
+        'mac': (3, 4),
+        'openssh': (2, 3),
+        'spark': (3, 4),
+        'windows': (4, 5)
+    }
+
     # Extract component and content from log line
     match = re.match(pattern, line)
     if match:
-        if pattern == patterns.get('android'):
-            component = match.group(5)
-            content = match.group(6)
-        elif pattern == patterns.get('apache'):
-            component = match.group(2)
-            content = match.group(3)
-        elif pattern == patterns.get('hadoop'):
-            component = match.group(3)
-            content = match.group(4)
-        elif pattern == patterns.get('hdfs'):
-            component = match.group(3)
-            content = match.group(4)
-        elif pattern == patterns.get('hpc'):
-            component = match.group(6)
-            content = match.group(7)
-        elif pattern == patterns.get('linux'):
-            component = match.group(2)
-            content = match.group(3)
-        elif pattern == patterns.get('mac'):
-            component = match.group(3)
-            content = match.group(4)
-        elif pattern == patterns.get('openssh'):
-            component = match.group(2)
-            content = match.group(3)
-        elif pattern == patterns.get('spark'):
-            component = match.group(3)
-            content = match.group(4)
-        elif pattern == patterns.get('windows'):
-            component = match.group(4)
-            content = match.group(5)
-
-        return component, content
+        for key, (comp_idx, cont_idx) in group_indices.items():
+            if pattern == patterns.get(key):
+                try:
+                    component = match.group(comp_idx)
+                    content = match.group(cont_idx)
+                    return component, content
+                except IndexError:
+                    return None, None
     return None, None
