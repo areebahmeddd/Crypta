@@ -1747,3 +1747,363 @@ rule Detect_SSH_Connection_Reset {
     condition:
         $connection_reset
 }
+
+rule Detect_Signal_Handler_Registration_Issues {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects issues related to the registration of signal handlers"
+
+    strings:
+        $signal_handlers = /signal\s*handlers\s*for\s*(TERM|HUP|INT|other)/i
+
+    condition:
+        $signal_handlers
+}
+
+rule Detect_ACL_Change_Issues {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects issues related to ACL (Access Control List) changes in SecurityManager"
+
+    strings:
+        $acl_issues = /Changing\s*(view|modify)\s*acls\s*(to|from):\s*/i
+
+    condition:
+        $acl_issues
+}
+
+rule Detect_SecurityManager_Configuration_Issues {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects configuration issues in SecurityManager related to authentication or UI ACLs"
+
+    strings:
+        $security_config = /SecurityManager.*(authentication|ui\s*acls|permissions)\s*(disabled|enabled)/i
+
+    condition:
+        $security_config
+}
+
+rule Detect_Service_Startup_Issues {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects issues related to the startup of various services in Spark"
+
+    strings:
+        $service_start = /Successfully\s*started\s*service.*(sparkExecutor|NettyBlockTransferService)/i
+
+    condition:
+        $service_start
+}
+
+rule Detect_DiskBlockManager_Issues {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects issues related to the creation of local directories in DiskBlockManager"
+
+    strings:
+        $disk_block = /Created\s*local\s*directory\s*at/i
+
+    condition:
+        $disk_block
+}
+
+rule Detect_MemoryStore_Issues {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects issues related to MemoryStore operations, like capacity or block storage"
+
+    strings:
+        $memory_store = /MemoryStore.*(started|block\s*stored|capacity|error|issue)/i
+
+    condition:
+        $memory_store
+}
+
+rule Detect_Executor_Connection_Issues {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects connection or registration issues with Spark Executors"
+
+    strings:
+        $executor_connection = /Executor.*(Connecting|connected|registered|error|issue)/i
+
+    condition:
+        $executor_connection
+}
+
+rule Detect_CacheManager_Issues {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects issues related to CacheManager operations like partition computations"
+
+    strings:
+        $cache_manager = /CacheManager.*(partition\s*not\s*found|computing|error|issue)/i
+
+    condition:
+        $cache_manager
+}
+
+rule Detect_Input_Split_Issues {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects issues related to input splits in HadoopRDD or other similar RDDs"
+
+    strings:
+        $input_split = /Input\s*split.*(hdfs|file|error|issue)/i
+
+    condition:
+        $input_split
+}
+
+rule Detect_Broadcast_Variable_Issues {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects issues related to the reading or storage of broadcast variables"
+
+    strings:
+        $broadcast_var = /Broadcast\s*variable.*(reading|stored|error|issue)/i
+
+    condition:
+        $broadcast_var
+}
+
+rule Detect_Deprecation_Warnings {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects deprecation warnings in configurations or other operations"
+
+    strings:
+        $deprecation_warning = /deprecation.*(mapred|task|warning|error)/i
+
+    condition:
+        $deprecation_warning
+}
+
+rule Detect_Remoting_Issues {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects issues related to remoting operations, like starting or listening"
+
+    strings:
+        $remoting_issues = /Remoting.*(starting|started|listening|error|issue)/i
+
+    condition:
+        $remoting_issues
+}
+
+rule Detect_SparkListener_Events {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects issues or activities related to SparkListener events"
+
+    strings:
+        $spark_listener = /SparkListener.*(event|error|issue|activity)/i
+
+    condition:
+        $spark_listener
+}
+
+rule Detect_BlockManager_Issues {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects issues related to block storage or replication in BlockManager"
+
+    strings:
+        $block_manager = /BlockManager.*(block\s*stored|replication|error|issue)/i
+
+    condition:
+        $block_manager
+}
+
+rule Detect_ShuffleBlockFetcher_Issues {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects issues related to fetching shuffle blocks"
+
+    strings:
+        $shuffle_fetcher = /ShuffleBlockFetcher.*(fetching|failed|error|issue)/i
+
+    condition:
+        $shuffle_fetcher
+}
+
+rule Detect_DAGScheduler_Issues {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects issues related to DAGScheduler operations like task submissions"
+
+    strings:
+        $dag_scheduler = /DAGScheduler.*(task\s*submitted|stage|failure|error|issue)/i
+
+    condition:
+        $dag_scheduler
+}
+
+rule Detect_Taskscheduler_Issues {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects issues related to TaskScheduler operations like task failures"
+
+    strings:
+        $task_scheduler = /TaskScheduler.*(task\s*failed|error|issue|pending)/i
+
+    condition:
+        $task_scheduler
+}
+
+rule Detect_TaskSetManager_Issues {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects issues related to TaskSetManager operations"
+
+    strings:
+        $task_set_manager = /TaskSetManager.*(failed|completed|error|issue)/i
+
+    condition:
+        $task_set_manager
+}
+
+rule Detect_Stage_Issues {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects issues related to stages in the Spark job"
+
+    strings:
+        $stage_issues = /Stage.*(failed|completed|error|issue)/i
+
+    condition:
+        $stage_issues
+}
+
+rule Detect_Executor_Loss {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects issues related to the loss of executors in a Spark job"
+
+    strings:
+        $executor_loss = /Lost\s*executor.*(reason|error|issue)/i
+
+    condition:
+        $executor_loss
+}
+
+rule Detect_Job_Failure {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects issues or errors leading to job failures"
+
+    strings:
+        $job_failure = /Job.*(failed|error|issue)/i
+
+    condition:
+        $job_failure
+}
+
+rule Detect_Resource_Allocation_Issues {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects issues related to resource allocation in Spark"
+
+    strings:
+        $resource_allocation = /Resource\s*allocation.*(error|issue|problem|failure)/i
+
+    condition:
+        $resource_allocation
+}
+
+rule Detect_Killed_Tasks {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects tasks that were killed due to various issues"
+
+    strings:
+        $killed_tasks = /Task.*(killed|terminated|failed)/i
+
+    condition:
+        $killed_tasks
+}
+
+rule Detect_Connection_Issues {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects issues related to connection failures or timeouts"
+
+    strings:
+        $connection_issues = /Connection.*(failed|timeout|refused|error)/i
+
+    condition:
+        $connection_issues
+}
+
+rule Detect_Network_Problems {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects network-related issues like timeouts or failures"
+
+    strings:
+        $network_problems = /Network.*(timeout|failed|error|issue)/i
+
+    condition:
+        $network_problems
+}
+
+rule Detect_RPC_Issues {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects issues related to RPC (Remote Procedure Call) failures or timeouts"
+
+    strings:
+        $rpc_issues = /RPC.*(failed|timeout|error|issue)/i
+
+    condition:
+        $rpc_issues
+}
+
+rule Detect_Memory_Issues {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects memory-related issues like out-of-memory errors"
+
+    strings:
+        $memory_issues = /Memory.*(out\s*of|error|issue|problem|failure)/i
+
+    condition:
+        $memory_issues
+}
+
+rule Detect_Garbage_Collection_Issues {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects issues related to garbage collection or memory leaks"
+
+    strings:
+        $gc_issues = /GC.*(overhead|memory|error|issue|leak)/i
+
+    condition:
+        $gc_issues
+}
+
+rule Detect_FileSystem_Issues {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects issues related to file system operations like reading or writing files"
+
+    strings:
+        $filesystem_issues = /FileSystem.*(read|write|failed|error|issue)/i
+
+    condition:
+        $filesystem_issues
+}
+
+rule Detect_Configuration_Warnings {
+    meta:
+        author = "Areeb Ahmed"
+        description = "Detects configuration warnings or errors"
+
+    strings:
+        $config_warnings = /Configuration.*(deprecated|warning|error|issue)/i
+
+    condition:
+        $config_warnings
+}
