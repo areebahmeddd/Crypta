@@ -4,11 +4,14 @@ from scapy.all import rdpcap, Ether, ARP, BOOTP, DHCP, IP, TCP, UDP, ICMP, DNS, 
 from scapy.layers.http import HTTPRequest
 
 def scan_network(file_path):
-    # Read pcap file and process packets to extract network traffic summary
-    packets = rdpcap(file_path)
-    processed_data = process_packet(packets)
-    output_directory = os.path.join(os.getcwd(), f'{os.path.splitext(os.path.basename(file_path))[0]}_report')
-    save_result(processed_data, output_directory, file_path)
+    try:
+        # Read pcap file and process packets to extract network traffic summary
+        packets = rdpcap(file_path)
+        processed_data = process_packet(packets)
+        output_directory = os.path.join(os.getcwd(), f'{os.path.splitext(os.path.basename(file_path))[0]}_report')
+        save_result(processed_data, output_directory, file_path)
+    except Exception as e:
+        print(f'[ERROR] Error occurred while scanning {os.path.basename(file_path)}: {e}')
 
 def process_packet(packets):
     # Initialize data dictionary to store network traffic summary
@@ -155,7 +158,7 @@ def process_packet(packets):
                 }
                 data['HTTP Requests'].append(http_data)
         except Exception as e:
-            print(f'[ERROR] Error occurred while processing packet: {e}')
+            print(f'[ERROR] Error occurred while processing {packet.summary()}: {e}')
 
     return data
 
