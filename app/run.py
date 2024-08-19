@@ -3,8 +3,8 @@ import json
 import zipfile
 import tempfile
 
-from file_analyzer import scan_file
-from network_analyzer import scan_network
+from file import scan_file
+from network import scan_network
 
 with open('app/metadata.json', 'r') as file:
     metadata = json.load(file)
