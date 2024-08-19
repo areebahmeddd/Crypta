@@ -1,3 +1,19 @@
+rule SQMEvents {
+    meta:
+        author = "Avantika Kesarwani"
+        description = "Detect SQM events"
+
+    strings:
+        $sqm_init = "SQM: Initializing online"
+        $sqm_cleanup = "SQM: Cleaning up report files"
+        $sqm_upload_request = "SQM: Requesting upload"
+        $sqm_failed_upload = "SQM: Failed to start upload"
+        $sqm_queued_files = "SQM: Queued"
+
+    condition:
+        any of them
+}
+
 rule ServicingStackLoaded {
     meta:
         author = "Areeb Ahmed"
@@ -32,22 +48,6 @@ rule TrustedInstallerEvents {
         $init_end = "Ending TrustedInstaller initialization"
         $main_loop_start = "Starting the TrustedInstaller main loop"
         $service_start = "TrustedInstaller service starts successfully"
-
-    condition:
-        any of them
-}
-
-rule SQMEvents {
-    meta:
-        author = "Avantika Kesarwani"
-        description = "Detect SQM events"
-
-    strings:
-        $sqm_init = "SQM: Initializing online"
-        $sqm_cleanup = "SQM: Cleaning up report files"
-        $sqm_upload_request = "SQM: Requesting upload"
-        $sqm_failed_upload = "SQM: Failed to start upload"
-        $sqm_queued_files = "SQM: Queued"
 
     condition:
         any of them
