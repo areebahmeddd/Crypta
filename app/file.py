@@ -3,6 +3,10 @@ import json
 import re
 import os
 import csv
+from colorama import init, Fore, Style
+
+# Initialize colorama
+init(autoreset=True)
 
 with open('app/metadata.json', 'r') as file:
     metadata = json.load(file)
@@ -62,11 +66,11 @@ def scan_file(file_path, rules_path, file_type):
                 csv_writer = csv.writer(file)
                 csv_writer.writerow(['Rule', 'Component', 'Content'])
                 csv_writer.writerows(matches_found)
-            print(f'[SUCCESS] {len(matches_found)} YARA rules matched in {os.path.basename(file_path)}')
+            print(f'{Fore.GREEN}[SUCCESS]{Style.RESET_ALL} {len(matches_found)} YARA rules matched in {os.path.basename(file_path)}')
         else:
-            print(f'[FAILURE] 0 YARA rules matched in {os.path.basename(file_path)}')
+            print(f'{Fore.YELLOW}[FAILURE]{Style.RESET_ALL} 0 YARA rules matched in {os.path.basename(file_path)}')
     except Exception as e:
-        print(f'[ERROR] Error occurred while scanning {os.path.basename(file_path)}: {e}')
+        print(f'{Fore.RED}[ERROR]{Style.RESET_ALL} Error occurred while scanning {os.path.basename(file_path)}: {e}')
 
 def identify_pattern(lines, patterns):
     # Check if sample lines match any file pattern
