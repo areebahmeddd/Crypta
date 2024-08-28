@@ -2,6 +2,10 @@ import os
 import pandas as pd
 from scapy.all import rdpcap, Ether, ARP, BOOTP, DHCP, IP, TCP, UDP, ICMP, DNS, SNMP, Dot11
 from scapy.layers.http import HTTPRequest
+from colorama import init, Fore, Style
+
+# Initialize colorama
+init(autoreset=True)
 
 def scan_network(file_path):
     try:
@@ -11,7 +15,7 @@ def scan_network(file_path):
         output_directory = os.path.join(os.getcwd(), f'{os.path.splitext(os.path.basename(file_path))[0]}_report')
         save_result(processed_data, output_directory, file_path)
     except Exception as e:
-        print(f'[ERROR] Error occurred while scanning {os.path.basename(file_path)}: {e}')
+        print(f'{Fore.RED}[ERROR]{Style.RESET_ALL} Error occurred while scanning {os.path.basename(file_path)}: {e}')
 
 def process_packet(packets):
     # Initialize data dictionary to store network traffic summary
@@ -158,7 +162,7 @@ def process_packet(packets):
                 }
                 data['HTTP Requests'].append(http_data)
         except Exception as e:
-            print(f'[ERROR] Error occurred while processing {packet.summary()}: {e}')
+            print(f'{Fore.RED}[ERROR]{Style.RESET_ALL} Error occurred while processing {packet.summary()}: {e}')
 
     return data
 
@@ -170,9 +174,9 @@ def save_result(protocols, output_directory, file_path):
         # Save each protocol data to separate sheets in Excel file and CSV files
         for name, entries in protocols.items():
             if entries:
-                print(f'[SUCCESS] {len(entries)} {name} captured in {os.path.basename(file_path)}')
+                print(f'{Fore.GREEN}[SUCCESS]{Style.RESET_ALL} {len(entries)} {name} captured in {os.path.basename(file_path)}')
                 df = pd.DataFrame(entries)
                 df.to_excel(writer, sheet_name=name, index=False)
                 df.to_csv(os.path.join(output_directory, f'{name.lower().replace(" ", "_")}.csv'), index=False)
             else:
-                print(f'[FAILURE] 0 {name} captured in {os.path.basename(file_path)}')
+                print(f'{Fore.YELLOW}[FAILURE]{Style.RESET_ALL} 0 {name} captured in {os.path.basename(file_path)}')

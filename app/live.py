@@ -1,5 +1,9 @@
 import psutil
 from parse import scan_path
+from colorama import init, Fore, Style
+
+# Initialize colorama
+init(autoreset=True)
 
 def scan_drive():
     # Initialize set to store detected drives
@@ -14,17 +18,17 @@ def scan_drive():
             new_drives = {device: mountpoint for device, mountpoint in current_drives.items() if device not in detected_drives}
             for device, mountpoint in new_drives.items():
                 # Process new drive by scanning the root directory for files and directories
-                print(f'[INFO] Drive detected: {device}')
+                print(f'{Fore.BLUE}[INFO]{Style.RESET_ALL} Drive detected: {device}')
                 scan_path(mountpoint)
                 detected_drives.add(device)
 
             # Check for removed drives and update detected drives set
             removed_drives = detected_drives - set(current_drives.keys())
             for device in removed_drives:
-                print(f'[INFO] Drive removed: {device}')
+                print(f'{Fore.BLUE}[INFO]{Style.RESET_ALL} Drive removed: {device}')
                 detected_drives.remove(device)
         except Exception as e:
-            print(f'[ERROR] Error occurred while scanning {device}: {e}')
+            print(f'{Fore.RED}[ERROR]{Style.RESET_ALL} Error occurred while scanning {device}: {e}')
 
 def list_drive():
     # Return dictionary of removable drives and their mountpoints
