@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from scapy.all import rdpcap, Ether, ARP, BOOTP, DHCP, IP, TCP, UDP, ICMP, DNS, SNMP, Dot11
+from scapy.all import rdpcap, Ether, ARP, DHCP, BOOTP, IP, TCP, UDP, ICMP, Dot11, DNS, SNMP
 from scapy.layers.http import HTTPRequest
 from colorama import init, Fore, Style
 
@@ -163,7 +163,6 @@ def process_packet(packets):
                 data['HTTP Requests'].append(http_data)
         except Exception as e:
             print(f'{Fore.RED}[ERROR]{Style.RESET_ALL} Error occurred while processing {packet.summary()}: {e}')
-
     return data
 
 def save_result(protocols, output_directory, file_path):
