@@ -3,9 +3,9 @@
 __pycache__/
 .env
 
+# Test files
+*.raw
+
 # Output related
 *.csv
 *_report/
-
-
-*.raw
