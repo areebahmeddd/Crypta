@@ -6,3 +6,6 @@ __pycache__/
 # Output related
 *.csv
 *_report/
+
+
+*.raw
