@@ -9,3 +9,6 @@ __pycache__/
 # Output related
 *.csv
 *_report/
+
+# Web related
+node_modules/

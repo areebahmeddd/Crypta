@@ -1,0 +1,45 @@
+{
+  "name": "Crypta",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "eject": "react-scripts eject"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fortawesome/free-brands-svg-icons": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "@heroicons/react": "^2.1.5",
+    "autoprefixer": "^10.4.20",
+    "axios": "^1.7.7",
+    "client": "file:",
+    "Crypta": "file:",
+    "lucide-react": "^0.436.0",
+    "postcss": "^8.4.41",
+    "react-dom": "^18.3.1",
+    "react-dropzone": "^14.2.3",
+    "react-router-dom": "^6.26.1",
+    "react-scripts": "^5.0.1",
+    "tailwindcss": "^3.4.10",
+    "web-vitals": "^4.2.3"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
