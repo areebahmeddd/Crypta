@@ -1,4 +1,4 @@
-import subprocess
+r'''import subprocess
 from parse import scan_path
 
 
@@ -28,7 +28,18 @@ if __name__ == '__main__':
 
     #if mount point is returned then scan the mounted directory 
     if mounted:
-        scan_path(mounted)
+        scan_path(mounted)'''
+
+
+from parse import scan_path
+import memprocfs
+
+vmm = memprocfs.Vmm(['-device', r'C:\Users\avike\OneDrive\Desktop\MemoryDump_Lab1.raw'])
+
+for file in vmm.vfs.list("/"):
+    scan_path(file)
+
+
 
 
 
