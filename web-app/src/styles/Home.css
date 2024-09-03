@@ -1,0 +1,364 @@
+/* General Container Styles */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f7f9fc; /* Light background color */
+  padding: 20px;
+  max-width: 2000px;
+  
+}
+
+.content-container {
+  transition: opacity 0.4s ease-out;
+  opacity: 1;
+}
+
+.content-container.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.next-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  transition: opacity 0.4s ease-in;
+  opacity: 0;
+}
+
+.next-content.fade-in {
+  opacity: 1;
+}
+
+.next-content-button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.next-content-button:hover {
+  background-color: #0056b3;
+}
+
+.drive-container {
+  background-color: #ffffff; /* White background for the upload box */
+  border-radius: 0.75rem; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  width: 100%;
+  max-width: 28rem; /* Max width for the upload box */
+  border: 2px #d1d5db; /* Dashed border */
+  transition: border-color 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  margin-bottom: 40px; 
+}
+
+.drive-label {
+  font-size: 1.5rem; /* Larger font size for header */
+  font-weight: 600; /* Bold font weight */
+  margin-top:1rem;
+  color: #333; /* Darker text color for better contrast */
+  text-align: left;
+  margin-left: 25px;
+}
+
+.detect-drive-button {
+  padding: 8px 16px;
+  background-color: #457d58;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.25rem;
+  cursor: pointer;
+  margin: 2px 20px; /* Top and bottom margin of 12px, left and right margin of 20px */
+  width: calc(100% - 40px); /* Full width minus the total left and right margin (20px each) */
+  box-sizing: border-box;
+  margin-bottom: 15px; /* Ensure padding and border are included in the element's total width and height */
+}
+
+.detect-drive-button:hover {
+  background-color: #519b69;
+}
+
+.drive-list {
+  margin-top: 20px;
+}
+
+.drive-list h3 {
+  margin-bottom: 10px;
+}
+
+.drive-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.drive-list li {
+  padding: 5px 0;
+}
+
+
+/* Upload Box Styles */
+.upload-box {
+  background-color: #ffffff; /* White background for the upload box */
+  padding: 2rem;
+  border-radius: 0.75rem; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  width: 100%;
+  max-width: 28rem; /* Max width for the upload box */
+  border: 2px dashed #d1d5db; /* Dashed border */
+  transition: border-color 0.3s ease;
+  margin-bottom: 40px; /* Smooth border color transition */
+}
+
+.upload-box.dragging {
+  border-color: #519b69; /* Border color when dragging */
+}
+
+.header {
+  font-size: 1.5rem; /* Larger font size for header */
+  font-weight: 600; /* Bold font weight */
+  margin-bottom: 1.5rem;
+}
+
+.hidden {
+  display: none; /* This hides the default file input */
+}
+
+.upload-area {
+  padding: 2rem;
+  border-radius: 0.5rem; /* Rounded corners */
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  font-size: 1rem; /* Adjusted font size */
+}
+
+.upload-icon {
+  width: 4rem; /* Adjusted icon size */
+  height: 4rem; /* Adjusted icon size */
+  margin-bottom: 1rem;
+  color: #519b69; /* Icon color */
+}
+
+.upload-text {
+  color: #333;
+  font-size: 16px; /* Text color */
+}
+
+.choose-file {
+  text-decoration: underline;
+  margin-bottom: 1.5rem; /* Underline for "Choose file" */
+}
+
+.file-info {
+  margin-top: 20px;
+  
+}
+
+.file-details {
+  display: flex;
+  justify-content: space-between;
+  color: #6b7280; /* Gray text color */
+  margin-bottom: 0.5rem;
+}
+
+.file-icon {
+  width: 2rem;
+  height: 2rem;
+}
+
+.file-name {
+  font-weight: 500;
+  color: #333;
+}
+
+.file-metadata {
+  display: flex;
+  flex-direction: column;
+}
+
+.file-size {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.file-cancel {
+  cursor: pointer;
+  color: #333;
+  font-size: 0.875rem;
+}
+
+
+.buttons {
+  display: flex;
+  justify-content: space-between; /* Space between buttons */
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.cancel-button,
+.submit-button {
+  flex: 1; /* Make both buttons take up equal space */
+  padding: 0.5rem;
+  border-radius: 0.5rem; /* Rounded corners */
+  font-size: 1.25rem; /* Smaller font size */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cancel-button {
+  background-color: #f0eded; /* Gray background */
+  color: #333; /* Dark text */
+}
+
+.cancel-button:hover {
+  background-color: #c5c9c7; /* Darker gray on hover */
+}
+
+.submit-button {
+  background-color: #457d58; /* Blue background */
+  color: #fff; /* White text */
+}
+
+.submit-button:hover {
+  background-color: #519b69; /* Darker blue on hover */
+}
+
+.submit-button:disabled {
+  background-color: #e5e7eb; /* Gray background for disabled state */
+  cursor: not-allowed;
+  color: #9c9a9a;
+}
+
+.options-container {
+  background-color: #ffffff; /* White background */
+  border-radius: 0.75rem; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  padding: 20px;
+  width: 100%;
+  max-width: 28rem; /* Max width for the options container */
+  margin-top: 20px;
+  align-items: start; /* Space from the upload box */
+}
+
+.options-container h3 {
+  margin-bottom: 15px;
+  font-size: 1.25rem; /* Slightly larger font size */
+}
+
+.options {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.option-button {
+  padding: 10px 20px;
+  background-color: #457d58; /* Blue background */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.option-button:hover {
+  background-color: #519b69; /* Darker blue on hover */
+}
+
+.metadata-container {
+  background-color: #ffffff; /* White background for the upload box */
+  border-radius: 0.75rem; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  width: 100%;
+  max-width: 28rem; /* Max width for the upload box */
+  border: 2px dashed #d1d5db; /* Dashed border */
+  transition: border-color 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: start; /* Center content horizontally */
+  justify-content: center;
+  margin-bottom: 20px;
+  padding-left: 50px;
+}
+
+.metadata-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-left: 10px;
+}
+
+.file-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+}
+
+.file-metadata {
+  display: flex;
+  flex-direction: column;
+}
+
+.file-name,
+.file-size,
+.file-type,
+.file-last-modified,
+.file-extension {
+  margin-bottom: 5px;
+}
+
+/* Container for progress bar */
+.progress-bar {
+  position: relative;
+  width: 100%;
+  height: 20px; /* Adjust height to be slim */
+  background-color: #e0e0e0; /* Light grey background color for the container */
+  border-radius: 10px; /* Slightly rounded corners for the container */
+  margin-top: 0.5rem; /* Margin to create space above */
+  margin-bottom: 0.5rem; /* Margin to create space below */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for a sleek effect */
+}
+
+/* Inner progress bar */
+.progress-bar-inner {
+  height: 100%; /* Full height of the container */
+  background-color: #457d58; /* Green progress color */
+  border-radius: 10px; /* Match rounded corners of the container */
+  transition: width 0.3s ease; /* Smooth transition for width changes */
+}
+
+/* Percentage text inside the progress bar */
+.upload-percentage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffffff; /* White text color */
+  font-weight: bold; /* Bold text for better visibility */
+  font-size: 0.9rem; /* Adjust text size */
+}

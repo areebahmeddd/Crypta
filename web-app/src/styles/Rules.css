@@ -1,0 +1,301 @@
+/* Rules.css */
+
+.options-containers {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Center items vertically */
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+  height: 90vh;
+  background-color: #f7f9fc; 
+}
+
+h2 {
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.optionss {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+}
+
+.options-wrappers {
+  border: 2px #d1d5db;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;  /* Dashed border */
+  border-radius: 0.5rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 600px; /* Adjust as needed */
+}
+
+.option-buttons {
+  background-color: #457d58; /* Button background */
+  color: #fff; /* Button text color */
+  border: none;
+  border-radius: 0.5rem;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.option-button:hovers {
+  background-color: #519b69;
+}
+
+.or {
+  margin-bottom: 5px;
+  font-size: 18px;
+  font-weight: 400;
+  align-self: center;
+  color: #1f1e1e;
+}
+
+.upload-boxs {
+  border: 2px dashed #d1d5db;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  width: 100%;
+  max-width: 80%;
+  text-align: center;
+  transition: border-color 0.3s ease;
+  align-self: center;
+  margin-bottom: 25px;
+}
+
+.upload-boxs.dragging {
+  border-color: #519b69; /* Border color when dragging */
+}
+
+.headers {
+  font-size: 22px;
+  margin-bottom: 1rem;
+  color: #333;
+  align-self: flex-start;
+  margin-left: 15px;
+}
+
+.hidden {
+  display: none; /* This hides the default file input */
+}
+
+.upload-areas {
+  position: relative;
+  display: inline-block;
+}
+
+.upload-labels {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  font-size: 1rem; /* Adjusted font size */
+}
+
+.upload-icons {
+  width: 4rem; /* Adjusted icon size */
+  height: 4rem; /* Adjusted icon size */
+  margin-bottom: 1rem;/* Icon color */
+}
+
+.upload-texts {
+  margin: 0.5rem 0;
+}
+
+.choose-files {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+
+.buttonss {
+  display: flex;
+  justify-content: space-between; /* Space between buttons */
+  gap: 1rem;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.cancel-buttons,
+.submit-buttons {
+  flex: 1; /* Make both buttons take up equal space */
+  padding: 0.55rem;
+  border-radius: 0.5rem; /* Rounded corners */
+  font-size: 1.2rem; /* Larger font size */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cancel-buttons {
+  background-color: #f0eded; /* Gray background */
+  color: #333; /* Dark text */
+}
+
+.cancel-buttons:hover {
+  background-color: #c5c9c7; /* Darker gray on hover */
+}
+
+.submit-buttons {
+  background-color: #457d58; /* Blue background */
+  color: #fff; /* White text */
+}
+
+.submit-buttons:hover {
+  background-color: #519b69; /* Darker blue on hover */
+}
+
+.submit-buttons:disabled {
+  background-color: #e5e7eb; /* Gray background for disabled state */
+  cursor: not-allowed;
+  color: #9c9a9a;
+}
+
+.default-rules {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Space between the logo and the info section */
+  margin-top: 20px;
+  align-self:flex-start;
+  margin-bottom: 15px;
+  margin-left: 55px;
+}
+
+.default-rules-logo {
+  max-width: 45px; /* Adjust the size as needed */
+  height: auto; /* Maintain aspect ratio */
+  border: 2px solid #ddd; /* Optional: Add a border for better visibility */
+  border-radius: 8px; /* Optional: Rounded corners */
+  padding: 1px; /* Optional: Add padding around the image */
+  background-color: #838181; /* Optional: Light background color */
+}
+
+.default-rules-info {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.default-rules-option {
+  cursor: pointer;
+  color: #4d4f50; /* Change this to your preferred color */
+  position: relative;
+  padding-left: 30px; /* Space for the radio button */
+  display: flex;
+  align-items: center;
+}
+
+.default-rules-option.selected {
+  font-weight: bold;
+  color: #0f0f0f; /* Change this to your preferred selected color */
+}
+
+.radio-button {
+  position: absolute;
+  left: 0;
+  width: 18px; /* Size of the radio button */
+  height: 18px; /* Size of the radio button */
+  border: 2px solid #0d0d0e; /* Border color */
+  border-radius: 50%; /* Makes it a circle */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.radio-inner {
+  width: 10px; /* Size of the inner dot */
+  height: 10px; /* Size of the inner dot */
+  background-color: #808488; /* Inner dot color */
+  border-radius: 50%; /* Makes it a circle */
+}
+
+.file-infoo {
+  border: 2px #d1d5db;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  padding: 8px; /* Spacing inside the container */
+  margin-top: 10px; /* Space above the container */
+  min-width: 600px; /* Limit width for better readability */
+  margin: auto; /* Center horizontally */
+}
+
+.file-infoo.hidden {
+  display: none;
+}
+
+.file-details {
+  color: #333;
+  display: flex;
+  align-items: center;
+  margin: 10px;
+  flex-wrap: wrap;/* Dark text color for readability */
+}
+
+.file-details > div {
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.file-details h3 {
+  margin-bottom: 1px; /* Space below the heading */
+  font-size: 1.1rem; /* Slightly larger font size for the heading */
+  color: #1f1e1e;
+  align-items: center; /* Heading color */
+}
+
+.file-details.name strong {
+  color: #555;
+  align-items: center; /* Color for labels */
+}
+
+.file-infoo p {
+  text-align: center; /* Center the text if no file is selected */
+  font-size: 1rem; /* Font size for the fallback message */
+  color: #888; /* Light gray color for the fallback message */
+}
+
+@media (max-width: 768px) {
+  .file-infoo {
+    margin-top: 10px;
+    width: 85%; /* Increase width to take up more space on small screens */
+    padding: 6px; /* Reduce padding for smaller screens */
+  }
+
+  .file-details h3 {
+    font-size: 1rem; /* Reduce font size for headings */
+  }
+
+  .file-details > div {
+    flex: 1 1 100%; /* Flex items to take up full width */
+    text-align: left; /* Align text to the left on small screens */
+    margin-bottom: 5px; /* Reduce space below elements */
+  }
+}
+
+/* Media query for extra small screens */
+@media (max-width: 480px) {
+  .file-infoo {
+    width: 100%; /* Use full width on very small screens */
+    padding: 4px; /* Reduce padding further */
+  }
+
+  .file-details h3 {
+    font-size: 0.9rem; /* Further reduce font size for headings */
+  }
+
+  .file-details > div {
+    margin-bottom: 3px; /* Further reduce space below elements */
+  }
+}
