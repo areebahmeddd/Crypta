@@ -34,7 +34,7 @@ if __name__ == '__main__':
 from parse import scan_path
 import memprocfs
 
-vmm = memprocfs.Vmm(['-device', r'C:\Users\avike\OneDrive\Desktop\MemoryDump_Lab1.raw'])
+vmm = memprocfs.Vmm(['-device', r'C:\Users\avike\OneDrive\Desktop\MemoryDump_Lab1.raw', '-forensic', '1'])
 
 for file in vmm.vfs.list("/"):
     scan_path(file)
