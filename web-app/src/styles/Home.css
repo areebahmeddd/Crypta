@@ -53,8 +53,8 @@
   border-radius: 0.75rem; /* Rounded corners */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
   width: 100%;
-  max-width: 28rem; /* Max width for the upload box */
-  border: 2px #d1d5db; /* Dashed border */
+  max-width: 32rem; /* Max width for the upload box */
+  border: 2px #d1d5db;
   transition: border-color 0.3s ease;
   display: flex;
   flex-direction: column;
@@ -81,9 +81,10 @@
   font-size: 1.25rem;
   cursor: pointer;
   margin: 2px 20px; /* Top and bottom margin of 12px, left and right margin of 20px */
-  width: calc(100% - 40px); /* Full width minus the total left and right margin (20px each) */
+  width: calc(100% - 60px); /* Full width minus the total left and right margin (20px each) */
   box-sizing: border-box;
   margin-bottom: 15px; /* Ensure padding and border are included in the element's total width and height */
+  align-self: center;
 }
 
 .detect-drive-button:hover {
@@ -114,7 +115,7 @@
   border-radius: 0.75rem; /* Rounded corners */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
   width: 100%;
-  max-width: 28rem; /* Max width for the upload box */
+  max-width: 32rem; /* Max width for the upload box */
   border: 2px dashed #d1d5db; /* Dashed border */
   transition: border-color 0.3s ease;
   margin-bottom: 40px; /* Smooth border color transition */
@@ -171,14 +172,21 @@
 
 .file-info {
   margin-top: 20px;
-  
+  border-bottom: 1px solid #ddd; /* Light gray horizontal line */
+  padding-bottom: 10px; /* Adds some space below the content */
+  margin-bottom: 5px;
+  width: 90%;
 }
 
+.file-info:last-child {
+  border-bottom: none; /* Remove the line from the last item */
+}
 .file-details {
   display: flex;
   color: #6b7280; /* Gray text color */
   margin-bottom: 0.5rem;
-  align-items: center; 
+  align-items: center;
+  padding-left: 15px; 
 }
 
 .file-icon {
@@ -208,7 +216,8 @@
 
 .file-metadata-table td {
   padding: 2px 25px; /* Adds spacing between the content */
-  vertical-align: top; /* Aligns the text to the top of the cell */
+  vertical-align: top;
+  width: 50%; /* Aligns the text to the top of the cell */
 }
 
 .metadata-label {
@@ -316,8 +325,8 @@
   border-radius: 0.75rem; /* Rounded corners */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
   width: 100%;
-  max-width: 28rem; /* Max width for the upload box */
-  border: 2px dashed #d1d5db; /* Dashed border */
+  max-width: 32rem; /* Max width for the upload box */
+  border: 2px #d1d5db;
   transition: border-color 0.3s ease;
   display: flex;
   flex-direction: column;
