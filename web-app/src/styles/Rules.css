@@ -153,9 +153,9 @@ h2 {
 }
 
 .submit-buttons:disabled {
-  background-color: #e5e7eb; /* Gray background for disabled state */
+  background-color: #d3d3d3; /* Gray */
+  color: #a9a9a9; /* Darker Gray */
   cursor: not-allowed;
-  color: #9c9a9a;
 }
 
 .default-rules {
@@ -171,10 +171,10 @@ h2 {
 .default-rules-logo {
   max-width: 45px; /* Adjust the size as needed */
   height: auto; /* Maintain aspect ratio */
-  border: 2px solid #ddd; /* Optional: Add a border for better visibility */
+  border: 2px solid #d1d1d1; /* Optional: Add a border for better visibility */
   border-radius: 8px; /* Optional: Rounded corners */
   padding: 1px; /* Optional: Add padding around the image */
-  background-color: #838181; /* Optional: Light background color */
+  background-color: #e7e2e2; /* Optional: Light background color */
 }
 
 .default-rules-info {
@@ -231,27 +231,26 @@ h2 {
   display: none;
 }
 
-.file-details {
-  color: #333;
+.files-details {
   display: flex;
-  align-items: center;
-  margin: 10px;
-  flex-wrap: wrap;/* Dark text color for readability */
+  flex-wrap: wrap; /* Allows wrapping to multiple lines if needed */
+  gap: 80px; /* Space between each detail section */
+  padding: 5px; /* Optional padding around the container */
 }
 
-.file-details > div {
+.files-details > div {
   margin-bottom: 8px;
   text-align: center;
 }
 
-.file-details h3 {
+.files-details h3 {
   margin-bottom: 1px; /* Space below the heading */
   font-size: 1.1rem; /* Slightly larger font size for the heading */
   color: #1f1e1e;
   align-items: center; /* Heading color */
 }
 
-.file-details.name strong {
+.files-details.name strong {
   color: #555;
   align-items: center; /* Color for labels */
 }
@@ -265,16 +264,16 @@ h2 {
 @media (max-width: 768px) {
   .file-infoo {
     margin-top: 10px;
-    width: 85%; /* Increase width to take up more space on small screens */
+    width: 55%; /* Increase width to take up more space on small screens */
     padding: 6px; /* Reduce padding for smaller screens */
   }
 
-  .file-details h3 {
+  .files-details h3 {
     font-size: 1rem; /* Reduce font size for headings */
   }
 
-  .file-details > div {
-    flex: 1 1 100%; /* Flex items to take up full width */
+  .files-details > div {
+    flex: 10%; /* Flex items to take up full width */
     text-align: left; /* Align text to the left on small screens */
     margin-bottom: 5px; /* Reduce space below elements */
   }
@@ -283,15 +282,15 @@ h2 {
 /* Media query for extra small screens */
 @media (max-width: 480px) {
   .file-infoo {
-    width: 100%; /* Use full width on very small screens */
+    width: 50%; /* Use full width on very small screens */
     padding: 4px; /* Reduce padding further */
   }
 
-  .file-details h3 {
+  .files-details h3 {
     font-size: 0.9rem; /* Further reduce font size for headings */
   }
 
-  .file-details > div {
+  .files-details > div {
     margin-bottom: 3px; /* Further reduce space below elements */
   }
 }

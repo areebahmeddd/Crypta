@@ -18,13 +18,13 @@ function Navbar() {
 
         {/* Navbar links */}
         <div className="navbar-links">
-          <a href="#about" className="navbar-link">
+          <a href="/about" className="navbar-link">
             About
           </a>
-          <a href="#team" className="navbar-link">
+          <a href="/team" className="navbar-link">
             Team
           </a>
-          <a href="#contact" className="navbar-link">
+          <a href="/contact" className="navbar-link">
             Contact
           </a>
         </div>

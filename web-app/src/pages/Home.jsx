@@ -220,14 +220,14 @@ function Home() {
           {files.map((fileData, index) => (
             <div key={index} className="file-info">
               <div className="file-details">
+                <div className="file-desc">
                 <img
                   src={fileData.icon}
                   alt="File Icon"
                   className="file-icon"
                 />
-                <div className="file-metadata">
-                  <div className="file-name">{fileData.name}</div>
-                </div>
+                  <div className="file-name">{fileData.name}</div>  
+        </div>
                 <div
                   className="file-cancel"
                   onClick={() => handleCancel(index)}
