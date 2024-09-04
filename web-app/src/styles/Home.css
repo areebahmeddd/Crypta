@@ -176,24 +176,49 @@
 
 .file-details {
   display: flex;
-  justify-content: space-between;
   color: #6b7280; /* Gray text color */
   margin-bottom: 0.5rem;
+  align-items: center; 
 }
 
 .file-icon {
+  margin-right:12px;
   width: 2rem;
   height: 2rem;
 }
 
 .file-name {
+  margin-left: 10px;
+  margin-right: 25px;
   font-weight: 500;
+  font-size: 18px;
   color: #333;
+  align-items: flex-start;
 }
 
 .file-metadata {
   display: flex;
   flex-direction: column;
+}
+
+.file-metadata-table {
+  width: 100%;
+  border-collapse: collapse; /* Ensures no space between table cells */
+}
+
+.file-metadata-table td {
+  padding: 2px 25px; /* Adds spacing between the content */
+  vertical-align: top; /* Aligns the text to the top of the cell */
+}
+
+.metadata-label {
+  text-align: left;
+  font-weight: bold;
+  padding-right: 20px; /* Creates space between label and value */
+}
+
+.metadata-value {
+  text-align: left;
 }
 
 .file-size {
@@ -203,8 +228,8 @@
 
 .file-cancel {
   cursor: pointer;
-  color: #333;
-  font-size: 0.875rem;
+  color: red;
+  font-size: 1.25rem;
 }
 
 .buttons {
