@@ -1,5 +1,5 @@
 {
-  "name": "Crypta",
+  "name": "crypta",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -19,8 +19,6 @@
     "@heroicons/react": "^2.1.5",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.7",
-    "client": "file:",
-    "Crypta": "file:",
     "lucide-react": "^0.436.0",
     "postcss": "^8.4.41",
     "react-dom": "^18.3.1",
