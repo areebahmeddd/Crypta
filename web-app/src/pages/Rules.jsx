@@ -119,10 +119,7 @@ function Rules() {
                 processedData: responseData.processedData, // Pass the processed data
               },
             });
-          } else {
-            setError("No processed data received from the server.");
-            alert("No processed data received from the server.");
-          }
+          } 
         } else {
           const errorData = await response.json();
           setError(`Error: ${errorData.message || "Failed to upload files"}`);
