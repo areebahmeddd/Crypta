@@ -87,46 +87,29 @@ function Rules() {
       setLoading(true); // Start loading state
       setError(""); // Clear any previous errors
 
-      console.log("Selected Files:", rulesFile);
       try {
         const formData = new FormData();
 
         // Append files passed from the homepage
         if (location.state && location.state.files) {
-          location.state.files.forEach((file, index) => {
-            formData.append(`file${index}`, file);
+          location.state.files.forEach((fileData) => {
+            formData.append("files", fileData.file); // Use 'files' as the key to match the backend
           });
         }
+
         // Append the selected YARA rules file
         if (rulesFile) {
           formData.append("rulesFile", rulesFile);
         }
 
-        for (let [key, value] of formData.entries()) {
-          if (value instanceof File) {
-            console.log(`${key}:`);
-            console.log(`  Name ${value.name}`);
-            console.log(`  Size ${(value.size / 1024).toFixed(2)} KB`);
-            console.log(`  Type ${value.type}`);
-            console.log(
-              `  Last Modified: ${
-                value.lastModifiedDate
-                  ? value.lastModifiedDate.toLocaleDateString()
-                  : "N/A"
-              }`
-            );
-          } else {
-            console.log(`${key}: ${value}`);
-          }
-        }
-        const response = await fetch("http://127.0.0.1:8080/api/upload", {
+        const response = await fetch("http://127.0.0.1:8000/api/upload", {
           method: "POST",
           body: formData,
         });
 
         if (response.ok) {
           const responseData = await response.json();
-          console.log("Response from backend:", result);
+          console.log("Response from backend:", responseData);
 
           if (responseData && responseData.processedData) {
             navigate("/dashboard", {

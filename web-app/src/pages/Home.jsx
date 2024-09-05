@@ -19,7 +19,7 @@ function Home() {
 
   const detectDrives = () => {
     axios
-      .get("http://127.0.0.1:8080/api/detect")
+      .get("http://127.0.0.1:8000/api/detect")
       .then((response) => {
         setDrives(response.data.drives);
         if (response.data.drives.length > 0) {
