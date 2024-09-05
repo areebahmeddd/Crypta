@@ -48,6 +48,12 @@ async def upload(files: list[UploadFile] = File(...), rulesFile: UploadFile = Fi
         results = []
         for file_path in uploaded_file_paths:
             scan_result = scan_path(file_path, yara_rules_path)
+            if scan_result is None:
+                scan_result = {
+                    'rule': 'No matches',
+                    'component': 'N/A',
+                    'context': 'N/A'
+                }
         results.append(scan_result)
 
         #backend response 
