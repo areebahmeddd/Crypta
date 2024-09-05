@@ -1,31 +1,17 @@
-#from parse import scan_path
-
-#if __name__ == '__main__':
-    #scan_path('logs')'''
-
-
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from typing import Annotated
+import uvicorn
 from fastapi import FastAPI, File, UploadFile
-
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-
-
-# Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # Allows all origins
-    allow_credentials=True,
-    allow_methods=["*"], # Allows all methods
-    allow_headers=["*"], # Allows all headers
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"]
 )
 
-
-#upload route
 @app.post("/api/upload")
-async def upload_file(files: list[UploadFile] = File(...), rulesFile: UploadFile = File(...)):
+async def upload(files: list[UploadFile] = File(...), rulesFile: UploadFile = File(...)):
     file_names = [file.filename for file in files]
     yara_file_name = rulesFile.filename
     return {
@@ -33,12 +19,9 @@ async def upload_file(files: list[UploadFile] = File(...), rulesFile: UploadFile
         "yara_file": yara_file_name
     }
 
+@app.post("/api/detect")
+async def detect():
+    pass
 
-
-
-
-
-
-
-
-
+if __name__ == '__main__':
+    uvicorn.run(app, host='127.0.0.1', port=8080)
