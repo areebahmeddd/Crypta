@@ -3,7 +3,11 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Navbar from "./components/Navbar.jsx";
 import Rules from "./pages/Rules.jsx";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./pages/Dashboard.jsx";
+import About from "./pages/About.jsx";
+import Team from "./pages/Team.jsx";
+import Contact from "./pages/Contact.jsx";
+
 function App() {
   return (
     <Router>
@@ -13,6 +17,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/rules" element={<Rules />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/team" element={<Team />} />
+          <Route path="/contact" element={<Contact />} />
         </Routes>
       </div>
     </Router>

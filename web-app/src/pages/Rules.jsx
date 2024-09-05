@@ -21,7 +21,6 @@ function Rules() {
       const files = location.state.files;
       console.log("Files received from homepage:", files);
       if (files.length > 0) {
-        setRulesFile(files[0]); // Set the first file (or modify to handle multiple files)
         setSelectedOption("drag-drop"); // Update selected option
       }
     }
@@ -227,7 +226,7 @@ function Rules() {
           <button
             className="submit-buttons"
             onClick={handleAnalyze}
-            disabled={loading}
+            disabled={!rulesFile}
           >
             Analyze
           </button>
@@ -235,7 +234,7 @@ function Rules() {
       </div>
       <div className={`file-infoo ${!rulesFile ? "hidden" : ""}`}>
         {rulesFile ? (
-          <div className="file-details">
+          <div className="files-details">
             <div>
               <div className="name">
                 <strong>Name</strong>
