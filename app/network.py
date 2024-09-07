@@ -12,8 +12,9 @@ def scan_network(file_path):
         # Read pcap file and process packets to extract network traffic summary
         packets = rdpcap(file_path)
         processed_data = process_packet(packets)
-        output_directory = os.path.join(os.getcwd(), f'{os.path.splitext(os.path.basename(file_path))[0]}_report')
-        save_result(processed_data, output_directory, file_path)
+        return processed_data
+        r'''output_directory = os.path.join(os.getcwd(), f'{os.path.splitext(os.path.basename(file_path))[0]}_report')
+        save_result(processed_data, output_directory, file_path)'''
     except Exception as e:
         print(f'{Fore.RED}[ERROR]{Style.RESET_ALL} Error occurred while scanning {os.path.basename(file_path)}: {e}')
 
