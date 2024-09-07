@@ -2,6 +2,8 @@ import uvicorn
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from app.parse import scan_path
+from app.parse import find_type
+from app.network import scan_network
 import os
 import tempfile
 
@@ -47,26 +49,36 @@ async def upload(files: list[UploadFile] = File(...), rulesFile: UploadFile = Fi
         #scanning the uploaded files with the uploaded rules
         results = []
         for file_path in uploaded_file_paths:
-            scan_result = scan_path(file_path, yara_rules_path)
-            if scan_result is None:
-                scan_result = {
-                    'rule': 'No matches',
-                    'component': 'N/A',
-                    'context': 'N/A'
+            file_type = find_type(file_path)
+            if file_type == 'network':
+                network_data = scan_network(file_path)
+                results.append(network_data)
+                result = {
+                    'protocol' : network_data
                 }
-        results.append(scan_result)
+            elif file_type:
+                scan_result = scan_path(file_path, yara_rules_path)
+                if scan_result is None:
+                    scan_result = {
+                        'rule': 'No matches',
+                        'component': 'N/A',
+                        'context': 'N/A'
+                    }
+                results.append(scan_result)
+                result = {
+                    'results': [
+                        {
+                            'file': os.path.basename(file_path),
+                            'rule': results['rule'],
+                            'component': results['component'],
+                            'context': results['context']
+                        }
+                    ]
+                } 
+
 
         #backend response 
-        return {
-            'results': [
-                {
-                    'file': os.path.basename(file_path),
-                    'rule': result['rule'],
-                    'component': result['component'],
-                    'context': result['context']
-                } for file_path, result in zip(uploaded_file_paths, results)
-            ]
-        }
+        return result
     
     #handle the exception 
     except Exception as e:
