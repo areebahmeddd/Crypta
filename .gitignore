@@ -6,7 +6,7 @@ __pycache__/
 # Test files
 *.raw
 *.mem
-*.eo1
+*.e01
 
 # Output related
 *.csv
