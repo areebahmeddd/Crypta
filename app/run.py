@@ -5,7 +5,7 @@ from app.parse import scan_path
 from app.parse import find_type
 from app.network import scan_network
 import os
-import tempfile
+
 
 
 app = FastAPI()
@@ -26,38 +26,25 @@ async def upload(files: list[UploadFile] = File(...), rulesFile: UploadFile = Fi
     #saving uploaded yara rules in a temp file
     results = []
     try:
-        with tempfile.NamedTemporaryFile(delete=False) as yara_rules_temp:
-            yara_rules_path = yara_rules_temp.name
-            yara_rules_temp.write(await rulesFile.read())
-        
-        # Check if the file was created
-        if not os.path.isfile(yara_rules_path):
-            return {"error": "Yara rules file not created"}
+        #direcly fetching yara rules
+        yara_rules_path = await rulesFile.read()
 
-        #saving uploaded folders in a temp file    
-        uploaded_file_paths = []
+        #directly fetching the uploaded files    
         for file in files:
-            with tempfile.NamedTemporaryFile(delete=False) as file_temp:
-                file_path = file_temp.name
-                file_temp.write(await file.read())
-                uploaded_file_paths.append(file_path)
-       
-        # Check if the uploaded files were created
-        for path in uploaded_file_paths:
-            if not os.path.isfile(path):
-                return {"error": f"Uploaded file not created: {path}"}
-        
-        #scanning the uploaded files with the uploaded rules
-        #results = []
-        for file_path in uploaded_file_paths:
-            file_type = find_type(file_path)
+            file_path = await file.read()
+            
+            #checking file type
+            file_type = find_type(file.filename)
+
+            #scanning network files
             if file_type == 'network':
                 network_data = scan_network(file_path)
                 results.append({
                     'file' : os.path.basename(file_path),
                     'protocol' : network_data
                 })
-                
+
+            #scanning other file types    
             else:#file_type:
                 scan_result = scan_path(file_path, yara_rules_path)
                 if scan_result is None:
@@ -73,14 +60,13 @@ async def upload(files: list[UploadFile] = File(...), rulesFile: UploadFile = Fi
                     'context' : scan_result['context']
                 })
                 
-
-
         #backend response 
         return {"results": results}
     
     #handle the exception 
     except Exception as e:
         return {"error": str(e)}
+        
     
 
 
