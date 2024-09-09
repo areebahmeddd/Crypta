@@ -24,6 +24,7 @@ app.add_middleware(
 async def upload(files: list[UploadFile] = File(...), rulesFile: UploadFile = File(...)):
     
     #saving uploaded yara rules in a temp file
+    results = []
     try:
         with tempfile.NamedTemporaryFile(delete=False) as yara_rules_temp:
             yara_rules_path = yara_rules_temp.name
@@ -47,16 +48,17 @@ async def upload(files: list[UploadFile] = File(...), rulesFile: UploadFile = Fi
                 return {"error": f"Uploaded file not created: {path}"}
         
         #scanning the uploaded files with the uploaded rules
-        results = []
+        #results = []
         for file_path in uploaded_file_paths:
             file_type = find_type(file_path)
             if file_type == 'network':
                 network_data = scan_network(file_path)
-                results.append(network_data)
-                result = {
+                results.append({
+                    'file' : os.path.basename(file_path),
                     'protocol' : network_data
-                }
-            elif file_type:
+                })
+                
+            else:#file_type:
                 scan_result = scan_path(file_path, yara_rules_path)
                 if scan_result is None:
                     scan_result = {
@@ -64,21 +66,17 @@ async def upload(files: list[UploadFile] = File(...), rulesFile: UploadFile = Fi
                         'component': 'N/A',
                         'context': 'N/A'
                     }
-                results.append(scan_result)
-                result = {
-                    'results': [
-                        {
-                            'file': os.path.basename(file_path),
-                            'rule': results['rule'],
-                            'component': results['component'],
-                            'context': results['context']
-                        }
-                    ]
-                } 
+                results.append({
+                    'file' : os.path.basename(file_path),
+                    'rule' : scan_result['rule'],
+                    'component' : scan_result['component'],
+                    'context' : scan_result['context']
+                })
+                
 
 
         #backend response 
-        return result
+        return {"results": results}
     
     #handle the exception 
     except Exception as e:
