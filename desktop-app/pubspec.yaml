@@ -44,6 +44,7 @@ dependencies:
   file_selector: ^1.0.3
   riverpod: ^2.5.1
   flutter_riverpod: ^2.5.1
+  data_table_2: ^2.5.15
 
 dev_dependencies:
   flutter_test:
