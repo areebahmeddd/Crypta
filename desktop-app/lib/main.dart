@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:crypta/screens/dashboard_page.dart';
 import 'package:crypta/screens/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
       title: 'File Upload App',
       theme: theme,
       debugShowCheckedModeBanner: false,
-      home: const HomePage(),
+      home: const DashboardPage(),
     );
   }
 }
