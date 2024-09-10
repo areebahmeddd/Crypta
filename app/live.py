@@ -1,8 +1,6 @@
 import psutil
 import os
 
-# Returning file name (not content) from the drive
-# TODO: send "file" not just file name so the setFiles() can render it properly --DONT TOUCH
 def scan_drive():
     drive_mountpoint = list_drive()
 

@@ -6,21 +6,22 @@ import uploadIcon from "../assets/upload.png";
 import fileIcons from "../assets/fileIcons";
 
 function Home() {
+  const navigate = useNavigate();
   const [files, setFiles] = useState([]);
   const [uploadPercentage, setUploadPercentage] = useState(0);
   const [dragging, setDragging] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [inputKey, setInputKey] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate();
 
   // Detect connected drives and fetch files from the backend
   const detectDrives = async () => {
     try {
-      await axios.post("http://127.0.0.1:8000/api/detect");
-      const response = await axios.get("http://127.0.0.1:8000/api/files");
-      console.log(response.data);
-      setFiles(response.data);
+      const postRequest = await axios.post("http://127.0.0.1:8000/api/detect");
+      console.log(postRequest.data);
+      const getResponse = await axios.get("http://127.0.0.1:8000/api/files");
+      console.log(getResponse.data);
+      setFiles(getResponse.data);
     } catch (error) {
       setErrorMessage("Failed to detect drives or fetch files.");
     }

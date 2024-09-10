@@ -18,29 +18,42 @@ app.add_middleware(
 )
 
 @app.post('/api/upload')
-async def upload(files: list[UploadFile] = File(...), rulesFile: UploadFile = File(...)):
+async def upload(uploadedFiles: list[UploadFile] = File(...), yaraFile: UploadFile = File(...)):
     
     UPLOAD_DIR = "uploaded_files"
     os.makedirs(UPLOAD_DIR, exist_ok=True)
     #saving uploaded yara rules in a temp file
     results = []
     try:
-        r'''with tempfile.NamedTemporaryFile(delete=False) as yara_rules_temp:
-            yara_rules_path = yara_rules_temp.name
-            yara_rules_temp.write(await rulesFile.read())''' 
-        yara_rules_path = os.path.join(UPLOAD_DIR, rulesFile.filename)
+        
+        yara_rules_path = os.path.join(UPLOAD_DIR, yaraFile.filename)
+        #print(rulesFile.filename)
+        #print(f"File content type: {rulesFile.content_type}")
         with open(yara_rules_path, "wb") as rules_file:
-            rules_file.write(await rulesFile.read())
+            rules_file.write(await yaraFile.read())
         print(yara_rules_path)
+
+        r'''with open(yara_rules_path, "rb") as rules_file:
+        rules_file_content = await rulesFile.read()
+        print(f"YARA rules file content (first 100 bytes): {rules_file_content[:100]}")'''  # Print the first 100 bytes
+        
         
 
+        
         #saving uploaded folders in a temp file    
-        for file in files:
+        for file in uploadedFiles:
             file_path = os.path.join(UPLOAD_DIR, file.filename)
+            file_path = os.path.normpath(file_path) 
+            print(file_path) 
+
+            directory = os.path.dirname(file_path)
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+            
             with open(file_path, "wb") as f:
                 f.write(await file.read())
             print(file_path) 
-                
+
         #scanning the uploaded files with the uploaded rules
         #results = []
             file_type = find_type(file_path)
@@ -68,7 +81,7 @@ async def upload(files: list[UploadFile] = File(...), rulesFile: UploadFile = Fi
                 
 
         #backend response 
-        return {"results": results}
+        return JSONResponse(content=results)
     
     #handle the exception 
     except Exception as e:
