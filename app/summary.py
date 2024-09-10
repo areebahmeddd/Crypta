@@ -8,7 +8,7 @@ from reportlab.lib import colors
 from reportlab.lib.units import inch
 from docx import Document  # Importing for Word generation
 import textwrap
-
+import csv
 # Load the API key from the .env file
 load_dotenv()
 genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
@@ -103,8 +103,23 @@ def generate_word_from_response(response_text, output_file='output.docx'):
     # Save the Word document
     doc.save(output_file)
 
+def generate_csv_from_response(response_text, output_file='output.csv'):
+    """Generates a CSV file with the bot's response."""
+    lines = response_text.split('\n')
+
+    # Assume each line is a row of data for CSV (you can modify this based on your structure)
+    with open(output_file, mode='w', newline='', encoding='utf-8') as csv_file:
+        writer = csv.writer(csv_file)
+
+        # Write each line of text as a row in the CSV
+        for line in lines:
+            # Split the line by commas if it's structured, otherwise just write it as a single column
+            row = line.split(',') if ',' in line else [line]
+            writer.writerow(row)
+
 # Example usage
 if __name__ == '__main__':
+
     file_data = "give me 5000 word of on the topic of ai and its benefitd elaborate"
     
     # Get the bot's summary
@@ -115,3 +130,4 @@ if __name__ == '__main__':
 
     generate_word_from_response(summary, output_file='bot_response.docx')
 
+    generate_csv_from_response(summary, output_file='bot_response.csv')
