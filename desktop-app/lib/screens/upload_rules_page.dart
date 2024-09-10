@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:crypta/providers/files_provider.dart';
+import 'package:crypta/screens/dashboard_page.dart';
 import 'package:crypta/utils/hexcolor.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -219,6 +220,13 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                               ElevatedButton(
                                 onPressed: () {
                                   // Analyze action
+                                  Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const DashboardPage(),
+                                        ),
+                                      );
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: myColorFromHex('#457d58'),

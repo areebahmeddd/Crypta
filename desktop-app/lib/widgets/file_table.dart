@@ -1,5 +1,4 @@
 import 'package:crypta/model/file_data.dart';
-import 'package:crypta/utils/hexcolor.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -60,19 +59,19 @@ class FileTableState extends ConsumerState<FileTable> {
                       },
                     ),
                     const SizedBox(width: 10),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Handle dispatch action
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: myColorFromHex('#457d58'),
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: const Text("DISPATCH SELECTED", style: TextStyle(color: Colors.white)),
-                    ),
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     // Handle dispatch action
+                    //   },
+                    //   style: ElevatedButton.styleFrom(
+                    //     backgroundColor: myColorFromHex('#457d58'),
+                    //     padding: const EdgeInsets.symmetric(horizontal: 20),
+                    //     shape: RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(8),
+                    //     ),
+                    //   ),
+                    //   child: const Text("DISPATCH SELECTED", style: TextStyle(color: Colors.white)),
+                    // ),
                   ],
                 ),
               ],
@@ -153,7 +152,7 @@ class FileTableState extends ConsumerState<FileTable> {
                 const SizedBox(width: 10),
                 const Text(
                   "Page 1 of 5", // Example page info
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  style:  TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(width: 10),
                 TextButton(

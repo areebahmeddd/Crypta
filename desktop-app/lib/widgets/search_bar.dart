@@ -50,65 +50,65 @@ class CustomSearchBarState extends State<CustomSearchBar> {
           ),
           const SizedBox(width: 10),
 
-          // Category Dropdown
-          Expanded(
-            flex: 1,
-            child: DropdownButtonFormField<String>(
-              value: selectedCategory,
-              items: ['All', 'Category 1', 'Category 2']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                filled: true,
-                fillColor: Colors.grey[200],
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-              onChanged: (String? newValue) {
-                setState(() {
-                  selectedCategory = newValue!;
-                });
-              },
-            ),
-          ),
-          const SizedBox(width: 10),
+          // // Category Dropdown
+          // Expanded(
+          //   flex: 1,
+          //   child: DropdownButtonFormField<String>(
+          //     value: selectedCategory,
+          //     items: ['All', 'Category 1', 'Category 2']
+          //         .map<DropdownMenuItem<String>>((String value) {
+          //       return DropdownMenuItem<String>(
+          //         value: value,
+          //         child: Text(value),
+          //       );
+          //     }).toList(),
+          //     decoration: InputDecoration(
+          //       contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+          //       filled: true,
+          //       fillColor: Colors.grey[200],
+          //       border: OutlineInputBorder(
+          //         borderRadius: BorderRadius.circular(10),
+          //         borderSide: BorderSide.none,
+          //       ),
+          //     ),
+          //     onChanged: (String? newValue) {
+          //       setState(() {
+          //         selectedCategory = newValue!;
+          //       });
+          //     },
+          //   ),
+          // ),
+          // const SizedBox(width: 10),
 
-          // Status Dropdown
-          Expanded(
-            flex: 1,
-            child: DropdownButtonFormField<String>(
-              value: selectedStatus,
-              items: ['All', 'Active', 'Inactive']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                filled: true,
-                fillColor: Colors.grey[200],
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-              onChanged: (String? newValue) {
-                setState(() {
-                  selectedStatus = newValue!;
-                });
-              },
-            ),
-          ),
-          const SizedBox(width: 10),
+          // // Status Dropdown
+          // Expanded(
+          //   flex: 1,
+          //   child: DropdownButtonFormField<String>(
+          //     value: selectedStatus,
+          //     items: ['All', 'Active', 'Inactive']
+          //         .map<DropdownMenuItem<String>>((String value) {
+          //       return DropdownMenuItem<String>(
+          //         value: value,
+          //         child: Text(value),
+          //       );
+          //     }).toList(),
+          //     decoration: InputDecoration(
+          //       contentPadding: EdgeInsets.symmetric(horizontal: 10),
+          //       filled: true,
+          //       fillColor: Colors.grey[200],
+          //       border: OutlineInputBorder(
+          //         borderRadius: BorderRadius.circular(10),
+          //         borderSide: BorderSide.none,
+          //       ),
+          //     ),
+          //     onChanged: (String? newValue) {
+          //       setState(() {
+          //         selectedStatus = newValue!;
+          //       });
+          //     },
+          //   ),
+          // ),
+          // const SizedBox(width: 10),
 
           // Search Button
           ElevatedButton(
