@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "../styles/Home.css";
 import uploadIcon from "../assets/upload.png";
 import fileIcons from "../assets/fileIcons";
+import backgroundImage from "../assets/a.jpeg"; 
 
 function Home() {
   const [files, setFiles] = useState([]);
@@ -43,8 +44,21 @@ function Home() {
         fileIcons["default"],
     }));
     setFiles(fileMetadata);
-    setUploadPercentage(0);
     setUploading(false);
+    startProgress();
+  };
+
+  const startProgress = () => {
+    setUploading(true);
+    let progress = 0;
+    const interval = setInterval(() => {
+      if (progress >= 100) {
+        clearInterval(interval);
+      } else {
+        progress += 10; // Adjust speed of progress increment
+        setUploadPercentage(progress);
+      }
+    }, 50); // Adjust the speed of the progress animation
   };
 
   const onDrop = (e) => {
@@ -83,12 +97,12 @@ function Home() {
                     fileIcons["default"],
                 });
                 setFiles((prevFiles) => [...prevFiles, ...files]);
+                startProgress();
               });
             }
           }
         }
       }
-      setUploadPercentage(0);
       setUploading(false);
     }
   };
@@ -116,6 +130,7 @@ function Home() {
               fileIcons["default"],
           },
         ]);
+        startProgress(); 
       });
     }
   };
@@ -145,7 +160,23 @@ function Home() {
   };
 
   const handleCancel = (index) => {
-    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+    setFiles((prevFiles) => {
+      const updatedFiles = prevFiles.filter((_, i) => i !== index);
+  
+      // If there are no more files, reset the progress and uploading states
+      if (updatedFiles.length === 0) {
+        setUploading(false);
+        setUploadPercentage(0);
+      }
+  
+      return updatedFiles;
+    });
+  };
+
+  const handleCancelAll = () => {
+    setFiles([]); 
+    setUploading(false);  // Stop the progress bar
+    setUploadPercentage(0); // Reset the percentage to 0
   };
 
   return (
@@ -199,7 +230,7 @@ function Home() {
             <button
               type="button"
               className="cancel-button"
-              onClick={() => setFiles([])} // Clears all files
+              onClick={handleCancelAll}// Clears all files
             >
               Cancel
             </button>

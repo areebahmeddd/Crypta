@@ -82,6 +82,7 @@ function Rules() {
     setRulesFile(null); // Clear the selected file
     navigate("/"); // Navigate to the home page or previous page
   };
+  
   const handleAnalyze = async () => {
     if (selectedOption || rulesFile) {
       setLoading(true); // Start loading state
@@ -117,9 +118,10 @@ function Rules() {
                 processingMethod: selectedOption,
                 rulesFile: rulesFile ? rulesFile.name : null,
                 processedData: responseData.processedData, // Pass the processed data
+                filesFromHome: location.state.files,
               },
             });
-          } 
+          }
         } else {
           const errorData = await response.json();
           setError(`Error: ${errorData.message || "Failed to upload files"}`);

@@ -371,7 +371,7 @@
 .progress-bar {
   position: relative;
   width: 100%;
-  height: 20px; /* Adjust height to be slim */
+  height: 22px; /* Adjust height to be slim */
   background-color: #e0e0e0; /* Light grey background color for the container */
   border-radius: 10px; /* Slightly rounded corners for the container */
   margin-top: 0.5rem; /* Margin to create space above */
