@@ -10,13 +10,9 @@ from app.live import scan_drive
 from fastapi.responses import JSONResponse
 
 app = FastAPI()
-origins = [
-    '*'
-]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=['*'],
-    allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*']
 )
@@ -77,23 +73,16 @@ async def upload(files: list[UploadFile] = File(...), rulesFile: UploadFile = Fi
     #handle the exception 
     except Exception as e:
         return {"error": str(e)}
-    
-
-
 
 @app.post('/api/detect')
 async def detect(background_tasks: BackgroundTasks):
-    print('hello')
     background_tasks.add_task(scan_drive)
-    result_sc = scan_drive()
-    return JSONResponse(content={'message' : 'detexting' })
+    return JSONResponse(content={'message': 'Drive detection started in the background.'})
 
-@app.get('/api/getdrive')
-async def detect(background_tasks: BackgroundTasks):
-    print('hello')
-    result_sc = scan_drive()
-    print(result_sc)
-    return JSONResponse(content=result_sc)
+@app.get('/api/files')
+async def files():
+    file_names = scan_drive()
+    return JSONResponse(content={'files': file_names})
 
 if __name__ == '__main__':
     uvicorn.run(app, host='127.0.0.1', port=8000)

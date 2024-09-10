@@ -12,33 +12,20 @@ function Home() {
   const [dragging, setDragging] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [inputKey, setInputKey] = useState(0);
-  const [drives, setDrives] = useState([]);
-  const [selectedDrive, setSelectedDrive] = useState("");
-  const [showOptions, setShowOptions] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  const detectDrives = () => {
-    fetch("http://127.0.0.1:8000/api/detect", {
-      method: "POST",  // Use POST method
-    })
-      .then((response) => response.json())  // Parse JSON response
-      .then((data) => {
-        console.log("Response data:", data);
-      })
-      .catch((error) => console.error("Error detecting drives:", error));
-
-      fetch("http://127.0.0.1:8000/api/getdrive", {
-        method: "GET",  // Use GET method
-      })
-        .then((response) => response.json())  // Parse JSON response
-        .then((data) => {
-          console.log("Response data:", data);
-          setFiles(data);  // Log the response data
-        })
-        .catch((error) => console.error("Error detecting drives:", error));
-  };
-
+  const detectDrives = async () => {
+    try {
+      await axios.post("http://127.0.0.1:8000/api/detect");
+      const response = await axios.get("http://127.0.0.1:8000/api/files");
+      console.log(response.data);
+      setFiles(response.data);
+    } catch (error) {
+      console.error("Error detecting drives:", error);
+      setErrorMessage("Failed to detect drives or fetch files.");
+    }
+  };
 
   const onChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
@@ -196,11 +183,6 @@ function Home() {
         <button className="detect-drive-button" onClick={detectDrives}>
           Detect
         </button>
-        {drives.length > 0 && (
-          <div className="drive-list">
-            {/* Add drive selection here if needed */}
-          </div>
-        )}
       </div>
 
       <div
