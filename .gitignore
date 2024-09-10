@@ -5,9 +5,12 @@ __pycache__/
 
 # Test files
 *.raw
+*.mem
+*.e01
 
 # Output related
 *.csv
+*.bin
 *_report/
 
 # Web related

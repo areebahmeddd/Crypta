@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:crypta/screens/dashboard_page.dart';
 import 'package:crypta/screens/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:window_manager/window_manager.dart';
 
 void main() async {
@@ -15,9 +17,9 @@ void main() async {
     await windowManager.focus();
   });
   if (Platform.isWindows) {
-    windowManager.setMinimumSize(const Size(900, 700));
+    windowManager.setMinimumSize(const Size(1000, 800));
   }
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -28,7 +30,7 @@ class MyApp extends StatelessWidget {
       title: 'File Upload App',
       theme: theme,
       debugShowCheckedModeBanner: false,
-      home: const HomePage(),
+      home: const DashboardPage(),
     );
   }
 }
