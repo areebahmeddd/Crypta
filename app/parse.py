@@ -14,7 +14,7 @@ with open('app/metadata.json', 'r') as file:
     metadata = json.load(file)
     file_types = metadata['file_types']
 
-def scan_path(input_path, rules_path):
+def scan_path(input_path, rules_path='yara-rules\security.yara'):
 
     # Check if input path is a directory, zip file or single file
     if os.path.isdir(input_path):
