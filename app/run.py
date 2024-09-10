@@ -48,8 +48,8 @@ async def upload(uploadedFiles: list[UploadFile] = File(...), yaraFile: UploadFi
             file_type = find_type(file_path)
             if file_type == 'network':
                 network_data = scan_network(file_path)
-                filtered_network_data = filter_empty_protocols(network_data)
-                serialized_network_data = serialize_network_data(filtered_network_data)
+                #filtered_network_data = filter_empty_protocols(network_data)
+                serialized_network_data = serialize_network_data(network_data)
                 results.append({
                     'file': os.path.basename(file_path),
                     'protocol': serialized_network_data
@@ -91,3 +91,17 @@ async def files():
 
 if __name__ == '__main__':
     uvicorn.run(app, host='127.0.0.1', port=8000)
+
+def serialize_network_data(data):
+    """
+    Converts network data into a serializable format.
+    """
+    def default_serializer(obj):
+        if isinstance(obj, bytes):
+            return obj.decode('utf-8')  # Convert bytes to string
+        if isinstance(obj, (set, frozenset)):
+            return list(obj)  # Convert sets to lists
+        return str(obj)  # Convert other non-serializable objects to string if necessary
+
+    # Convert to JSON string and back to Python object to ensure serializability
+    return json.loads(json.dumps(data, default=default_serializer))
