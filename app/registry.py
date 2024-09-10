@@ -1,6 +1,8 @@
 import winreg
 import pandas as pd
 
+
+## Code is under development --DONT TOUCH :)
 def read_registry_key(hive, subkey):
     try:
         registry = winreg.OpenKey(hive, subkey)
