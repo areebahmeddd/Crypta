@@ -65,14 +65,28 @@ function Rules() {
     }
   };
 
-  // Set the default file and update the selected option
-  const handleFileSelection = () => {
-    const defaultFile = new File([defaultRulesFile], "security.yara", {
-      type: "text/plain",
-    });
-    setRulesFile(defaultFile);
-    setSelectedOption("default-file");
+  const handleFileSelection = async () => {
+    try {
+      // Fetch the static file content
+      const response = await fetch(defaultRulesFile);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const fileContent = await response.text();
+  
+      // Create a new File object from the fetched content
+      const defaultFile = new File([fileContent], "security.yara", {
+        type: "text/plain",
+      });
+  
+      // Update state with the new file and selected option
+      setRulesFile(defaultFile);
+      setSelectedOption("default-file");
+    } catch (error) {
+      console.error('Error fetching the default file:', error);
+    }
   };
+  
 
   // Prevent default form submission behavior
   const onSubmit = (e) => {
