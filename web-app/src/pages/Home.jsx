@@ -19,16 +19,26 @@ function Home() {
   const navigate = useNavigate();
 
   const detectDrives = () => {
-    axios
-      .get("http://127.0.0.1:8000/api/detect")
-      .then((response) => {
-        setDrives(response.data.drives);
-        if (response.data.drives.length > 0) {
-          setSelectedDrive(response.data.drives[0]);
-        }
+    fetch("http://127.0.0.1:8000/api/detect", {
+      method: "POST",  // Use POST method
+    })
+      .then((response) => response.json())  // Parse JSON response
+      .then((data) => {
+        console.log("Response data:", data);
       })
-      .catch((error) => console.error("Error fetching drives:", error));
-  };
+      .catch((error) => console.error("Error detecting drives:", error));
+
+      fetch("http://127.0.0.1:8000/api/getdrive", {
+        method: "GET",  // Use GET method
+      })
+        .then((response) => response.json())  // Parse JSON response
+        .then((data) => {
+          console.log("Response data:", data);
+          setFiles(data);  // Log the response data
+        })
+        .catch((error) => console.error("Error detecting drives:", error));
+  };
+
 
   const onChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
