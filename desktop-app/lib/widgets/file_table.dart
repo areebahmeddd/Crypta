@@ -33,47 +33,47 @@ class FileTableState extends ConsumerState<FileTable> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Top controls (e.g., Show column, Dispatch selected, pagination)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
+          const Padding(
+            padding:  EdgeInsets.only(bottom: 8.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const Text(
+                 Text(
                   "File Summary",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 // Dropdown and button
-                Row(
-                  children: [
-                    DropdownButton<String>(
-                      value: 'All Column',
-                      items: ['All Column', 'File', 'Type', 'Size']
-                          .map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        // Handle dropdown change
-                      },
-                    ),
-                    const SizedBox(width: 10),
-                    // ElevatedButton(
-                    //   onPressed: () {
-                    //     // Handle dispatch action
-                    //   },
-                    //   style: ElevatedButton.styleFrom(
-                    //     backgroundColor: myColorFromHex('#457d58'),
-                    //     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    //     shape: RoundedRectangleBorder(
-                    //       borderRadius: BorderRadius.circular(8),
-                    //     ),
-                    //   ),
-                    //   child: const Text("DISPATCH SELECTED", style: TextStyle(color: Colors.white)),
-                    // ),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     DropdownButton<String>(
+                //       value: 'All Column',
+                //       items: ['All Column', 'File', 'Type', 'Size']
+                //           .map((String value) {
+                //         return DropdownMenuItem<String>(
+                //           value: value,
+                //           child: Text(value),
+                //         );
+                //       }).toList(),
+                //       onChanged: (String? newValue) {
+                //         // Handle dropdown change
+                //       },
+                //     ),
+                //     const SizedBox(width: 10),
+                //     // ElevatedButton(
+                //     //   onPressed: () {
+                //     //     // Handle dispatch action
+                //     //   },
+                //     //   style: ElevatedButton.styleFrom(
+                //     //     backgroundColor: myColorFromHex('#457d58'),
+                //     //     padding: const EdgeInsets.symmetric(horizontal: 20),
+                //     //     shape: RoundedRectangleBorder(
+                //     //       borderRadius: BorderRadius.circular(8),
+                //     //     ),
+                //     //   ),
+                //     //   child: const Text("DISPATCH SELECTED", style: TextStyle(color: Colors.white)),
+                //     // ),
+                //   ],
+                // ),
               ],
             ),
           ),
@@ -121,11 +121,11 @@ class FileTableState extends ConsumerState<FileTable> {
                   .entries
                   .map(
                     (entry) => DataRow(
-                      onSelectChanged: (isSelected) {
-                        setState(() {
-                          selectedRows[entry.key] = isSelected ?? false;
-                        });
-                      },
+                      // onSelectChanged: (isSelected) {
+                      //   setState(() {
+                      //     selectedRows[entry.key] = isSelected ?? false;
+                      //   });
+                      // },
                       cells: [
                         DataCell(Text(entry.value['file']!)),
                         DataCell(Text(entry.value['type']!)),

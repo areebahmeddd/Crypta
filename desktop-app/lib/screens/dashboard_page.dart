@@ -48,6 +48,17 @@ class DashboardPageState extends ConsumerState<DashboardPage> {
                   },
                 ),
                 ListTile(
+                  leading: const Icon(Icons.chat, color: Colors.white),
+                  title:
+                      const Text('Chat', style: TextStyle(color: Colors.white)),
+                  onTap: () {
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const HomePage()));
+                  },
+                ),
+                ListTile(
                   leading: const Icon(Icons.settings, color: Colors.white),
                   title: const Text('Settings',
                       style: TextStyle(color: Colors.white)),
@@ -78,30 +89,41 @@ class DashboardPageState extends ConsumerState<DashboardPage> {
                       ),
                       Gap(20),
                       SizedBox(
-                        height: 500,
+                        height: 480,
                         width: double.infinity,
                         child: FileTable2(),
                       ),
                       Gap(20),
-                      DownloadReport(),
-                      Gap(5),
-                      ExportAnalysis(),
-                      Gap(60),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(
-                            width: 500,
-                            height: 500,
-                            child: LineChartSample(),
-                          ),
-                          Spacer(),
-                          SizedBox(
-                            width: 500,
-                            height: 500,
-                            child: BarChartSample(),
-                          ),
-                          Gap(50)
+                          // Gap(80),
+                          DownloadReport(),
+                          // Spacer(),
+                          Gap(20),
+                          ExportAnalysis(),
+                          // Gap(80)
                         ],
+                      ),
+                      Gap(60),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 500,
+                              height: 500,
+                              child: LineChartSample(),
+                            ),
+                            Gap(45),
+                            SizedBox(
+                              width: 500,
+                              height: 500,
+                              child: BarChartSample(),
+                            ),
+                            Gap(50)
+                          ],
+                        ),
                       )
                     ],
                   ),
