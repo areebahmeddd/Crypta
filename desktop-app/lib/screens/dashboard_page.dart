@@ -1,9 +1,11 @@
 import "package:crypta/screens/home_page.dart";
 import "package:crypta/utils/hexcolor.dart";
+import "package:crypta/widgets/barchart.dart";
 import "package:crypta/widgets/download_report.dart";
 import "package:crypta/widgets/export_analysis.dart";
 import "package:crypta/widgets/file_table.dart";
 import "package:crypta/widgets/file_tables_2.dart";
+import "package:crypta/widgets/linechart.dart";
 import "package:crypta/widgets/search_bar.dart";
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
@@ -84,6 +86,23 @@ class DashboardPageState extends ConsumerState<DashboardPage> {
                       DownloadReport(),
                       Gap(5),
                       ExportAnalysis(),
+                      Gap(60),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 500,
+                            height: 500,
+                            child: LineChartSample(),
+                          ),
+                          Spacer(),
+                          SizedBox(
+                            width: 500,
+                            height: 500,
+                            child: BarChartSample(),
+                          ),
+                          Gap(50)
+                        ],
+                      )
                     ],
                   ),
                 ),
