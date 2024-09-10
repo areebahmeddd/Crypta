@@ -47,7 +47,7 @@ class FileTable2State extends ConsumerState<FileTable2> {
                     },
                     border: TableBorder.all(color: Colors.grey, width: 1),
                     children: [
-                      _buildTableRow("Level", "Type", "IoC", isHeader: true),
+                      _buildTableRow("Level", "Type", "Triggered Action", isHeader: true),
                       _buildTableRow(
                           fileData['level'] ?? "High",
                           fileData['type'] ?? "Authentication",
@@ -183,52 +183,52 @@ class FileTable2State extends ConsumerState<FileTable2> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Top controls (e.g., Show column, Dispatch selected, pagination)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
+          const Padding(
+            padding:  EdgeInsets.only(bottom: 8.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const Text(
+                 Text(
                   "Vulnerability Summary",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 // Dropdown and button
-                Row(
-                  children: [
-                    DropdownButton<String>(
-                      value: 'All Column',
-                      items: [
-                        'All Column',
-                        'File',
-                        'Vulnerability Type',
-                        'Indicators'
-                      ].map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        // Handle dropdown change
-                      },
-                    ),
-                    const SizedBox(width: 10),
-                    // ElevatedButton(
-                    //   onPressed: () {
-                    //     // Handle dispatch action
-                    //   },
-                    //   style: ElevatedButton.styleFrom(
-                    //     backgroundColor: myColorFromHex('#457d58'),
-                    //     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    //     shape: RoundedRectangleBorder(
-                    //       borderRadius: BorderRadius.circular(8),
-                    //     ),
-                    //   ),
-                    //   child: const Text("DISPATCH SELECTED",
-                    //       style: TextStyle(color: Colors.white)),
-                    // ),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     DropdownButton<String>(
+                //       value: 'All Column',
+                //       items: [
+                //         'All Column',
+                //         'File',
+                //         'Vulnerability Type',
+                //         'Indicators'
+                //       ].map((String value) {
+                //         return DropdownMenuItem<String>(
+                //           value: value,
+                //           child: Text(value),
+                //         );
+                //       }).toList(),
+                //       onChanged: (String? newValue) {
+                //         // Handle dropdown change
+                //       },
+                //     ),
+                //     const SizedBox(width: 10),
+                //     // ElevatedButton(
+                //     //   onPressed: () {
+                //     //     // Handle dispatch action
+                //     //   },
+                //     //   style: ElevatedButton.styleFrom(
+                //     //     backgroundColor: myColorFromHex('#457d58'),
+                //     //     padding: const EdgeInsets.symmetric(horizontal: 20),
+                //     //     shape: RoundedRectangleBorder(
+                //     //       borderRadius: BorderRadius.circular(8),
+                //     //     ),
+                //     //   ),
+                //     //   child: const Text("DISPATCH SELECTED",
+                //     //       style: TextStyle(color: Colors.white)),
+                //     // ),
+                //   ],
+                // ),
               ],
             ),
           ),
@@ -271,11 +271,11 @@ class FileTable2State extends ConsumerState<FileTable2> {
                   .entries
                   .map(
                     (entry) => DataRow(
-                      onSelectChanged: (isSelected) {
-                        setState(() {
-                          selectedRows[entry.key] = isSelected ?? false;
-                        });
-                      },
+                      // onSelectChanged: (isSelected) {
+                      //   setState(() {
+                      //     selectedRows[entry.key] = isSelected ?? false;
+                      //   });
+                      // },
                       cells: [
                         DataCell(
                           Text(entry.value['file']!),
@@ -308,7 +308,7 @@ class FileTable2State extends ConsumerState<FileTable2> {
           const SizedBox(height: 16),
           const Text(
             "Alert",
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
           ),
           const SizedBox(height: 8),
           const Text("• Found 10 high-level threats for authentication."),

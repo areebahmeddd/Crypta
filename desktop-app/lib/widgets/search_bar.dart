@@ -43,6 +43,8 @@ class CustomSearchBarState extends State<CustomSearchBar> {
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide.none,
                 ),
+                suffixIcon: GestureDetector(
+                    onTap: () {}, child: const Icon(Icons.filter_alt_outlined)),
                 filled: true,
                 fillColor: Colors.grey[200],
               ),
@@ -108,7 +110,6 @@ class CustomSearchBarState extends State<CustomSearchBar> {
           //     },
           //   ),
           // ),
-          // const SizedBox(width: 10),
 
           // Search Button
           ElevatedButton(

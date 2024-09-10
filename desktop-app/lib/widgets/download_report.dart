@@ -1,6 +1,7 @@
 import 'package:crypta/model/downloadable_file_types.dart';
 import 'package:crypta/utils/hexcolor.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 class DownloadReport extends StatefulWidget {
   const DownloadReport({super.key});
@@ -25,32 +26,27 @@ class _DownloadReportState extends State<DownloadReport> {
                 borderRadius: BorderRadius.circular(8),
               )),
           child: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 125, vertical: 8),
+            padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
             child: Text(
               'Download Report',
               style: TextStyle(color: Colors.white),
             ),
           ),
         ),
-        const Spacer(),
-        SizedBox(
-          width: 200,
-          child: Center(
-            child: DropdownButton<String>(
-              value: exportFileType, // Current selected value
-              items: downloadableFileTypes
-                  .map((String fileType) => DropdownMenuItem<String>(
-                        value: fileType,
-                        child: Text(fileType),
-                      ))
-                  .toList(),
-              onChanged: (String? newValue) {
-                setState(() {
-                  exportFileType = newValue ?? exportFileType; // Set new value
-                });
-              },
-            ),
-          ),
+        const Gap(20),
+        DropdownButton<String>(
+          value: exportFileType, // Current selected value
+          items: downloadableFileTypes
+              .map((String fileType) => DropdownMenuItem<String>(
+                    value: fileType,
+                    child: Text(fileType),
+                  ))
+              .toList(),
+          onChanged: (String? newValue) {
+            setState(() {
+              exportFileType = newValue ?? exportFileType; // Set new value
+            });
+          },
         ),
       ],
     );
