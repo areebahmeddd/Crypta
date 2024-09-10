@@ -3,7 +3,7 @@ import os
 from fastapi import FastAPI, File, UploadFile, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-
+import json
 from app.parse import scan_file, find_type
 from app.network import scan_network
 from app.live import scan_drive
@@ -48,9 +48,11 @@ async def upload(uploadedFiles: list[UploadFile] = File(...), yaraFile: UploadFi
             file_type = find_type(file_path)
             if file_type == 'network':
                 network_data = scan_network(file_path)
+                filtered_network_data = filter_empty_protocols(network_data)
+                serialized_network_data = serialize_network_data(filtered_network_data)
                 results.append({
                     'file': os.path.basename(file_path),
-                    'protocol': network_data
+                    'protocol': serialized_network_data
                 })
                 
             else:  # Handle other file types
