@@ -4,8 +4,7 @@ from fastapi import FastAPI, File, UploadFile, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.parse import scan_path
-from app.parse import find_type
+from app.parse import scan_file, find_type
 from app.network import scan_network
 from app.live import scan_drive
 
@@ -22,25 +21,16 @@ async def upload(uploadedFiles: list[UploadFile] = File(...), yaraFile: UploadFi
     
     UPLOAD_DIR = "uploaded_files"
     os.makedirs(UPLOAD_DIR, exist_ok=True)
-    #saving uploaded yara rules in a temp file
+
     results = []
     try:
-        
+        # Saving uploaded YARA rules in a temp file
         yara_rules_path = os.path.join(UPLOAD_DIR, yaraFile.filename)
-        #print(rulesFile.filename)
-        #print(f"File content type: {rulesFile.content_type}")
         with open(yara_rules_path, "wb") as rules_file:
             rules_file.write(await yaraFile.read())
         print(yara_rules_path)
 
-        r'''with open(yara_rules_path, "rb") as rules_file:
-        rules_file_content = await rulesFile.read()
-        print(f"YARA rules file content (first 100 bytes): {rules_file_content[:100]}")'''  # Print the first 100 bytes
-        
-        
-
-        
-        #saving uploaded folders in a temp file    
+        # Saving uploaded files in a temp directory    
         for file in uploadedFiles:
             file_path = os.path.join(UPLOAD_DIR, file.filename)
             file_path = os.path.normpath(file_path) 
@@ -54,38 +44,38 @@ async def upload(uploadedFiles: list[UploadFile] = File(...), yaraFile: UploadFi
                 f.write(await file.read())
             print(file_path) 
 
-        #scanning the uploaded files with the uploaded rules
-        #results = []
+            # Scanning the uploaded files with the uploaded rules
             file_type = find_type(file_path)
             if file_type == 'network':
                 network_data = scan_network(file_path)
                 results.append({
-                    'file' : os.path.basename(file_path),
-                    'protocol' : network_data
+                    'file': os.path.basename(file_path),
+                    'protocol': network_data
                 })
                 
-            else:#file_type:
-                scan_result = scan_path(file_path, yara_rules_path)
-                if scan_result is None:
-                    scan_result = {
+            else:  # Handle other file types
+                scan_result = scan_file(file_path, yara_rules_path, file_type)
+                if not scan_result:
+                    # If no matches, return 'No matches'
+                    scan_result = [{
                         'rule': 'No matches',
                         'component': 'N/A',
-                        'context': 'N/A'
-                    }
-                results.append({
-                    'file' : os.path.basename(file_path),
-                    'rule' : scan_result['rule'],
-                    'component' : scan_result['component'],
-                    'context' : scan_result['context']
-                })
+                        'content': 'N/A'
+                    }]
+                for match in scan_result:
+                    results.append({
+                        'file': os.path.basename(file_path),
+                        'rule': match['rule'],
+                        'component': match['component'],
+                        'content': match['content']
+                    })
                 
-
-        #backend response 
+        # Return results as a JSON response
         return JSONResponse(content=results)
     
-    #handle the exception 
+    # Handle exceptions
     except Exception as e:
-        return {"error": str(e)}
+        return JSONResponse(content={"error": str(e)})
 
 @app.post('/api/detect')
 async def detect(background_tasks: BackgroundTasks):

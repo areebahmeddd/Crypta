@@ -1,8 +1,7 @@
 import yara
 import json
-import re
 import os
-import csv
+import re
 from colorama import init, Fore, Style
 
 # Initialize colorama
@@ -34,13 +33,13 @@ def scan_file(file_path, rules_path, file_type):
                     matches = rules.match(data=data)
                     if matches:
                         # Add triggered rules to matches_found list
-                        triggered_rules = ", ".join([match.rule for match in matches])
-                        #matches_found.append([triggered_rules, 'N/A', 'N/A'])
-                    return {
-                        'rule': triggered_rules,
-                        'component': 'N/A',
-                        'context': 'N/A'
-                    }
+                        for match in matches:
+                            matches_found.append({
+                                'rule': match.rule,
+                                'component': 'N/A',
+                                'content': 'N/A'
+                            })
+                    return matches_found
 
                 for line in file:
                     # If file type is detected, scan each line for YARA rule matches
@@ -49,13 +48,12 @@ def scan_file(file_path, rules_path, file_type):
                         # Add triggered rules, component and content to matches_found list
                         component, content = extract_info(line, file_pattern, patterns)
                         if component and content:
-                            triggered_rules = ", ".join([match.rule for match in matches])
-                            #matches_found.append([triggered_rules, component, content])
-                            return {
-                                'rule': triggered_rules,
-                                'component': component,
-                                'context': content
-                            }
+                            for match in matches:
+                                matches_found.append({
+                                    'rule': match.rule,
+                                    'component': component,
+                                    'content': content
+                                })
 
         elif file_type in ['binary', 'script', 'database', 'config']:
             with open(file_path, 'rb') as file:
@@ -64,27 +62,23 @@ def scan_file(file_path, rules_path, file_type):
                 matches = rules.match(data=data)
                 if matches:
                     # Add triggered rules to matches_found list
-                    triggered_rules = ", ".join([match.rule for match in matches])
-                    #matches_found.append([triggered_rules, 'N/A', 'N/A'])
-                    return {
-                        'rule': triggered_rules,
-                        'component': component,
-                        'context': content
-                    }
+                    for match in matches:
+                        matches_found.append({
+                            'rule': match.rule,
+                            'component': 'N/A',
+                            'content': 'N/A'
+                        })
 
-        r'''if matches_found:
-            # Generate CSV report with YARA rule matches, components and content found
-            output_filename = f'{os.path.splitext(os.path.basename(file_path))[0]}_report.csv'
-            output_filepath = os.path.join(os.getcwd(), output_filename)
-            with open(output_filepath, 'w', newline='') as file:
-                csv_writer = csv.writer(file)
-                csv_writer.writerow(['Rule', 'Component', 'Content'])
-                csv_writer.writerows(matches_found)
+        if matches_found:
             print(f'{Fore.GREEN}[SUCCESS]{Style.RESET_ALL} {len(matches_found)} YARA rules matched in {os.path.basename(file_path)}')
         else:
-            print(f'{Fore.YELLOW}[FAILURE]{Style.RESET_ALL} 0 YARA rules matched in {os.path.basename(file_path)}')'''
+            print(f'{Fore.YELLOW}[FAILURE]{Style.RESET_ALL} 0 YARA rules matched in {os.path.basename(file_path)}')
+
+        return matches_found
+
     except Exception as e:
         print(f'{Fore.RED}[ERROR]{Style.RESET_ALL} Error occurred while scanning {os.path.basename(file_path)}: {e}')
+        return []
 
 def identify_pattern(lines, patterns):
     # Check if sample lines match any file pattern

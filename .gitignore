@@ -12,6 +12,7 @@ __pycache__/
 *.csv
 *.bin
 *_report/
+uploaded_files/
 
 # Web related
 node_modules/
