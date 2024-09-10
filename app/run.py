@@ -1,13 +1,13 @@
 import uvicorn
-from fastapi import FastAPI, File, UploadFile
+import os
+from fastapi import FastAPI, File, UploadFile, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+
 from app.parse import scan_path
 from app.parse import find_type
 from app.network import scan_network
-import os
-from fastapi import BackgroundTasks, FastAPI
 from app.live import scan_drive
-from fastapi.responses import JSONResponse
 
 app = FastAPI()
 app.add_middleware(
@@ -77,12 +77,12 @@ async def upload(files: list[UploadFile] = File(...), rulesFile: UploadFile = Fi
 @app.post('/api/detect')
 async def detect(background_tasks: BackgroundTasks):
     background_tasks.add_task(scan_drive)
-    return JSONResponse(content={'message': 'Drive detection started in the background.'})
+    return JSONResponse(content={'message': 'Drive detection started.'})
 
 @app.get('/api/files')
 async def files():
-    file_names = scan_drive()
-    return JSONResponse(content={'files': file_names})
+    found_files = scan_drive()
+    return JSONResponse(content=found_files)
 
 if __name__ == '__main__':
     uvicorn.run(app, host='127.0.0.1', port=8000)

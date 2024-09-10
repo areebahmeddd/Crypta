@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "../styles/Home.css";
 import uploadIcon from "../assets/upload.png";
 import fileIcons from "../assets/fileIcons";
-import backgroundImage from "../assets/a.jpeg"; 
 
 function Home() {
   const [files, setFiles] = useState([]);
@@ -15,6 +14,7 @@ function Home() {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
+  // Detect connected drives and fetch files from the backend
   const detectDrives = async () => {
     try {
       await axios.post("http://127.0.0.1:8000/api/detect");
@@ -22,11 +22,11 @@ function Home() {
       console.log(response.data);
       setFiles(response.data);
     } catch (error) {
-      console.error("Error detecting drives:", error);
       setErrorMessage("Failed to detect drives or fetch files.");
     }
   };
 
+  // Handle file selection through the input or drag-and-drop
   const onChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
     const fileMetadata = selectedFiles.map((file) => ({
@@ -35,7 +35,6 @@ function Home() {
       size: (file.size / 1024 / 1024).toFixed(2),
       type: file.type,
       lastModified: new Date(file.lastModified).toLocaleDateString(),
-      extension: file.name.split(".").pop().toLowerCase(),
       icon:
         fileIcons[file.name.split(".").pop().toLowerCase()] ||
         fileIcons["default"],
@@ -45,6 +44,7 @@ function Home() {
     startProgress();
   };
 
+  // Simulate progress bar animation
   const startProgress = () => {
     setUploading(true);
     let progress = 0;
@@ -52,12 +52,13 @@ function Home() {
       if (progress >= 100) {
         clearInterval(interval);
       } else {
-        progress += 10; // Adjust speed of progress increment
+        progress += 10;
         setUploadPercentage(progress);
       }
-    }, 50); // Adjust the speed of the progress animation
+    }, 50); // Adjust progress animation speed here
   };
 
+  // Handle file or folder drop into the upload area
   const onDrop = (e) => {
     e.preventDefault();
     setDragging(false);
@@ -72,23 +73,18 @@ function Home() {
           const entry = item.webkitGetAsEntry();
           if (entry) {
             if (entry.isDirectory) {
-              // Handle directory
               const reader = entry.createReader();
               reader.readEntries((entries) => {
                 entries.forEach((entry) => processEntry(entry, ""));
               });
             } else {
-              // Handle single file
               item.file((file) => {
                 files.push({
                   file,
                   name: file.name,
                   size: (file.size / 1024 / 1024).toFixed(2),
                   type: file.type,
-                  lastModified: new Date(
-                    file.lastModified
-                  ).toLocaleDateString(),
-                  extension: file.name.split(".").pop().toLowerCase(),
+                  lastModified: new Date(file.lastModified).toLocaleDateString(),
                   icon:
                     fileIcons[file.name.split(".").pop().toLowerCase()] ||
                     fileIcons["default"],
@@ -104,6 +100,7 @@ function Home() {
     }
   };
 
+  // Process each file or folder recursively if it's a directory
   const processEntry = (entry, path) => {
     if (entry.isDirectory) {
       const reader = entry.createReader();
@@ -127,53 +124,51 @@ function Home() {
               fileIcons["default"],
           },
         ]);
-        startProgress(); 
+        startProgress();
       });
     }
   };
 
+  // Set the dragging state when a file or folder is dragged over the upload area
   const onDragOver = (e) => {
     e.preventDefault();
     setDragging(true);
   };
 
+  // Reset dragging state when the dragged file or folder leaves the upload area
   const onDragLeave = (e) => {
     e.preventDefault();
     setDragging(false);
   };
 
+  // Handle form submission to move to the next step (e.g., rules page)
   const onSubmit = (e) => {
     e.preventDefault();
     if (files.length === 0) {
       setErrorMessage("Please select a folder to upload.");
       return;
     }
-
-    // No need for form data here since we are passing the file list via state
     setUploading(true);
-
-    // Navigate to the Rules page with the files included in the state
     navigate("/rules", { state: { files } });
   };
 
+  // Cancel individual file selection
   const handleCancel = (index) => {
     setFiles((prevFiles) => {
       const updatedFiles = prevFiles.filter((_, i) => i !== index);
-  
-      // If there are no more files, reset the progress and uploading states
       if (updatedFiles.length === 0) {
         setUploading(false);
         setUploadPercentage(0);
       }
-  
       return updatedFiles;
     });
   };
 
+  // Cancel all selected files and reset the state
   const handleCancelAll = () => {
-    setFiles([]); 
-    setUploading(false);  // Stop the progress bar
-    setUploadPercentage(0); // Reset the percentage to 0
+    setFiles([]);
+    setUploading(false);
+    setUploadPercentage(0);
   };
 
   return (
@@ -222,7 +217,7 @@ function Home() {
             <button
               type="button"
               className="cancel-button"
-              onClick={handleCancelAll}// Clears all files
+              onClick={handleCancelAll}
             >
               Cancel
             </button>
@@ -244,13 +239,13 @@ function Home() {
             <div key={index} className="file-info">
               <div className="file-details">
                 <div className="file-desc">
-                <img
-                  src={fileData.icon}
-                  alt="File Icon"
-                  className="file-icon"
-                />
-                  <div className="file-name">{fileData.name}</div>  
-        </div>
+                  <img
+                    src={fileData.icon}
+                    alt="File Icon"
+                    className="file-icon"
+                  />
+                  <div className="file-name">{fileData.name}</div>
+                </div>
                 <div
                   className="file-cancel"
                   onClick={() => handleCancel(index)}
