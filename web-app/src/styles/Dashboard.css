@@ -48,6 +48,7 @@
   
 
 .dashboard__card {
+  position: relative;
   width: 100%;
   background: #fff;
   border-radius: 8px;
@@ -97,7 +98,16 @@
   width: 50%;
 }
 
+.total-files {
+  position: absolute;
+  bottom: 10px; /* Adjust as needed */
+  left: 10px;   /* Adjust as needed */
+  font-size: 16px; /* Adjust as needed */
+  color: #7a7878; /* Adjust color as needed */
+}
+
 .dashboard_v_card {
+  position: relative;
   background: #fff;
   width: 100%;
   border-radius: 8px;
@@ -141,6 +151,14 @@
   flex: 1;
   padding: 5px;
   text-align: center;
+}
+
+.total-v-files {
+  position: absolute;
+  bottom: 10px; /* Adjust as needed */
+  left: 10px;   /* Adjust as needed */
+  font-size: 16px; /* Adjust as needed */
+  color: #7a7878; /* Adjust color as needed */
 }
 
 .dashboard__view-btn {

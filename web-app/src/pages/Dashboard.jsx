@@ -201,9 +201,6 @@ const Dashboard = () => {
     ],
   };
 
-  const totalFilePages = Math.ceil(fileData.length / rowsPerPage);
-  const totalVulnPages = Math.ceil(vulnerabilityData.length / rowsPerPage);
-
   const handleSearch = useCallback(() => {
     const searchTermLower = searchTerm.toLowerCase();
 
@@ -237,6 +234,10 @@ const Dashboard = () => {
   };
 
 // Logic for File Pagination (max two numbers shown)
+
+const totalFilePages = Math.ceil(fileData.length / rowsPerPage);
+const totalVulnPages = Math.ceil(vulnerabilityData.length / rowsPerPage);
+
 const maxPageNumbersToShow = 2;
 const startFilePage = Math.max(1, filePage - 1);  // Show the current page and the previous one
 const endFilePage = Math.min(totalFilePages, filePage + 1);  // Show the current page and the next one
@@ -436,6 +437,12 @@ const handleVulnPageChange = (directionOrPage) => {
       </div>
     ))}
   </div>
+
+   {/* Total Files */}
+   <div className="total-files">
+    Total Files: {fileData.length}
+  </div>
+
   {/* Pagination Controls */}
   <div className="pagination-controls">
     <button 
@@ -490,6 +497,12 @@ const handleVulnPageChange = (directionOrPage) => {
       </div>
     ))}
   </div>
+
+     {/* Total Files */}
+     <div className="total-v-files">
+    Total Files: {vulnerabilityData.length}
+  </div>
+
   {/* Pagination Controls */}
   <div className="pagination-controls">
     <button 
