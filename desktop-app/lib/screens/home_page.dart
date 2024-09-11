@@ -1,25 +1,26 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:crypta/providers/files_provider.dart';
 import 'package:crypta/screens/upload_rules_page.dart';
 import 'package:crypta/utils/hexcolor.dart';
+import 'package:crypta/widgets/file_details.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
   @override
   HomePageState createState() => HomePageState();
 }
 
-class HomePageState extends State<HomePage> {
+class HomePageState extends ConsumerState<HomePage> {
   PlatformFile? _selectedFile;
   List<Map<String, String>> uploadedFilesMetadata = [];
-
-  List<File> selectedFiles = [];
 
   double _progress = 0.0;
 
@@ -33,54 +34,6 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> pickFolder() async {
-    String? folderPath = await getDirectoryPath();
-
-    if (folderPath != null) {
-      final directory = Directory(folderPath);
-      List<FileSystemEntity> files = directory.listSync();
-
-      setState(() {
-        selectedFiles.clear();
-        uploadedFilesMetadata.clear();
-        _progress = 0.0;
-      });
-
-      for (int i = 0; i < files.length; i++) {
-        var fileEntity = files[i];
-
-        if (fileEntity is File) {
-          log('Adding file: ${fileEntity.path}');
-
-          double progress = (i + 1) / files.length;
-          setState(() {
-            selectedFiles.add(fileEntity);
-            _progress = progress;
-          });
-
-          await getFileMetadatas(fileEntity);
-
-          await Future.delayed(const Duration(milliseconds: 500));
-        }
-      }
-    }
-  }
-
-  Future<void> getFileMetadatas(File file) async {
-    final fileStat = await file.stat();
-    final fileSizeInMB = (fileStat.size / (1024 * 1024)).toStringAsFixed(2);
-    final fileType = fileStat.type;
-    final fileExtension = file.path.split('.').last;
-    setState(() {
-      uploadedFilesMetadata.add({
-        'name': file.path.split('/').last,
-        'size': '$fileSizeInMB MB',
-        'type': fileType.toString(),
-        'extension': fileExtension,
-      });
-    });
-  }
-
   void _goToGithub() async {
     const url = 'https://github.com/areebahmeddd/Crypta';
     try {
@@ -92,53 +45,56 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // appBar: AppBar(
+    Future<void> getFileMetadatas(File file) async {
+      final fileStat = await file.stat();
+      final fileSizeInMB = (fileStat.size / (1024 * 1024)).toStringAsFixed(2);
+      final fileType = fileStat.type;
+      final fileExtension = file.path.split('.').last;
+      setState(() {
+        uploadedFilesMetadata.add({
+          'name': file.path.split('/').last,
+          'size': '$fileSizeInMB MB',
+          'type': fileType.toString(),
+          'extension': fileExtension,
+          'path': file.path,
+        });
+      });
+    }
 
-      //   // title: const Center(
-      //   //   child: Row(
-      //   //     mainAxisAlignment: MainAxisAlignment.center,
-      //   //     crossAxisAlignment: CrossAxisAlignment.center,
-      //   //     mainAxisSize: MainAxisSize.min,
-      //   //     children: [
-      //   //       Gap(100),
-      //   //       Text('About'),
-      //   //       Gap(8),
-      //   //       Text('Team'),
-      //   //       Gap(8),
-      //   //       Text('Contact'),
-      //   //     ],
-      //   //   ),
-      //   // ),
-      //   actions: [
-      //     Row(children: [
-      //       // IconButton(
-      //       //   icon: const Icon(Icons.download),
-      //       //   onPressed: () {},
-      //       // ),
-      //       // const Gap(4),
-      //       // const Text('Download'),
-      //       const Gap(16),
-      //       GestureDetector(
-      //         onTap: () {},
-      //         child: Container(
-      //           padding: const EdgeInsets.all(16),
-      //           child: const Image(
-      //             image: AssetImage(
-      //               'assets/github-logo.png',
-      //             ),
-      //             height: 100,
-      //           ),
-      //         ),
-      //       )
-      //     ]),
-      //   ],
-      //   titleTextStyle: const TextStyle(
-      //       fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
-      //   centerTitle: true,
-      //   elevation: 4,
-      //   backgroundColor: Colors.white,
-      // ),
+    Future<void> pickFolder() async {
+      String? folderPath = await getDirectoryPath();
+
+      if (folderPath != null) {
+        final directory = Directory(folderPath);
+        List<FileSystemEntity> files = directory.listSync();
+
+        setState(() {
+          ref.watch(filesProvider.notifier).clearFiles();
+          uploadedFilesMetadata.clear();
+          _progress = 0.0;
+        });
+
+        for (int i = 0; i < files.length; i++) {
+          var fileEntity = files[i];
+
+          if (fileEntity is File) {
+            log('Adding file: ${fileEntity.path}');
+
+            double progress = (i + 1) / files.length;
+            setState(() {
+              ref.read(filesProvider.notifier).addFile(fileEntity);
+              _progress = progress;
+            });
+
+            await getFileMetadatas(fileEntity);
+
+            await Future.delayed(const Duration(milliseconds: 500));
+          }
+        }
+      }
+    }
+
+    return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Stack(
@@ -251,7 +207,7 @@ class HomePageState extends State<HomePage> {
                                 ),
                               ),
                             ),
-                            if (selectedFiles.isNotEmpty) ...[
+                            if (ref.watch(filesProvider).isNotEmpty) ...[
                               const SizedBox(height: 20),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -283,7 +239,9 @@ class HomePageState extends State<HomePage> {
                                   ElevatedButton(
                                     onPressed: () {
                                       setState(() {
-                                        selectedFiles = [];
+                                        ref
+                                            .watch(filesProvider.notifier)
+                                            .clearFiles();
                                         uploadedFilesMetadata = [];
                                       });
                                     },
@@ -298,7 +256,7 @@ class HomePageState extends State<HomePage> {
                                     ),
                                     child: const Text(
                                       'Cancel',
-                                      style: TextStyle(color: Colors.white),
+                                      style: TextStyle(color: Colors.black),
                                     ),
                                   ),
                                   const SizedBox(width: 20),
@@ -307,12 +265,13 @@ class HomePageState extends State<HomePage> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => const UploadRulesPage(),
+                                          builder: (context) =>
+                                              const UploadRulesPage(),
                                         ),
                                       );
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.blue,
+                                      backgroundColor: myColorFromHex('#457d58'),
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 100, vertical: 25),
                                       shape: RoundedRectangleBorder(
@@ -332,7 +291,7 @@ class HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  selectedFiles.isEmpty
+                  ref.watch(filesProvider).isEmpty
                       ? const SizedBox()
                       : Expanded(
                           flex: 2,
@@ -347,21 +306,109 @@ class HomePageState extends State<HomePage> {
                                   color: Colors.white,
                                   margin:
                                       const EdgeInsets.symmetric(vertical: 8),
-                                  child: ListTile(
-                                    title: Text(uploadedFilesMetadata[index]
-                                            ['name'] ??
-                                        ''),
-                                    subtitle: Text(
-                                      'Size: ${uploadedFilesMetadata[index]['size']}\n'
-                                      'Type: ${uploadedFilesMetadata[index]['type']}\n'
-                                      'Extension: ${uploadedFilesMetadata[index]['extension']}',
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(
+                                        10.0), // Add some padding for a clean look
+                                    child: ListTile(
+                                      title: RichText(
+                                        text: TextSpan(
+                                          text: uploadedFilesMetadata[index]
+                                              ['name']!, // File name
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight
+                                                .bold, // Bold file name
+                                            fontSize: 16, // Increase font size
+                                            color: Colors
+                                                .black, // Use black for title
+                                          ),
+                                        ),
+                                      ),
+                                      subtitle: RichText(
+                                        text: TextSpan(
+                                          children: [
+                                            const TextSpan(
+                                              text: 'Size: ',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight
+                                                    .bold, // Bold for label
+                                                fontSize: 14,
+                                                color: Colors
+                                                    .black87, // Darker color for labels
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: uploadedFilesMetadata[index]
+                                                      ['size']! +
+                                                  '\n',
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight
+                                                    .normal, // Normal font weight for value
+                                                fontSize: 14,
+                                                color: Colors
+                                                    .grey, // Grey color for file details
+                                              ),
+                                            ),
+                                            const TextSpan(
+                                              text: 'Type: ',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                                color: Colors.black87,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: uploadedFilesMetadata[index]
+                                                      ['type']! +
+                                                  '\n',
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 14,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                            const TextSpan(
+                                              text: 'Extension: ',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                                color: Colors.black87,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: uploadedFilesMetadata[index]
+                                                  ['extension']!,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 14,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      trailing: IconButton(
+                                        icon: const Icon(Icons.delete,
+                                            color: Colors
+                                                .red), // Red delete icon for emphasis
+                                        onPressed: () {
+                                          ref
+                                              .read(filesProvider.notifier)
+                                              .removeFile(
+                                                  uploadedFilesMetadata[index]
+                                                      ['path']!);
+                                          setState(() {
+                                            uploadedFilesMetadata
+                                                .removeAt(index);
+                                          });
+                                        },
+                                      ),
                                     ),
                                   ),
                                 );
                               },
                             ),
                           ),
-                        )
+                        ),
                 ],
               ),
             ),

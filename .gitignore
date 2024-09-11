@@ -6,12 +6,13 @@ __pycache__/
 # Test files
 *.raw
 *.mem
-*.eo1
+*.e01
 
 # Output related
 *.csv
 *.bin
 *_report/
+uploaded_files/
 
 # Web related
 node_modules/

@@ -1,82 +1,113 @@
 import uvicorn
-from fastapi import FastAPI, File, UploadFile
-from fastapi.middleware.cors import CORSMiddleware
-from app.parse import scan_path
 import os
-import tempfile
-
+from fastapi import FastAPI, File, UploadFile, BackgroundTasks
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+import json
+from app.parse import scan_file, find_type
+from app.network import scan_network
+from app.live import scan_drive
 
 app = FastAPI()
-origins = [
-    '*'
-]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=['*'],
-    allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*']
 )
 
 @app.post('/api/upload')
-async def upload(files: list[UploadFile] = File(...), rulesFile: UploadFile = File(...)):
+async def upload(uploadedFiles: list[UploadFile] = File(...), yaraFile: UploadFile = File(...)):
     
-    #saving uploaded yara rules in a temp file
+    UPLOAD_DIR = "uploaded_files"
+    os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+    results = []
     try:
-        with tempfile.NamedTemporaryFile(delete=False) as yara_rules_temp:
-            yara_rules_path = yara_rules_temp.name
-            yara_rules_temp.write(await rulesFile.read())
-        
-        # Check if the file was created
-        if not os.path.isfile(yara_rules_path):
-            return {"error": "Yara rules file not created"}
+        # Saving uploaded YARA rules in a temp file
+        yara_rules_path = os.path.join(UPLOAD_DIR, yaraFile.filename)
+        with open(yara_rules_path, "wb") as rules_file:
+            rules_file.write(await yaraFile.read())
+        print(yara_rules_path)
 
-        #saving uploaded folders in a temp file    
-        uploaded_file_paths = []
-        for file in files:
-            with tempfile.NamedTemporaryFile(delete=False) as file_temp:
-                file_path = file_temp.name
-                file_temp.write(await file.read())
-                uploaded_file_paths.append(file_path)
-       
-        # Check if the uploaded files were created
-        for path in uploaded_file_paths:
-            if not os.path.isfile(path):
-                return {"error": f"Uploaded file not created: {path}"}
-        
-        #scanning the uploaded files with the uploaded rules
-        results = []
-        for file_path in uploaded_file_paths:
-            scan_result = scan_path(file_path, yara_rules_path)
-            if scan_result is None:
-                scan_result = {
-                    'rule': 'No matches',
-                    'component': 'N/A',
-                    'context': 'N/A'
-                }
-        results.append(scan_result)
+        # Saving uploaded files in a temp directory    
+        for file in uploadedFiles:
+            file_path = os.path.join(UPLOAD_DIR, file.filename)
+            file_path = os.path.normpath(file_path) 
+            print(file_path) 
 
-        #backend response 
-        return {
-            'results': [
-                {
+            directory = os.path.dirname(file_path)
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+            
+            with open(file_path, "wb") as f:
+                f.write(await file.read())
+            print(file_path) 
+
+            # Scanning the uploaded files with the uploaded rules
+            file_type = find_type(file_path)
+            if file_type == 'network':
+                network_data = scan_network(file_path)
+                filtered_network_data = filter_empty_protocols(network_data)
+                serialized_network_data = serialize_network_data(filtered_network_data)
+                results.append({
                     'file': os.path.basename(file_path),
-                    'rule': result['rule'],
-                    'component': result['component'],
-                    'context': result['context']
-                } for file_path, result in zip(uploaded_file_paths, results)
-            ]
-        }
+                    'protocol': serialized_network_data
+                })
+                
+            else:  # Handle other file types
+                scan_result = scan_file(file_path, yara_rules_path, file_type)
+                if not scan_result:
+                    # If no matches, return 'No matches'
+                    scan_result = [{
+                        'rule': 'No matches',
+                        'component': 'N/A',
+                        'content': 'N/A'
+                    }]
+                for match in scan_result:
+                    results.append({
+                        'file': os.path.basename(file_path),
+                        'rule': match['rule'],
+                        'component': match['component'],
+                        'content': match['content']
+                    })
+                
+        # Return results as a JSON response
+        return JSONResponse(content=results)
     
-    #handle the exception 
+    # Handle exceptions
     except Exception as e:
-        return {"error": str(e)}
-    
-
+        return JSONResponse(content={"error": str(e)})
 
 @app.post('/api/detect')
-async def detect():
-    pass
+async def detect(background_tasks: BackgroundTasks):
+    background_tasks.add_task(scan_drive)
+    return JSONResponse(content={'message': 'Drive detection started.'})
+
+@app.get('/api/files')
+async def files():
+    found_files = scan_drive()
+    return JSONResponse(content=found_files)
 
 if __name__ == '__main__':
     uvicorn.run(app, host='127.0.0.1', port=8000)
+
+def serialize_network_data(data):
+    """
+    Converts network data into a serializable format.
+    """
+    def default_serializer(obj):
+        if isinstance(obj, bytes):
+            return obj.decode('utf-8')  # Convert bytes to string
+        if isinstance(obj, (set, frozenset)):
+            return list(obj)  # Convert sets to lists
+        return str(obj)  # Convert other non-serializable objects to string if necessary
+
+    # Convert to JSON string and back to Python object to ensure serializability
+    return json.loads(json.dumps(data, default=default_serializer))
+
+def filter_empty_protocols(data):
+    """
+    Filters out protocols with empty lists from the network data.
+    """
+    return {protocol: packets for protocol, packets in data.items() if packets}
