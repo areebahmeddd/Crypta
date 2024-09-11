@@ -81,7 +81,7 @@ async def send_file(file_name: str):
     file_object = next(
         (file for file in files_metadata if file['name'] == file_name), None
     )
-    return FileResponse(file_object['path'], media_type='application/octet-stream', filename=file_object['name'])
+    return FileResponse(filename=file_object['name'], path=file_object['path'], media_type='application/octet-stream')
 
 @app.post('/api/download')
 async def download():
