@@ -17,23 +17,31 @@ function Home() {
   // Detect connected drives and fetch files from the backend
   const detectDrives = async () => {
     try {
-      const postRequest = await axios.post("http://127.0.0.1:8000/api/detect");
-      console.log(postRequest.data);
-      const getResponse = await axios.get("http://127.0.0.1:8000/api/files");
-      console.log(getResponse.data);
-      if (getResponse.data.length > 0) {
-        const fileMetadata = getResponse.data.map((file) => ({
-          file,
+      const response = await axios.post("http://127.0.0.1:8000/api/detect");
+      console.log(response.data);
+      const filesResponse = await axios.get("http://127.0.0.1:8000/api/files");
+      console.log("Files Metadata:", filesResponse.data);
+
+      const filePromises = filesResponse.data.map(async (file) => {
+        const fileResponse = await axios.get("http://127.0.0.1:8000/api/files/${file.name}",
+          { responseType: "blob" }
+        );
+        const fileBlob = new Blob([fileResponse.data]);
+
+        return {
+          file: new File([fileBlob], file.name, { type: file.type, lastModified: file.lastModified }),
           name: file.name,
           size: (file.size / 1024 / 1024).toFixed(2),
-          type: file.type,
+          type: file.type || "Unknown",
           lastModified: new Date(file.lastModified).toLocaleDateString(),
           icon:
             fileIcons[file.name.split(".").pop().toLowerCase()] ||
-            fileIcons["default"],
-        }));
-        setFiles(fileMetadata);
-      }
+            fileIcons.default,
+        };
+      });
+
+      const fileObjects = await Promise.all(filePromises);
+      setFiles(fileObjects);
     } catch (error) {
       setErrorMessage("Failed to detect drives or fetch files.");
     }
@@ -46,7 +54,7 @@ function Home() {
       file,
       name: file.name,
       size: (file.size / 1024 / 1024).toFixed(2),
-      type: file.type,
+      type: file.type || "Unknown",
       lastModified: new Date(file.lastModified).toLocaleDateString(),
       icon:
         fileIcons[file.name.split(".").pop().toLowerCase()] ||
@@ -96,7 +104,7 @@ function Home() {
                   file,
                   name: file.name,
                   size: (file.size / 1024 / 1024).toFixed(2),
-                  type: file.type,
+                  type: file.type || "Unknown",
                   lastModified: new Date(file.lastModified).toLocaleDateString(),
                   icon:
                     fileIcons[file.name.split(".").pop().toLowerCase()] ||
@@ -130,7 +138,7 @@ function Home() {
             file,
             name: path + file.name,
             size: (file.size / 1024 / 1024).toFixed(2),
-            type: file.type,
+            type: file.type || "Unknown",
             lastModified: new Date(file.lastModified).toLocaleDateString(),
             icon:
               fileIcons[file.name.split(".").pop().toLowerCase()] ||

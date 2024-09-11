@@ -2,7 +2,7 @@ import uvicorn
 import os
 from fastapi import FastAPI, UploadFile, File, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 
 from parse import scan_file, find_type
 from network import scan_network
@@ -64,13 +64,24 @@ async def analyze(uploadedFiles: list[UploadFile] = File(...), yaraFile: UploadF
 
 @app.post('/api/detect')
 async def detect(background_tasks: BackgroundTasks):
+    # Add scan_drive function to background tasks to look for removable drives
     background_tasks.add_task(scan_drive)
     return JSONResponse(content={'message': 'Drive detection started.'})
 
 @app.get('/api/files')
 async def files():
-    found_files = scan_drive()
-    return JSONResponse(content=found_files)
+    # Get metadata of all files in the drive
+    files_metadata = scan_drive()
+    return JSONResponse(content=files_metadata)
+
+@app.get('/api/files/{file_name}')
+async def send_file(file_name: str):
+    # Send the file based on the file name in the request
+    files_metadata = scan_drive()
+    file_object = next(
+        (file for file in files_metadata if file['name'] == file_name), None
+    )
+    return FileResponse(file_object['path'], media_type='application/octet-stream', filename=file_object['name'])
 
 @app.post('/api/download')
 async def download():
@@ -78,6 +89,10 @@ async def download():
 
 @app.post('/api/export')
 async def export():
+    pass
+
+@app.post('/api/chat')
+async def chat():
     pass
 
 if __name__ == '__main__':

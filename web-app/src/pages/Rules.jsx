@@ -20,7 +20,7 @@ function Rules() {
   useEffect(() => {
     if (location.state && location.state.files) {
       const files = location.state.files;
-      console.log("Files from Home: ", files);
+      console.log("Files from Home:", files);
       if (files.length > 0) {
         setSelectedOption("drag-drop");
       }
@@ -119,7 +119,7 @@ function Rules() {
 
         if (response.status === 200) {
           const responseData = response.data;
-          console.log("Response from Backend: ", responseData);
+          console.log("Response from Backend:", responseData);
           if (responseData && responseData.processedData) {
             navigate("/dashboard", {
               state: {
