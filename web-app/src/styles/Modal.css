@@ -89,6 +89,7 @@
     display: flex;
     padding: 12px;
     border-bottom: 1px solid #e0e0e0;
+    align-items: center;
     transition: background 0.2s;
   }
   
@@ -151,3 +152,89 @@
     background: #45a049;
   }
   
+  /* Modal.css or appropriate stylesheet */
+
+/* Adjusted CSS for Recommended Fixes section */
+
+.dashboard__alert-section {
+  margin-bottom: 20px; /* Space from other sections */
+  margin-left: 20px;
+  max-height: 400px; /* Set a max height for the section */
+  overflow-y: auto;
+}
+
+.dashboard__alert-title {
+  font-size: 1.75rem; /* Larger font size for the title */
+  margin-bottom: 5px; /* Space between title and separator */
+}
+
+.dashboard__alert-separator {
+  border: 0; /* Remove default border */
+  border-top: 1px solid #ddd; /* Separator line */
+  margin-bottom: 10px; /* Space between separator and alert list */
+}
+
+.dashboard__alert-list {
+  list-style-type: disc; /* Bullet points for the list */
+  padding-left: 20px; /* Space for bullet points */
+  margin: 0; /* Remove default margin */
+}
+
+.dashboard__alert-item {
+  margin-bottom: 10px; /* Space between alert items */
+  font-size: 16px; /* Font size for alert text */
+}
+
+/* Optional: Show more/less button styling to match the design */
+.dashboard__show-more {
+  background: none; /* No background */
+  border: none; /* Remove border */
+  color: #457d58; /* Button color */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-size: 16px; /* Font size */
+  margin-top: 10px; /* Space above button */
+  transition: background-color 0.3s ease;
+}
+
+.dashboard__show-more:hover {
+  text-decoration: underline;/* Darker shade on hover */
+}
+
+.dashboard__show-more:disabled {
+  background-color: #ccc; /* Grey background for disabled state */
+  cursor: not-allowed;
+}
+
+/* Style for the Level column */
+.level-column {
+  width: 50%;
+  padding: 10px;
+  border-radius: 4px;
+  font-weight: bold;
+  margin-left: 25%;
+}
+
+/* Define color styles for each level */
+.level_all {
+  justify-content: center;
+}
+
+.level-high {
+  background-color: #ff4d4d; /* High severity color */
+  color: #fff; /* White text */
+}
+
+.level-medium-high {
+  background-color: #ff9a33; /* Medium-High severity color */
+  color: #fff; /* White text */
+}
+
+.level-medium {
+  background-color: #ffcc00; /* Medium severity color */
+  color: #000; /* Black text */
+}
+
+.level-low {
+  background-color: #FFFF00; /* Low severity color */
+  color: #000; /* Black text */
+}

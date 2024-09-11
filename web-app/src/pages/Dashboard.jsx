@@ -69,7 +69,7 @@ const Dashboard = () => {
         indicators: [
           { level: "High", type: "File Hash", indicator: "abc123hash" },
           { level: "Medium", type: "IP Address", indicator: "192.168.1.1" },
-          { level: "High", type: "Domain", indicator: "malicious.com" }
+          { level: "Low", type: "Domain", indicator: "malicious.com" }
         ]
       },
       {
@@ -85,16 +85,16 @@ const Dashboard = () => {
         file: "ransomware.zip",
         type: "Ransomware",
         indicators: [
-          { level: "Critical", type: "File Hash", indicator: "ransom123hash" },
+          { level: "Medium-High", type: "File Hash", indicator: "ransom123hash" },
           { level: "High", type: "IP Address", indicator: "203.0.113.42" },
-          { level: "Critical", type: "Domain", indicator: "ransom-domain.com" }
+          { level: "Low", type: "Domain", indicator: "ransom-domain.com" }
         ]
       },
       { file: 'archive5.zip', type: 'Ransomware', indicators: [{ level: 'High', type: 'Encryption', indicator: 'ransomware-encryptor.exe' }] },
-      { file: 'image3.png', type: 'Malware', indicators: [{ level: 'Critical', type: 'Virus', indicator: 'malicious_code.exe' }] },
+      { file: 'image3.png', type: 'Malware', indicators: [{ level: 'Medium', type: 'Virus', indicator: 'malicious_code.exe' }] },
       { file: 'document4.docx', type: 'Phishing', indicators: [{ level: 'Low', type: 'Email', indicator: 'phishing@example.com' }] },
       { file: 'data2.csv', type: 'Cross-Site Scripting', indicators: [{ level: 'Medium', type: 'XSS', indicator: '<script>alert(1)</script>' }] },
-      { file: 'image3.png', type: 'Malware', indicators: [{ level: 'Critical', type: 'Virus', indicator: 'malicious_code.exe' }] },
+      { file: 'image3.png', type: 'Malware', indicators: [{ level: 'Low', type: 'Virus', indicator: 'malicious_code.exe' }] },
 
     ];
 
@@ -106,7 +106,7 @@ const Dashboard = () => {
       { id: 5, message: "High CPU usage alert. Check for any processes that might be consuming excessive resources." },
       // More alerts...
     ]);
-    
+
     const options = {
       responsive: true,
       maintainAspectRatio: false,
@@ -278,14 +278,14 @@ const handleVulnPageChange = (directionOrPage) => {
   const displayedVulnerabilityData = vulnerabilityData.slice((vulnPage - 1) * rowsPerPage, vulnPage * rowsPerPage);
 
   const getVulnerabilityColor = (count) => {
-    if (count > 40) return '#FF0000'; // Red for more than 40
-    if (count >= 30) return '#FF6F00'; // Orange for 30-40
-    if (count >= 21) return '#FFEB3B'; // Yellow for 21-30
-    if (count >= 16) return '#FFC107'; // Amber for 16-20
-    if (count >= 11) return '#FF9800'; // Deep orange for 11-15
-    if (count >= 6) return '#FF5722'; // Deep orange for 6-10
-    if (count >= 1) return '#FF8C00'; // Dark orange for 1-5
-    return '#4CAF50'; // Green for 0
+    if (count > 40) return '#FF0000';
+    if (count >= 30) return '#FF6F00'; 
+    if (count >= 21) return '#FFEB3B'; 
+    if (count >= 16) return '#FFC107'; 
+    if (count >= 11) return '#FF9800'; 
+    if (count >= 6) return '#FF5722'; 
+    if (count >= 1) return '#FF8C00'; 
+    return '#4CAF50'; 
   };
   
 

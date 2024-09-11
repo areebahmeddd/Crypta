@@ -8,7 +8,19 @@ const ModalPage = ({ isOpen, onClose, data }) => {
   const rowsPerPage = 5;
   const indicators = data?.indicators || [];
   const totalFilePages = Math.ceil(indicators.length / rowsPerPage);
+  const [showAllFixes, setShowAllFixes] = useState(false); // State to toggle recommended fixes
+  // const recommendedFixes = data?.recommendedFixes || []; 
 
+   // Mock data for recommended fixes
+   const recommendedFixes = [
+    { id: 1, message: "Critical system update required. Please update your software to ensure security." },
+    { id: 2, message: "Unauthorized access attempt detected. Review your security settings immediately." },
+    { id: 3, message: "New vulnerability discovered in your application. Apply the latest patch to address the issue." },
+    { id: 4, message: "Backup failure detected. Ensure your backup system is functioning properly to avoid data loss." },
+    { id: 5, message: "High CPU usage alert. Check for any processes that might be consuming excessive resources." },
+    // More mock data...
+  ];
+  
   // Calculate page numbers to show
   const maxPageNumbersToShow = 2;
   const startPage = Math.max(1, filePage - 1);  // Show the current page and the previous one
@@ -23,7 +35,25 @@ const ModalPage = ({ isOpen, onClose, data }) => {
   };
 
   const displayedIndicators = indicators.slice((filePage - 1) * rowsPerPage, filePage * rowsPerPage);
+  const displayedFixes = showAllFixes ? recommendedFixes : recommendedFixes.slice(0, 3);
 
+
+  // Function to get the class name based on the level
+  const getLevelClass = (level) => {
+    switch (level) {
+      case 'High':
+        return 'level-high';
+      case 'Medium-High':
+        return 'level-medium-high';
+      case 'Medium':
+        return 'level-medium';
+      case 'Low':
+        return 'level-low';
+      default:
+        return '';
+    }
+  };
+  
   if (!isOpen) return null;
 
   return (
@@ -44,7 +74,9 @@ const ModalPage = ({ isOpen, onClose, data }) => {
               {displayedIndicators.length > 0 ? (
                 displayedIndicators.map((indicator, index) => (
                   <div key={index} className="indicator-table-row">
-                    <div>{indicator.level}</div>
+                   <div className="level_all"> <div className={`level-column ${getLevelClass(indicator.level)}`}>
+                      {indicator.level}
+                    </div></div>
                     <div>{indicator.type}</div>
                     <div>{indicator.indicator}</div>
                   </div>
@@ -83,6 +115,24 @@ const ModalPage = ({ isOpen, onClose, data }) => {
     <FontAwesomeIcon icon={faChevronRight} />
   </button>
           </div>
+        </div>
+
+           {/* Recommended Fixes Section */}
+           <div className="dashboard__alert-section">
+          <h2 className="dashboard__alert-title">Recommended Fixes</h2>
+          <hr className="dashboard__alert-separator" />
+          <ul className="dashboard__alert-list">
+            {displayedFixes.map(fix => (
+              <li key={fix.id} className="dashboard__alert-item">
+                {fix.message}
+              </li>
+            ))}
+          </ul>
+          {recommendedFixes.length > 3 && (
+            <button className="dashboard__show-more" onClick={() => setShowAllFixes(!showAllFixes)}>
+              {showAllFixes ? "Show Less" : "Show More"}
+            </button>
+          )}
         </div>
       </div>
     </div>
