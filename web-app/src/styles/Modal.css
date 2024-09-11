@@ -1,0 +1,153 @@
+/* Modal.css */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background: #fff;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 900px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .modal-header {
+    padding: 16px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f5f5f5;
+  }
+  
+  .modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  
+  .modal-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #f44336;
+    color: white;
+    border: none;
+    padding: 7px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 5px;
+    margin-right: 5px;
+  }
+  
+  .modal-close-btn:hover {
+    background: #d32f2f;
+  }
+  
+  .indicator-card {
+    padding: 16px;
+    background: #fafafa;
+  }
+  
+  .indicator-table {
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .indicator-table-header {
+    display: flex;
+    background: #e0e0e0;
+    padding: 12px;
+    font-weight: bold;
+  }
+  
+  .indicator-table-header div {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .indicator-table-body {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .indicator-table-row {
+    display: flex;
+    padding: 12px;
+    border-bottom: 1px solid #e0e0e0;
+    transition: background 0.2s;
+  }
+  
+  .indicator-table-row:hover {
+    background: #f5f5f5;
+  }
+  
+  .indicator-table-row div {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .no-indicators {
+    padding: 16px;
+    text-align: center;
+    color: #888;
+    font-style: italic;
+  }
+  
+  .pagination-controls {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .pagination-btn {
+    background: #457d58;
+    border: none;
+    color: #fff;
+    padding: 6px 12px;
+    margin: 0 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+  
+  .pagination-btn:disabled {
+    background: #e0e0e0;
+    cursor: not-allowed;
+  }
+  
+  .pagination-number {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    color: #333;
+    padding: 6px 12px;
+    margin: 0 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+  
+  .pagination-number.active {
+    background: #457d58;
+    color: #fff;
+  }
+  
+  .pagination-number:hover {
+    background: #45a049;
+  }
+  
