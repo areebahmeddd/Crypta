@@ -17,31 +17,32 @@ function Home() {
   // Detect connected drives and fetch files from the backend
   const detectDrives = async () => {
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/detect");
-      console.log(response.data);
-      const filesResponse = await axios.get("http://127.0.0.1:8000/api/files");
-      console.log("Files Metadata:", filesResponse.data);
+      const postResponse = await axios.post("http://127.0.0.1:8000/api/detect");
+      console.log(postResponse.data);
+      const getResponse = await axios.get("http://127.0.0.1:8000/api/files");
+      console.log("File Metadata:", getResponse.data);
 
-      const filePromises = filesResponse.data.map(async (file) => {
-        const fileResponse = await axios.get("http://127.0.0.1:8000/api/files/${file.name}",
-          { responseType: "blob" }
-        );
-        const fileBlob = new Blob([fileResponse.data]);
+      if (getResponse.data.length > 0) {
+        const filePromises = getResponse.data.map(async (file) => {
+          const fileResponse = await axios.get(`http://127.0.0.1:8000/api/files/${file.name}`, { responseType: "blob" });
+          const fileBlob = new Blob([fileResponse.data]);
+          const fileObject = new File([fileBlob], file.name, { type: file.type, lastModified: file.lastModified });
 
-        return {
-          file: new File([fileBlob], file.name, { type: file.type, lastModified: file.lastModified }),
-          name: file.name,
-          size: (file.size / 1024 / 1024).toFixed(2),
-          type: file.type || "Unknown",
-          lastModified: new Date(file.lastModified).toLocaleDateString(),
-          icon:
-            fileIcons[file.name.split(".").pop().toLowerCase()] ||
-            fileIcons.default,
-        };
-      });
+          return {
+            file: fileObject,
+            name: file.name,
+            size: (file.size / 1024 / 1024).toFixed(2),
+            type: file.type || "Unknown",
+            lastModified: new Date(file.lastModified).toLocaleDateString(),
+            icon:
+              fileIcons[file.name.split(".").pop().toLowerCase()] ||
+              fileIcons["default"],
+          };
+        });
 
-      const fileObjects = await Promise.all(filePromises);
-      setFiles(fileObjects);
+        const fileMetadata = await Promise.all(filePromises);
+        setFiles(fileMetadata);
+      }
     } catch (error) {
       setErrorMessage("Failed to detect drives or fetch files.");
     }

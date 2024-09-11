@@ -81,6 +81,10 @@ async def send_file(file_name: str):
     file_object = next(
         (file for file in files_metadata if file['name'] == file_name), None
     )
+
+    if file_object is None:
+        return JSONResponse(content={'error': 'File not found.'})
+
     return FileResponse(filename=file_object['name'], path=file_object['path'], media_type='application/octet-stream')
 
 @app.post('/api/download')
