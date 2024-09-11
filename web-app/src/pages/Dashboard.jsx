@@ -9,7 +9,7 @@ import { saveAs } from 'file-saver';
 import '../styles/Dashboard.css';
 import 'jspdf-autotable';  // Import the autoTable plugin
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretDown, faSearch, faTimes, faChevronLeft, faChevronRight, faFilter } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faSearch, faTimes, faChevronLeft, faChevronRight, faFilter, faArrowDown, faShareSquare,} from '@fortawesome/free-solid-svg-icons';
 import _ from 'lodash';
 import { Line, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend } from 'chart.js';
@@ -51,15 +51,15 @@ const Dashboard = () => {
 
     // Use mock data
     const fileData = [
-      { file: 'report1.pdf', type: 'PDF', size: '1.2 MB', vulnerability: 5 },
-      { file: 'data2.csv', type: 'CSV', size: '800 KB', vulnerability: 2 },
-      { file: 'image3.png', type: 'PNG', size: '1.5 MB', vulnerability: 3 },
-      { file: 'document4.docx', type: 'DOCX', size: '500 KB', vulnerability: 1 },
+      { file: 'report1.pdf', type: 'PDF', size: '1.2 MB', vulnerability: 15 },
+      { file: 'data2.csv', type: 'CSV', size: '800 KB', vulnerability: 0 },
+      { file: 'image3.png', type: 'PNG', size: '1.5 MB', vulnerability: 63 },
+      { file: 'document4.docx', type: 'DOCX', size: '500 KB', vulnerability: 11 },
       { file: 'archive5.zip', type: 'ZIP', size: '3.0 MB', vulnerability: 7 },
       { file: 'data2.csv', type: 'CSV', size: '800 KB', vulnerability: 2 },
       { file: 'image3.png', type: 'PNG', size: '1.5 MB', vulnerability: 3 },
-      { file: 'document4.docx', type: 'DOCX', size: '500 KB', vulnerability: 1 },
-      { file: 'archive5.zip', type: 'ZIP', size: '3.0 MB', vulnerability: 7 },
+      { file: 'document4.docx', type: 'DOCX', size: '500 KB', vulnerability: 32 },
+      { file: 'archive5.zip', type: 'ZIP', size: '3.0 MB', vulnerability: 47 },
     ];
 
     const vulnerabilityData = [
@@ -277,10 +277,17 @@ const handleVulnPageChange = (directionOrPage) => {
   // Get sliced data for the current page (Vulnerability Information)
   const displayedVulnerabilityData = vulnerabilityData.slice((vulnPage - 1) * rowsPerPage, vulnPage * rowsPerPage);
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
+  const getVulnerabilityColor = (count) => {
+    if (count > 40) return '#FF0000'; // Red for more than 40
+    if (count >= 30) return '#FF6F00'; // Orange for 30-40
+    if (count >= 21) return '#FFEB3B'; // Yellow for 21-30
+    if (count >= 16) return '#FFC107'; // Amber for 16-20
+    if (count >= 11) return '#FF9800'; // Deep orange for 11-15
+    if (count >= 6) return '#FF5722'; // Deep orange for 6-10
+    if (count >= 1) return '#FF8C00'; // Dark orange for 1-5
+    return '#4CAF50'; // Green for 0
   };
-
+  
 
   const handleViewClick = (data) => {
     setSelectedData(data);
@@ -290,6 +297,10 @@ const handleVulnPageChange = (directionOrPage) => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedData(null);
+  };
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
   };
 
   const selectFormat = (format) => {
@@ -352,19 +363,21 @@ const handleVulnPageChange = (directionOrPage) => {
     }
   };
 
-  const handleExport = (format) => {
-    // Add your export logic here
-    console.log(`Exporting as ${format}`);
-    setIsExportMenuOpen(false); // Close menu after selection
-  };
-
+  // Toggle the export dropdown menu
   const toggleExportMenu = () => {
-    setIsExportMenuOpen(!isExportMenuOpen);
+    setIsExportMenuOpen((prev) => !prev);
   };
 
-  const handleExportFormatSelect = (format) => {
+  // Handle export format selection
+  const selectExportFormat = (format) => {
     setSelectedExportFormat(format);
-    handleExport(format);
+    setIsExportMenuOpen(false); // Close the dropdown after selecting a format
+  };
+
+  // Handle export action
+  const handleExport = () => {
+    // Your export logic here, e.g., sending the selected format to the backend
+    console.log(`Exporting in ${selectedExportFormat} format`);
   };
 
   return (
@@ -402,7 +415,7 @@ const handleVulnPageChange = (directionOrPage) => {
     <div>File</div>
     <div>Type</div>
     <div>Size</div>
-    <div>Vulnerability</div>
+    <div>Vulnerability Count</div>
   </div>
   <div className="dashboard__card-body">
     {displayedFileData.map((data, index) => (
@@ -410,7 +423,16 @@ const handleVulnPageChange = (directionOrPage) => {
         <div>{data.file}</div>
         <div>{data.type}</div>
         <div>{data.size}</div>
-        <div>{data.vulnerability}</div>
+        <div><div className="vul_count" 
+          style={{
+            backgroundColor: getVulnerabilityColor(data.vulnerability), // Background color based on the vulnerability count
+            padding: '5px 0', // Adjust padding as needed
+            borderRadius: '5px', // Optional: for rounded corners
+            display: 'inline-block' // Makes the div fit the content size
+          }}>
+  {data.vulnerability}
+</div>
+</div>
       </div>
     ))}
   </div>
@@ -520,45 +542,51 @@ const handleVulnPageChange = (directionOrPage) => {
     </button>
   )}
 </div>
+
 <div className="dashboard__buttons-container">
-  {/* Download Button Section */}
-  <div className="dashboard__download-section">
-    <button className="dashboard__download-btn" onClick={handleDownload}>Download Report</button>
+{/* Download Button Section */}
+<div className="dashboard__download-section">
+  <button className="dashboard__download-btn" onClick={handleDownload}>
+    Download Report <FontAwesomeIcon icon={faArrowDown} className="dashboard__download-icon" />
+  </button>
 
-    {/* Download Dropdown */}
-    <div className="dashboard__dropdown">
-      <button onClick={toggleMenu} className="dashboard__dropdown-toggle">
-        {selectedFormat} <FontAwesomeIcon icon={faCaretDown} className="dashboard__dropdown-icon" />
-      </button>
-      {isOpen && (
-        <div className="dashboard__dropdown-menu">
-          <div onClick={() => selectFormat('PDF')}>PDF</div>
-          <div onClick={() => selectFormat('XLSX')}>XLSX</div>
-          <div onClick={() => selectFormat('CSV')}>CSV</div>
-        </div>
-      )}
-    </div>
+  {/* Download Dropdown */}
+  <div className="dashboard__dropdown">
+    <button onClick={toggleMenu} className="dashboard__dropdown-toggle">
+      {selectedFormat} <FontAwesomeIcon icon={faCaretDown} className="dashboard__dropdown-icon" />
+    </button>
+    {isOpen && (
+      <div className="dashboard__dropdown-menu">
+        <div onClick={() => selectFormat('PDF')}>PDF</div>
+        <div onClick={() => selectFormat('XLSX')}>XLSX</div>
+        <div onClick={() => selectFormat('CSV')}>CSV</div>
+      </div>
+    )}
   </div>
+</div>
 
-  {/* Export Button Section */}
-  <div className="dashboard__export-section">
-    <button className="dashboard__export-btn" onClick={handleExport}>Export Analysis</button>
+{/* Export Button Section */}
+<div className="dashboard__export-section">
+  <button className="dashboard__export-btn" onClick={handleExport}>
+    Export Analysis <FontAwesomeIcon icon={faShareSquare} className="dashboard__export-icon" />
+  </button>
 
-    {/* Export Dropdown */}
-    <div className="dashboard__dropdown">
-      <button onClick={toggleExportMenu} className="dashboard__dropdown-toggle">
-        {selectedExportFormat} <FontAwesomeIcon icon={faCaretDown} className="dashboard__dropdown-icon" />
-      </button>
-      {isExportMenuOpen && (
-        <div className="dashboard__dropdown-export-menu">
-          <div onClick={() => selectExportFormat('JSON')}>JSON</div>
-          <div onClick={() => selectExportFormat('XML')}>XML</div>
-          <div onClick={() => selectExportFormat('TEXT')}>TEXT</div>
-          <div onClick={() => selectExportFormat('MARKDOWN')}>MD</div>
-        </div>
-      )}
-    </div>
+  {/* Export Dropdown */}
+  <div className="dashboard__dropdown">
+    <button onClick={toggleExportMenu} className="dashboard__dropdown-toggle">
+      {selectedExportFormat} <FontAwesomeIcon icon={faCaretDown} className="dashboard__dropdown-icon" />
+    </button>
+    {isExportMenuOpen && (
+      <div className="dashboard__dropdown-export-menu">
+        <div onClick={() => selectExportFormat('JSON')}>JSON</div>
+        <div onClick={() => selectExportFormat('XML')}>XML</div>
+        <div onClick={() => selectExportFormat('TEXT')}>TEXT</div>
+        <div onClick={() => selectExportFormat('MD')}>MD</div>
+      </div>
+    )}
   </div>
+</div>
+
 </div>
 
       <h1 className="graph__title">Graphs</h1>

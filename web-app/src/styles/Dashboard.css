@@ -93,6 +93,10 @@
   text-align: center;
 }
 
+.vul_count{
+  width: 50%;
+}
+
 .dashboard_v_card {
   background: #fff;
   width: 100%;
@@ -281,6 +285,17 @@
   border-radius: 4px;
   cursor: pointer;
   text-align: center;
+}
+
+.dashboard__download-icon {
+  margin-left: 8px;
+  font-size: 18px; /* Adjust the size as needed */
+  font-weight: bold; /* Make the icon appear thicker */
+}
+
+.dashboard__export-icon {
+  margin-left: 8px;
+  font-size: 18px; /* Adjust the size as needed */
 }
 
 /* Hover effect */
