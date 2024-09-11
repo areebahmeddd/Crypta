@@ -65,28 +65,17 @@ function Rules() {
     }
   };
 
-  const handleFileSelection = async () => {
-    try {
-      // Fetch the static file content
-      const response = await fetch(defaultRulesFile);
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const fileContent = await response.text();
-  
-      // Create a new File object from the fetched content
-      const defaultFile = new File([fileContent], "security.yara", {
-        type: "text/plain",
+  // Fetch default rules file and set the rules file state
+  const handleFileSelection = () => {
+    fetch(defaultRulesFile)
+      .then((response) => response.text())
+      .then((fileContent) => {
+        setRulesFile(
+          new File([fileContent], "security.yara", { type: "text/plain" })
+        );
+        setSelectedOption("default-file");
       });
-  
-      // Update state with the new file and selected option
-      setRulesFile(defaultFile);
-      setSelectedOption("default-file");
-    } catch (error) {
-      console.error('Error fetching the default file:', error);
-    }
   };
-  
 
   // Prevent default form submission behavior
   const onSubmit = (e) => {
@@ -117,11 +106,9 @@ function Rules() {
         if (rulesFile) {
           formData.append("yaraFile", rulesFile);
         }
-        
-        console.log("Uploaded Files: ", location.state.files);
-        console.log("Rules File: ", rulesFile);
+
         const response = await axios.post(
-          "http://127.0.0.1:8000/api/upload",
+          "http://127.0.0.1:8000/api/analyze",
           formData,
           {
             headers: {

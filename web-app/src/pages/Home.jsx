@@ -21,7 +21,19 @@ function Home() {
       console.log(postRequest.data);
       const getResponse = await axios.get("http://127.0.0.1:8000/api/files");
       console.log(getResponse.data);
-      setFiles(getResponse.data);
+      if (getResponse.data.length > 0) {
+        const fileMetadata = getResponse.data.map((file) => ({
+          file,
+          name: file.name,
+          size: (file.size / 1024 / 1024).toFixed(2),
+          type: file.type,
+          lastModified: new Date(file.lastModified).toLocaleDateString(),
+          icon:
+            fileIcons[file.name.split(".").pop().toLowerCase()] ||
+            fileIcons["default"],
+        }));
+        setFiles(fileMetadata);
+      }
     } catch (error) {
       setErrorMessage("Failed to detect drives or fetch files.");
     }
