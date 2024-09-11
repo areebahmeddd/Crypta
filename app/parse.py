@@ -4,19 +4,18 @@ import zipfile
 import tempfile
 from colorama import init, Fore, Style
 
-from app.file import scan_file
-from app.network import scan_network
+from file import scan_file
+from network import scan_network
 
-# Initialize colorama
+# Initialize colorama for colored output in console
 init(autoreset=True)
 
-with open('app/metadata.json', 'r') as file:
+with open('metadata/schema.json', 'r') as file:
     metadata = json.load(file)
     file_types = metadata['file_types']
 
-def scan_path(input_path, rules_path='yara-rules\security.yara'):
-
-    # Check if input path is a directory, zip file or single file
+def scan_path(input_path, rules_path='yara-rules/security.yara'):
+    # Check if input path is a directory, zip file, or single file
     if os.path.isdir(input_path):
         process_directory(input_path, rules_path)
     elif zipfile.is_zipfile(input_path):

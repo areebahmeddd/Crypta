@@ -1,26 +1,26 @@
 import os
-import pandas as pd
+import json
 from scapy.all import rdpcap, Ether, ARP, DHCP, BOOTP, IP, TCP, UDP, ICMP, Dot11, DNS, SNMP
 from scapy.layers.http import HTTPRequest
 from colorama import init, Fore, Style
 
-# Initialize colorama
+# Initialize colorama for colored output in console
 init(autoreset=True)
 
 def scan_network(file_path):
     try:
-        # Read pcap file and process packets to extract network traffic summary
-        packets = rdpcap(file_path)
-        processed_data = process_packet(packets)
-        return processed_data
-        r'''output_directory = os.path.join(os.getcwd(), f'{os.path.splitext(os.path.basename(file_path))[0]}_report')
-        save_result(processed_data, output_directory, file_path)'''
+        # Read the pcap file using scapy and extract packets from it
+        captured_packets = rdpcap(file_path)
+        # Process the packets and serialize the network traffic summary into JSON format
+        network_summary = process_packet(captured_packets)
+        formatted_data = serialize_network(network_summary)
+        return formatted_data
     except Exception as e:
         print(f'{Fore.RED}[ERROR]{Style.RESET_ALL} Error occurred while scanning {os.path.basename(file_path)}: {e}')
 
-def process_packet(packets):
-    # Initialize data dictionary to store network traffic summary
-    data = {
+def process_packet(captured_packets):
+    # Initialize network_data dictionary to store network traffic summary
+    network_data = {
         'Management Frames': [],
         'Control Frames': [],
         'HTTP Requests': [],
@@ -35,7 +35,7 @@ def process_packet(packets):
     }
 
     # Process each packet in the pcap file and extract relevant information
-    for packet in packets:
+    for packet in captured_packets:
         try:
             # Ethernet Frames
             if packet.haslayer(Ether):
@@ -49,10 +49,10 @@ def process_packet(packets):
                         'Operation': packet[ARP].op,
                         'Summary': packet.summary()
                     }
-                    data['ARP Packets'].append(arp_data)
+                    network_data['ARP Packets'].append(arp_data)
 
+                # DHCP Packets
                 elif packet.haslayer(DHCP):
-                    # DHCP Packets
                     dhcp_data = {
                         'Source MAC': packet[Ether].src,
                         'Destination MAC': packet[Ether].dst,
@@ -63,7 +63,7 @@ def process_packet(packets):
                         'Gateway IP': packet[BOOTP].giaddr,
                         'Summary': packet.summary()
                     }
-                    data['DHCP Packets'].append(dhcp_data)
+                    network_data['DHCP Packets'].append(dhcp_data)
 
             # IP Layer
             if packet.haslayer(IP):
@@ -77,7 +77,7 @@ def process_packet(packets):
                         'Flags': packet[TCP].flags,
                         'Summary': packet.summary()
                     }
-                    data['TCP Packets'].append(tcp_data)
+                    network_data['TCP Packets'].append(tcp_data)
 
                     # FTP Packets
                     if packet[TCP].dport in [20, 21] or packet[TCP].sport in [20, 21]:
@@ -89,7 +89,7 @@ def process_packet(packets):
                             'Flags': packet[TCP].flags,
                             'Summary': packet.summary()
                         }
-                        data['FTP Packets'].append(ftp_data)
+                        network_data['FTP Packets'].append(ftp_data)
 
                 # UDP Packets
                 elif packet.haslayer(UDP):
@@ -97,10 +97,11 @@ def process_packet(packets):
                         dns_data = {
                             'Source IP': packet[IP].src,
                             'Destination IP': packet[IP].dst,
-                            'Query Name': packet[DNS].qd.qname.decode() if hasattr(packet[DNS], 'qd') and packet[DNS].qd else None,
+                            'Query Name': packet[DNS].qd.qname.decode()
+                                if hasattr(packet[DNS], 'qd') and packet[DNS].qd else None,
                             'Summary': packet.summary()
                         }
-                        data['DNS Queries'].append(dns_data)
+                        network_data['DNS Queries'].append(dns_data)
                     else:
                         udp_data = {
                             'Source IP': packet[IP].src,
@@ -109,7 +110,7 @@ def process_packet(packets):
                             'Destination Port': packet[UDP].dport,
                             'Summary': packet.summary()
                         }
-                        data['UDP Packets'].append(udp_data)
+                        network_data['UDP Packets'].append(udp_data)
 
                 # ICMP Packets
                 elif packet.haslayer(ICMP):
@@ -120,7 +121,7 @@ def process_packet(packets):
                         'Code': packet[ICMP].code,
                         'Summary': packet.summary()
                     }
-                    data['ICMP Packets'].append(icmp_data)
+                    network_data['ICMP Packets'].append(icmp_data)
 
             # Dot11 Frames (Wireless Frames)
             if packet.haslayer(Dot11):
@@ -135,10 +136,10 @@ def process_packet(packets):
                 # Determine frame type based on the type field
                 if packet.type == 0:
                     frame_data['Frame Type'] = 'Management'
-                    data['Management Frames'].append(frame_data)
+                    network_data['Management Frames'].append(frame_data)
                 elif packet.type == 1:
                     frame_data['Frame Type'] = 'Control'
-                    data['Control Frames'].append(frame_data)
+                    network_data['Control Frames'].append(frame_data)
 
             # SNMP Packets
             if packet.haslayer(SNMP):
@@ -149,7 +150,7 @@ def process_packet(packets):
                     'PDU Type': packet[SNMP].PDU,
                     'Summary': packet.summary()
                 }
-                data['SNMP Packets'].append(snmp_data)
+                network_data['SNMP Packets'].append(snmp_data)
 
             # HTTP Requests
             if packet.haslayer(HTTPRequest):
@@ -161,22 +162,23 @@ def process_packet(packets):
                     'Path': packet[HTTPRequest].Path.decode(),
                     'Summary': packet.summary()
                 }
-                data['HTTP Requests'].append(http_data)
+                network_data['HTTP Requests'].append(http_data)
         except Exception as e:
             print(f'{Fore.RED}[ERROR]{Style.RESET_ALL} Error occurred while processing {packet.summary()}: {e}')
-    return data
 
-def save_result(protocols, output_directory, file_path):
-    # Create output directory if it doesn't exist
-    os.makedirs(output_directory, exist_ok=True)
-    excel_path = os.path.join(output_directory, 'network_traffic_summary.xlsx')
-    with pd.ExcelWriter(excel_path) as writer:
-        # Save each protocol data to separate sheets in Excel file and CSV files
-        for name, entries in protocols.items():
-            if entries:
-                print(f'{Fore.GREEN}[SUCCESS]{Style.RESET_ALL} {len(entries)} {name} captured in {os.path.basename(file_path)}')
-                df = pd.DataFrame(entries)
-                df.to_excel(writer, sheet_name=name, index=False)
-                df.to_csv(os.path.join(output_directory, f'{name.lower().replace(" ", "_")}.csv'), index=False)
-            else:
-                print(f'{Fore.YELLOW}[FAILURE]{Style.RESET_ALL} 0 {name} captured in {os.path.basename(file_path)}')
+    # Remove empty lists from the network_data dictionary
+    network_data = {key: value for key, value in network_data.items() if value}
+    return network_data
+
+def serialize_network(data):
+    def default_serializer(obj):
+        # Convert bytes to string
+        if isinstance(obj, bytes):
+            return obj.decode('utf-8')
+        # Convert set to list
+        if isinstance(obj, (set, frozenset)):
+            return list(obj)
+        # Convert other objects to string
+        return str(obj)
+
+    return json.loads(json.dumps(data, default=default_serializer))

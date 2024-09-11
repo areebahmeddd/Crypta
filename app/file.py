@@ -1,21 +1,21 @@
 import yara
 import json
-import os
 import re
+import os
 from colorama import init, Fore, Style
 
-# Initialize colorama
+# Initialize colorama for colored output in console
 init(autoreset=True)
 
-with open('app/metadata.json', 'r') as file:
+with open('metadata/schema.json', 'r') as file:
     metadata = json.load(file)
     patterns = metadata['log_patterns']
 
 def scan_file(file_path, rules_path, file_type):
     try:
         # Compile YARA rules
-        rules = yara.compile(filepath=rules_path)
-        matches_found = []
+        yara_rules = yara.compile(filepath=rules_path)
+        yara_results = []
 
         if file_type == 'text':
             with open(file_path, 'r', encoding='utf-8') as file:
@@ -29,56 +29,50 @@ def scan_file(file_path, rules_path, file_type):
 
                 if detected_type is None:
                     # If file type cannot be detected, scan the entire file for YARA rule matches
-                    data = file.read()
-                    matches = rules.match(data=data)
-                    if matches:
-                        # Add triggered rules to matches_found list
-                        for match in matches:
-                            matches_found.append({
-                                'rule': match.rule,
-                                'component': 'N/A',
-                                'content': 'N/A'
-                            })
-                    return matches_found
+                    file_data = file.read()
+                    yara_matches = yara_rules.match(data=file_data)
+                    if yara_matches:
+                        # Add triggered YARA rules to results list
+                        for match in yara_matches:
+                            add_result(yara_results, match.rule)
+                    return yara_results
 
                 for line in file:
                     # If file type is detected, scan each line for YARA rule matches
-                    matches = rules.match(data=line)
-                    if matches:
-                        # Add triggered rules, component and content to matches_found list
+                    yara_matches = yara_rules.match(data=line)
+                    if yara_matches:
+                        # Add triggered rules, component and content to results list
                         component, content = extract_info(line, file_pattern, patterns)
                         if component and content:
-                            for match in matches:
-                                matches_found.append({
-                                    'rule': match.rule,
-                                    'component': component,
-                                    'content': content
-                                })
+                            for match in yara_matches:
+                                add_result(yara_results, match.rule, component, content)
 
         elif file_type in ['binary', 'script', 'database', 'config']:
             with open(file_path, 'rb') as file:
                 # If file type is not text, scan the entire file for YARA rule matches
-                data = file.read()
-                matches = rules.match(data=data)
-                if matches:
-                    # Add triggered rules to matches_found list
-                    for match in matches:
-                        matches_found.append({
-                            'rule': match.rule,
-                            'component': 'N/A',
-                            'content': 'N/A'
-                        })
+                file_data = file.read()
+                yara_matches = yara_rules.match(data=file_data)
+                if yara_matches:
+                    # Add triggered YARA rules to results list
+                    for match in yara_matches:
+                        add_result(yara_results, match.rule)
 
-        if matches_found:
-            print(f'{Fore.GREEN}[SUCCESS]{Style.RESET_ALL} {len(matches_found)} YARA rules matched in {os.path.basename(file_path)}')
+        if yara_results:
+            print(f'{Fore.GREEN}[SUCCESS]{Style.RESET_ALL} {len(yara_results)} YARA rules matched in {os.path.basename(file_path)}')
         else:
             print(f'{Fore.YELLOW}[FAILURE]{Style.RESET_ALL} 0 YARA rules matched in {os.path.basename(file_path)}')
 
-        return matches_found
-
+        return yara_results
     except Exception as e:
         print(f'{Fore.RED}[ERROR]{Style.RESET_ALL} Error occurred while scanning {os.path.basename(file_path)}: {e}')
-        return []
+
+def add_result(yara_results, rule, component='N/A', content='N/A'):
+    # Helper function to add YARA scan results to the list
+    yara_results.append({
+        'rule': rule,
+        'component': component,
+        'content': content
+    })
 
 def identify_pattern(lines, patterns):
     # Check if sample lines match any file pattern
@@ -103,15 +97,12 @@ def extract_info(line, pattern, patterns):
         'windows': (4, 5)
     }
 
-    # Extract component and content from log line
+    # Extract component and content based on pattern match
     match = re.match(pattern, line)
     if match:
         for key, (comp_idx, cont_idx) in group_indices.items():
             if pattern == patterns.get(key):
-                try:
-                    component = match.group(comp_idx)
-                    content = match.group(cont_idx)
-                    return component, content
-                except IndexError:
-                    return None, None
-    return None, None
+                component = match.group(comp_idx)
+                content = match.group(cont_idx)
+                return component, content
+    return 'N/A', 'N/A'
