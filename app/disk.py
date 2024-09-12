@@ -1,7 +1,12 @@
 import pytsk3
 import pyewf
-from typing import List
+import json
+import os
+from datetime import datetime
+from typing import List, Dict, Any
 
+with open('metadata/schema.json', 'r') as file:
+    metadata = json.load(file)
 
 class EwfImgInfo(pytsk3.Img_Info):
     def __init__(self, ewf_handle: pyewf.handle) -> None:
@@ -19,30 +24,47 @@ class EwfImgInfo(pytsk3.Img_Info):
         return self._ewf_handle.get_media_size()
 
 
-def list_directory_recursively(fs: pytsk3.FS_Info, directory_path: str) -> None:
-    """Recursively list the contents of a directory within the filesystem."""
+def list_directory_recursively(fs: pytsk3.FS_Info, directory_path: str) -> List[Dict[str, Any]]:
+    """Recursively list the contents of a directory within the filesystem and collect file metadata."""
     directory = fs.open_dir(directory_path)
+    file_metadata = []
 
-    print(f"Contents of directory: {directory_path}")
     for entry in directory:
         name = entry.info.name.name.decode()
         if name not in [".", ".."]:
-            entry_type = 'Directory' if entry.info.meta.type == pytsk3.TSK_FS_META_TYPE_DIR else 'File'
-            print(f"Found: {name} - {entry_type}")
 
-            # If it's a directory, recursively explore it
             if entry.info.meta.type == pytsk3.TSK_FS_META_TYPE_DIR:
                 try:
-                    list_directory_recursively(fs, f"{directory_path}/{name}")
+                    file_metadata.extend(list_directory_recursively(fs, f"{directory_path}/{name}"))
                 except OSError as e:
                     print(f"Error accessing directory {name}: {e}")
+            else:
+                # Collect file metadata if the file extension is supported
+                file_ext = os.path.splitext(name)[1]
+                
+                supported_extensions = [ext for extensions in metadata['file_types'].values() for ext in extensions]
+                if file_ext in supported_extensions:
+                    file_path = os.path.join(directory_path, name)
+                    # Handle time conversion and check for 0 timestamp
+                    last_modified = (
+                        datetime.fromtimestamp(entry.info.meta.mtime).strftime('%d/%m/%Y')
+                        if entry.info.meta.mtime != 0 else 'N/A'
+                    )
+                    file_metadata.append({
+                        'name': name,
+                        'path': file_path,
+                        'size': entry.info.meta.size,
+                        'type': file_ext,
+                        'last_modified': last_modified
+                    })
+
+    return file_metadata
 
 
-def open_e01_image(image_path: str) -> None:
+def open_e01_image(image_path: str) -> List[Dict[str, Any]]:
     """Opens an E01 image and scans the contents of all folders."""
     try:
         # Open the EWF file using pyewf
-        print(f"Opening E01 image: {image_path}")
         filenames: List[str] = pyewf.glob(image_path)
         ewf_handle = pyewf.handle()
         ewf_handle.open(filenames)
@@ -52,27 +74,29 @@ def open_e01_image(image_path: str) -> None:
 
         # Attempt to open the FAT16, FAT32, or NTFS partition
         partition_table = pytsk3.Volume_Info(img_info)
-        print("Partition table loaded.")
         for part in partition_table:
-            print(f"Found partition: {part.desc.decode()} starting at sector {part.start}")
             if (
                 part.desc.decode() == "DOS FAT16 (0x04)" or
                 part.desc.decode() == "Win95 FAT32 (0x0b)" or
                 "NTFS" in part.desc.decode()
             ):
-                print(
-                    f"Attempting to open partition: {part.desc.decode()} starting at sector {part.start}"
-                )
-
                 # Open the partition using its starting offset
                 filesystem = pytsk3.FS_Info(img_info, offset=part.start * 512)
 
-                # Scan the contents of the root directory
-                list_directory_recursively(filesystem, "/")
-                break
+                # Scan the contents of the root directory and collect file metadata
+                file_metadata = list_directory_recursively(fs=filesystem, directory_path="/")
+                ewf_handle.close()
+
+                return file_metadata
         else:
             print("No suitable filesystem found.")
+            ewf_handle.close()
 
-        ewf_handle.close()
+            return []
+
     except Exception as e:
         print(f"An error occurred: {e}")
+        return []
+
+
+print(json.dumps(open_e01_image(r"c:\Users\shiva\Downloads\ubnist1.gen2.E01"), indent=2))
