@@ -94,6 +94,22 @@
   text-align: center;
 }
 
+.sort-button-custom {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  margin-left: 5px;
+}
+
+.sort-button-custom:focus {
+  outline: none;
+}
+
+.sort-button-custom:hover {
+  color: #457d58; /* Optional: Change color on hover */
+}
+
 .vul_count{
   width: 50%;
 }

@@ -9,7 +9,7 @@ import { saveAs } from 'file-saver';
 import '../styles/Dashboard.css';
 import 'jspdf-autotable';  // Import the autoTable plugin
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretDown, faSearch, faTimes, faChevronLeft, faChevronRight, faFilter, faArrowDown, faShareSquare,} from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faSearch, faTimes, faChevronLeft, faChevronRight, faFilter, faArrowDown, faShareSquare, faSortUp, faSortDown} from '@fortawesome/free-solid-svg-icons';
 import _ from 'lodash';
 import { Line, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend } from 'chart.js';
@@ -40,6 +40,9 @@ const Dashboard = () => {
   const [vulnPage, setVulnPage] = useState(1); // Page for vulnerability table
   const [isExportMenuOpen, setIsExportMenuOpen] = useState(false);
   const [selectedExportFormat, setSelectedExportFormat] = useState('JSON');
+  const [sortCriteria, setSortCriteria] = useState({ key: 'size', order: 'asc' });
+  const [displayedFileData, setDisplayedFileData] = useState([]);
+
   const location = useLocation();
   const {
     processedData = [],
@@ -233,8 +236,50 @@ const Dashboard = () => {
     setSearchTerm(e.target.value);
   };
 
+  const handleSort = (key) => {
+    const newOrder = (sortCriteria.key === key && sortCriteria.order === 'asc') ? 'desc' : 'asc';
+    setSortCriteria({ key, order: newOrder });
+  };  
+  
+  const convertSizeToBytes = (sizeStr) => {
+    const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+    const [size, unit] = sizeStr.split(/([a-zA-Z]+)/); // Split number and unit
+  
+    const unitIndex = units.indexOf(unit.toUpperCase());
+    if (unitIndex === -1) return parseFloat(size); // Fallback in case of an unknown unit
+  
+    return parseFloat(size) * Math.pow(1024, unitIndex); // Convert to bytes
+  };
+  
+  useEffect(() => {
+    const sortedData = [...fileData].sort((a, b) => {
+      const aValue = a[sortCriteria.key];
+      const bValue = b[sortCriteria.key];
+  
+      // Special case for sorting file sizes
+      if (sortCriteria.key === 'size') {
+        const aBytes = convertSizeToBytes(aValue);
+        const bBytes = convertSizeToBytes(bValue);
+        return sortCriteria.order === 'asc' ? aBytes - bBytes : bBytes - aBytes;
+      }
+  
+      // Sorting vulnerability counts or other numerical fields
+      if (sortCriteria.key === 'vulnerability') {
+        return sortCriteria.order === 'asc' ? aValue - bValue : bValue - aValue;
+      }
+  
+      // Sorting other string fields
+      if (aValue < bValue) return sortCriteria.order === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortCriteria.order === 'asc' ? 1 : -1;
+      return 0;
+    });
+  
+    const startIndex = (filePage - 1) * rowsPerPage;
+    const endIndex = filePage * rowsPerPage;
+    setDisplayedFileData(sortedData.slice(startIndex, endIndex));
+  }, [fileData, filePage, rowsPerPage, sortCriteria]);
+  
 // Logic for File Pagination (max two numbers shown)
-
 const totalFilePages = Math.ceil(fileData.length / rowsPerPage);
 const totalVulnPages = Math.ceil(vulnerabilityData.length / rowsPerPage);
 
@@ -254,7 +299,6 @@ const handleFilePageChange = (directionOrPage) => {
   }
 };
 
-
   // Logic for Vulnerability Pagination (max two numbers shown)
 const startVulnPage = Math.max(1, vulnPage - 1);  // Show the current page and the previous one
 const endVulnPage = Math.min(totalVulnPages, vulnPage + 1);  // Show the current page and the next one
@@ -271,9 +315,8 @@ const handleVulnPageChange = (directionOrPage) => {
   }
 };
 
-
-      // Get sliced data for the current page (File Details)
-  const displayedFileData = fileData.slice((filePage - 1) * rowsPerPage, filePage * rowsPerPage);
+  //     // Get sliced data for the current page (File Details)
+  // const displayedFileData = fileData.slice((filePage - 1) * rowsPerPage, filePage * rowsPerPage);
 
   // Get sliced data for the current page (Vulnerability Information)
   const displayedVulnerabilityData = vulnerabilityData.slice((vulnPage - 1) * rowsPerPage, vulnPage * rowsPerPage);
@@ -415,9 +458,28 @@ const handleVulnPageChange = (directionOrPage) => {
   <div className="dashboard__card-header">
     <div>File</div>
     <div>Type</div>
-    <div>Size</div>
-    <div>Vulnerability Count</div>
+    <div>
+  Size
+  <button className="sort-button-custom" onClick={() => handleSort('size')}>
+    {sortCriteria.key === 'size' && sortCriteria.order === 'asc' ? (
+      <FontAwesomeIcon icon={faSortUp} />
+    ) : (
+      <FontAwesomeIcon icon={faSortDown} />
+    )}
+  </button>
+</div>
+<div>
+  Vulnerability Count
+  <button className="sort-button-custom" onClick={() => handleSort('vulnerability')}>
+    {sortCriteria.key === 'vulnerability' && sortCriteria.order === 'asc' ? (
+      <FontAwesomeIcon icon={faSortUp} />
+    ) : (
+      <FontAwesomeIcon icon={faSortDown} />
+    )}
+  </button>
+</div>
   </div>
+  
   <div className="dashboard__card-body">
     {displayedFileData.map((data, index) => (
       <div key={index} className="dashboard__card-row">
