@@ -26,13 +26,14 @@ h2 {
   border: 2px #d1d5db;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   background-color: #ffffff;  /* Dashed border */
-  border-radius: 0.5rem;
-  padding: 1rem;
+  border-radius: 1rem;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
   max-width: 600px; /* Adjust as needed */
+  margin-bottom: 40px;
 }
 
 .option-buttons {
@@ -183,6 +184,10 @@ h2 {
   flex-direction: column;
 }
 
+.default-rules-para {
+  min-width: 100%;
+}
+
 .default-rules-option {
   cursor: pointer;
   color: #4d4f50; /* Change this to your preferred color */
@@ -222,9 +227,8 @@ h2 {
   background-color: #ffffff;
   border-radius: 0.5rem;
   padding: 8px; /* Spacing inside the container */
-  margin-top: 10px; /* Space above the container */
-  min-width: 600px; /* Limit width for better readability */
-  margin: auto; /* Center horizontally */
+  min-width: 600px;
+  margin-bottom: 40px;
 }
 
 .file-infoo.hidden {
