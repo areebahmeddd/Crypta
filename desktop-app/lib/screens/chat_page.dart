@@ -1,9 +1,9 @@
 import 'dart:developer';
 
-import 'package:mivro/models/message.dart';
-import 'package:mivro/providers/chat_history_provider.dart';
-import 'package:mivro/providers/chat_provider.dart';
-import 'package:mivro/widgets/chat/chat_item.dart';
+import 'package:crypta/model/message.dart';
+import 'package:crypta/providers/chat_history_provider.dart';
+import 'package:crypta/providers/chat_provider.dart';
+import 'package:crypta/widgets/chat_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

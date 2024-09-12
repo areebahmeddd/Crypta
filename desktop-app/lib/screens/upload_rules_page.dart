@@ -299,7 +299,7 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                                     // Last Modified
                                     const Column(
                                       children: [
-                                        const Text(
+                                         Text(
                                           'Last Modified:',
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
@@ -321,7 +321,7 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                               children: [
                                 // Name
                                 Column(
-                                  children: const [
+                                  children:  [
                                     Text(
                                       'Name:',
                                       style: TextStyle(
@@ -332,7 +332,7 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                                 ),
                                 // Size
                                 Column(
-                                  children: const [
+                                  children:  [
                                     Text(
                                       'Size:',
                                       style: TextStyle(
@@ -343,7 +343,7 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                                 ),
                                 // Type
                                 Column(
-                                  children: const [
+                                  children:  [
                                     Text(
                                       'Type:',
                                       style: TextStyle(
@@ -354,7 +354,7 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                                 ),
                                 // Last Modified
                                 Column(
-                                  children: const [
+                                  children:  [
                                     Text(
                                       'Last Modified:',
                                       style: TextStyle(

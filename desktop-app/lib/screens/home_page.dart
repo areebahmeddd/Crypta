@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:crypta/providers/files_provider.dart';
 import 'package:crypta/screens/upload_rules_page.dart';
 import 'package:crypta/utils/hexcolor.dart';
-import 'package:crypta/widgets/file_details.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
@@ -271,7 +270,8 @@ class HomePageState extends ConsumerState<HomePage> {
                                       );
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: myColorFromHex('#457d58'),
+                                      backgroundColor:
+                                          myColorFromHex('#457d58'),
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 100, vertical: 25),
                                       shape: RoundedRectangleBorder(
@@ -337,9 +337,8 @@ class HomePageState extends ConsumerState<HomePage> {
                                               ),
                                             ),
                                             TextSpan(
-                                              text: uploadedFilesMetadata[index]
-                                                      ['size']! +
-                                                  '\n',
+                                              text:
+                                                  '${uploadedFilesMetadata[index]['size']!} \n',
                                               style: const TextStyle(
                                                 fontWeight: FontWeight
                                                     .normal, // Normal font weight for value
@@ -357,9 +356,8 @@ class HomePageState extends ConsumerState<HomePage> {
                                               ),
                                             ),
                                             TextSpan(
-                                              text: uploadedFilesMetadata[index]
-                                                      ['type']! +
-                                                  '\n',
+                                              text:
+                                                  '${uploadedFilesMetadata[index]['type']!} \n',
                                               style: const TextStyle(
                                                 fontWeight: FontWeight.normal,
                                                 fontSize: 14,
@@ -434,17 +432,17 @@ class HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  Widget _buildFileInfo(PlatformFile file) {
-    final fileSizeInMB = (file.size / (1024 * 1024)).toStringAsFixed(2);
-    final fileType = file.extension;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('File Name: ${file.name}'),
-        Text('File Size: $fileSizeInMB MB'),
-        Text('File Type: image/$fileType'),
-        Text('File Extension: .$fileType'),
-      ],
-    );
-  }
+  // Widget _buildFileInfo(PlatformFile file) {
+  //   final fileSizeInMB = (file.size / (1024 * 1024)).toStringAsFixed(2);
+  //   final fileType = file.extension;
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       Text('File Name: ${file.name}'),
+  //       Text('File Size: $fileSizeInMB MB'),
+  //       Text('File Type: image/$fileType'),
+  //       Text('File Extension: .$fileType'),
+  //     ],
+  //   );
+  // }
 }
