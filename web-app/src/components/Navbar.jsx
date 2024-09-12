@@ -1,5 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faYoutube } from "@fortawesome/free-brands-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faArrowCircleDown } from "@fortawesome/free-solid-svg-icons";
 import "../styles/Navbar.css";
@@ -32,11 +33,11 @@ function Navbar() {
         {/* Navbar right side */}
         <div className="navbar-right">
           <a href="CryptaSetup.exe" download className="download-link">
-            <span>Download</span>
-            <FontAwesomeIcon
-              icon={faArrowCircleDown}
-              style={{ marginLeft: "8px" }}
-            />
+            <span style={{ marginRight: "12px" }}>Download</span>
+            <FontAwesomeIcon icon={faArrowCircleDown} />
+          </a>
+          <a href="https://youtu.be/ToXUq-NSkUg?si=b6PRGx4nwImTz-li" className="yt-icon">
+            <FontAwesomeIcon icon={faYoutube} />
           </a>
           <a
             href="https://github.com/areebahmeddd/Crypta"
