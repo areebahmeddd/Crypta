@@ -186,9 +186,9 @@ function Rules() {
               className="default-rules-logo"
             />
             <div className="default-rules-info">
-              <p>
+              <div className="default-rules-para">
                 <code>security.yara</code>
-              </p>
+              </div>
               <div
                 className={`default-rules-option ${
                   selectedOption === "default-file" ? "selected" : ""
