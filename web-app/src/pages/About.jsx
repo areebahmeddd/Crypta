@@ -1,11 +1,10 @@
-import React from 'react';
-import '../styles/About.css'; // Import the CSS file
+import React from "react";
+import "../styles/About.css";
 
 const About = () => {
   return (
     <div className="page-about">
       <h1>About Us</h1>
-      <p>This is the About page.</p>
     </div>
   );
 };

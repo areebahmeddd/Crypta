@@ -1,0 +1,468 @@
+/* src/components/Dashboard.css */
+
+.dashboard__title {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  text-align: center;
+  width: 100%;
+}
+
+.dashboard__separator {
+  width: 100%;
+  border: 0;
+  border-top: 3px solid #ccc; /* Customize color and thickness */
+  margin-bottom: 20px; /* Add space below the line */
+}
+
+.dashboard__container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .dashboard__search-bar-wrapper {
+    display: flex;
+    align-items: center;
+    background-color:#fdfdfd;
+    border-radius: 25px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 6px 16px;
+    width: 100%;
+    margin-bottom: 40px;
+  }
+  
+  .dashboard__search-bar {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    border-radius: 25px;
+    padding: 8px;
+    font-size: 16px;
+  }
+  
+  .dashboard__search-icon, .dashboard__search-clear, .dashboard__search-filter {
+    margin-left: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    color: #757474;
+  }
+  
+
+.dashboard__card {
+  position: relative;
+  width: 100%;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+
+.dashboard__card-header {
+  display: flex;
+  justify-content: space-between; /* Distribute columns evenly */
+  align-items: center;
+  background: #f5f5f5;
+  padding: 10px;
+  font-weight: bold;
+}
+
+.dashboard__card-body {
+  padding: 10px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.dashboard__card-row {
+  display: flex;
+  justify-content: space-between; /* Distribute columns evenly */
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.dashboard__card-row:last-child {
+  border-bottom: none;
+}
+
+.dashboard__card-row:hover {
+  background: #f5f5f5;
+}
+
+.dashboard__card-header div,
+.dashboard__card-row div {
+  flex: 1;
+  padding: 5px;
+  text-align: center;
+   align-items: center;
+}
+
+.sort-button-custom {
+  background-color: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  margin-left: 5px;
+  padding: 0;
+  position: relative;
+}
+
+
+.icon-container {
+  width: 16px; /* Width of the icon */
+  height: 16px; /* Height of the icon */
+  display: inline-block;
+  text-align: center;
+}
+
+.sort-button-custom .icon-container svg {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.sort-button-custom:hover {
+  color: #457d58; /* Optional: Change color on hover */
+}
+
+.vul_count{
+  width: 50%;
+}
+
+.total-files {
+  position: absolute;
+  bottom: 10px; /* Adjust as needed */
+  left: 10px;   /* Adjust as needed */
+  font-size: 16px; /* Adjust as needed */
+  color: #7a7878; /* Adjust color as needed */
+}
+
+.dashboard_v_card {
+  position: relative;
+  background: #fff;
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+
+.dashboard_v_card-header {
+  display: flex;
+  justify-content: space-between; /* Distribute columns evenly */
+  align-items: center;
+  background: #f5f5f5;
+  padding: 10px;
+  font-weight: bold;
+}
+
+.dashboard_v_card-body {
+  padding: 10px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.dashboard_v_card-row {
+  display: flex;
+  justify-content: space-between; /* Distribute columns evenly */
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.dashboard_v_card-row:last-child {
+  border-bottom: none;
+}
+
+.dashboard_v_card-row:hover {
+  background: #f5f5f5;
+}
+
+.dashboard_v_card-header div,
+.dashboard_v_card-row div {
+  flex: 1;
+  padding: 5px;
+  text-align: center;
+}
+
+.total-v-files {
+  position: absolute;
+  bottom: 10px; /* Adjust as needed */
+  left: 10px;   /* Adjust as needed */
+  font-size: 16px; /* Adjust as needed */
+  color: #7a7878; /* Adjust color as needed */
+}
+
+.dashboard__view-btn {
+  background:  #457d58; /* Primary blue color */
+  border: none;
+  color: #fff;
+  padding: 6px 28px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard__view-btn:hover {
+  background: #45a049; /* Darker blue for hover */
+  transform: scale(1.05); /* Slightly enlarge the button */
+}
+
+.dashboard__view-btn:focus {
+  outline: none;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.pagination-btn {
+  background: #457d58;
+  border: none;
+  color: #fff;
+  padding: 6px 12px;
+  margin: 0 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  width: 40px; /* Fixed width for consistency */
+  height: 40px; /* Fixed height */
+}
+
+.pagination-btn-r {
+  background: #457d58;
+  border: none;
+  color: #fff;
+  padding: 6px 12px;
+  margin: 0 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  width: 40px; /* Fixed width for consistency */
+  height: 40px; /* Fixed height */
+  margin-right: 50px;
+}
+
+.pagination-btn:disabled {
+  background: #e0e0e0;
+  cursor: not-allowed;
+}
+
+.pagination-btn-r:disabled {
+  background: #e0e0e0;
+  cursor: not-allowed;
+}
+
+.pagination-number {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  color: #333;
+  padding: 6px 12px;
+  margin: 0 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  width: 38px; /* Fixed width for consistency */
+  height: 38px; /* Fixed height */
+}
+
+.pagination-number.active {
+  background: #457d58;
+  color: #fff;
+}
+
+.pagination-number:hover {
+  background: #45a049;
+}
+
+.dashboard__alert-section {
+  margin-bottom: 20px; /* Space from other sections */
+}
+
+.dashboard__alert-title {
+  font-size: 1.75rem; /* Larger font size for the title */
+  margin-bottom: 5px; /* Space between title and separator */
+}
+
+.dashboard__alert-separator {
+  border: 0; /* Remove default border */
+  border-top: 1px solid #ddd; /* Separator line */
+  margin-bottom: 10px; /* Space between separator and alert list */
+}
+
+.dashboard__alert-list {
+  list-style-type: disc; /* Bullet points for the list */
+  padding-left: 20px; /* Space for bullet points */
+  margin: 0; /* Remove default margin */
+}
+
+.dashboard__alert-item {
+  margin-bottom: 10px; /* Space between alert items */
+  font-size: 16px; /* Font size for alert text */
+}
+
+.dashboard__show-more {
+  background: none; /* No background */
+  border: none; /* Remove border */
+  color: #457d58; /* Button color */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-size: 16px; /* Font size */
+  margin-top: 10px; /* Space above button */
+}
+
+.dashboard__show-more:hover {
+  text-decoration: underline; /* Underline on hover */
+}
+
+/* Container for download and export sections */
+.dashboard__buttons-container {
+  display: flex;
+  justify-content: center; /* Center the whole container */
+  align-items: center; /* Vertically center */
+  gap: 20px; /* Adds spacing between the buttons and dropdowns */
+  padding: 20px;
+  flex-wrap: wrap; /* Ensures responsive wrapping */
+}
+
+/* Download and Export Sections */
+.dashboard__download-section,
+.dashboard__export-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  gap: 10px; /* Spacing between button and dropdown */
+}
+
+/* Button styles */
+.dashboard__download-btn, 
+.dashboard__export-btn {
+  padding: 10px 50px;
+  background-color: #457d58;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  width: auto; /* Remove width constraints */
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+.dashboard__download-icon, 
+.dashboard__export-icon {
+  margin-left: 8px;
+  font-size: 18px;
+}
+
+/* Hover effect */
+.dashboard__download-btn:hover, 
+.dashboard__export-btn:hover {
+  background-color: #45a049;
+}
+
+/* Dropdown container */
+.dashboard__dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dashboard__dropdown-icon {
+  margin-left: 5px;
+}
+
+/* Dropdown toggle button */
+.dashboard__dropdown-toggle {
+  padding: 10px 20px;
+  background-color: rgb(161, 155, 155);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+/* Hover effect for dropdown toggle */
+.dashboard__dropdown-toggle:hover {
+  background-color: rgb(179, 175, 175);
+}
+
+/* Dropdown menu */
+.dashboard__dropdown-menu,
+.dashboard__dropdown-export-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: lightgray;
+  border-radius: 4px;
+  width: 100px;
+  z-index: 1;
+}
+
+/* Dropdown items */
+.dashboard__dropdown-menu div, 
+.dashboard__dropdown-export-menu div {
+  padding: 10px;
+  cursor: pointer;
+  text-align: center;
+}
+
+/* Hover effect for dropdown items */
+.dashboard__dropdown-menu div:hover, 
+.dashboard__dropdown-export-menu div:hover {
+  background-color: #ddd;
+}
+
+/* Make the layout responsive */
+@media screen and (max-width: 768px) {
+  .dashboard__buttons-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .dashboard__download-btn, 
+  .dashboard__export-btn, 
+  .dashboard__dropdown-toggle {
+    width: 100%; /* Ensure full width on small screens */
+  }
+}
+
+  /* Container for the charts */
+
+  .graph__title {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    text-align: center;
+    width: 100%;
+    margin-top: 70px;
+  }
+
+.dashboard__charts {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px; /* Space between the charts */
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+
+/* Individual chart container */
+.dashboard__chart-container {
+  flex: 1;
+  min-width: 300px; /* Minimum width for each chart */
+  max-width: 45%; /* Maximum width for each chart container */
+  box-sizing: border-box;
+  height: 400PX;
+}
+
+/* Optional: Adjust the chart titles if needed */
+.dashboard__chart-container h2 {
+  text-align: center;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}

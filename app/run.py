@@ -54,10 +54,14 @@ async def analyze(uploadedFiles: list[UploadFile] = File(...), yaraFile: UploadF
                     else:
                         rule_counts[rule] = 1
 
+                # Append text scan results to scan_results list as dictionary
                 scan_results.append({
                     'file': os.path.basename(file_path),
                     'rules': rule_counts,
-                    'vulnerabilities': sum(rule_counts.values())
+                    'risk_level': 'Low', # DUMMY VALUES FOR NOW
+                    'risk_type': 'File Error',
+                    'vulnerability_type': 'Text',
+                    'vulnerability_count': sum(rule_counts.values())
                 })
 
             elif file_type == 'network':
@@ -66,7 +70,10 @@ async def analyze(uploadedFiles: list[UploadFile] = File(...), yaraFile: UploadF
                 scan_results.append({
                     'file': os.path.basename(file_path),
                     'network': network_data,
-                    'vulnerabilities': len(network_data)
+                    'risk_level': 'High',
+                    'risk_type': 'Firewall Bypass',
+                    'vulnerability_type': 'Network',
+                    'vulnerability_count': len(network_data)
                 })
 
         return JSONResponse(content={

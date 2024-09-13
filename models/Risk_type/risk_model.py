@@ -16,7 +16,9 @@ from sklearn.utils import shuffle
 
 # make prediction for CBS_Restart
 
-def predict(new_text):
+def predict_type(new_text):
+    model=tf.keras.models.load_model('Risk_type/risk_type98.h5')
+
     # Preprocess the input text
     new_sequence = tokenizer.texts_to_sequences([new_text])
     new_padded_sequence = pad_sequences(new_sequence, maxlen=max_sequence_length)
@@ -116,6 +118,6 @@ model=tf.keras.models.load_model('Risk_type/risk_type98.h5')
 
 # Make predictions
 new_text = "Metadata_Manipulation"
-predicted_class_name = predict(new_text)
+predicted_class_name = predict_type(new_text)
 print(f"Predicted class: {class_names[predicted_class_name]}")
 

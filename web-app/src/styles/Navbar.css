@@ -6,7 +6,12 @@
   width: 100%;
   height: 4rem; /* Adjust this height if needed */
   border-bottom: 1px solid rgba(64, 64, 64, 0.2);
-  background-color: rgba(255, 255, 255, 0.1); /* Slightly transparent background */
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.1
+  ); /* Slightly transparent background */
   backdrop-filter: blur(10px); /* Backdrop blur for the Navbar */
   animation: fadein-opacity 0.5s ease-in-out; /* Fade-in effect */
 }
@@ -56,11 +61,24 @@
   font-weight: 500;
   font-size: 1.5rem; /* Increased font size (24px) */
   transition: color 0.3s ease;
-  margin-left: 10px;
 }
 
 .social-link:hover {
-  color: #457d58; /* Updated hover color */
+  color: #457d58;
+}
+
+.yt-icon {
+  color: #333;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  font-size: 1.5rem;
+  transition: color 0.3s ease;
+}
+
+.yt-icon:hover {
+  color: #457d58;
 }
 
 /* Download button */
@@ -70,8 +88,7 @@
   display: flex;
   align-items: center;
   font-weight: 600;
-  font-size: 1.25rem; /* Adjust font size as needed */
-  margin-right: 1rem; /* Space between download and GitHub */
+  font-size: 1.25rem;
   transition: color 0.3s ease;
 }
 
@@ -79,9 +96,9 @@
   color: #457d58; /* Hover color */
 }
 
-.download-link span {
-  margin-left: 0.5rem; /* Space between icon and text */
-}
+/* .download-link span {
+  margin-left: 0.5rem; 
+} */
 
 /* Divider line between buttons in the Navbar */
 #button__divider {
@@ -106,12 +123,12 @@
 }
 .navbar-right {
   display: flex;
-  align-items: center; /* Adjust as needed */
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .download-link {
   text-decoration: none;
   color: #333; /* Adjust as needed */
   cursor: pointer;
-  margin-left: 20px;
 }
