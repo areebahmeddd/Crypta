@@ -75,6 +75,15 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
     }
   }
 
+  void _goToYoutube() async {
+    const url = 'https://www.youtube.com/@areebahmeddd';
+    try {
+      await launchUrl(Uri.parse(url));
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -415,7 +424,7 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
               ),
             ),
             Positioned(
-              top: -15,
+              top: -10,
               right: -15,
               child: GestureDetector(
                 onTap: _goToGithub,
@@ -423,7 +432,7 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                   padding: const EdgeInsets.all(16),
                   child: const Image(
                     image: AssetImage(
-                      'assets/github-logo.png',
+                      'assets/images/github-logo.png',
                     ),
                     height: 25,
                   ),
@@ -431,7 +440,7 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
               ),
             ),
             Positioned(
-              top: -15,
+              top: -10,
               right: 30,
               child: GestureDetector(
                 onTap: _goToWebsite,
@@ -439,13 +448,49 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                   padding: const EdgeInsets.all(16),
                   child: const Image(
                     image: AssetImage(
-                      'assets/domain.png',
+                      'assets/images/domain.png',
                     ),
                     height: 25,
                   ),
                 ),
               ),
-            )
+            ),
+            Positioned(
+              top: -11,
+              right: 80,
+              child: GestureDetector(
+                onTap: _goToYoutube,
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  child: const Image(
+                    image: AssetImage(
+                      'assets/images/youtube.png',
+                    ),
+                    height: 30,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 5,
+              right: 10,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: myColorFromHex('#457d58'),
+                  shape: const CircleBorder(side: BorderSide.none),
+                ),
+                onPressed: () {},
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  child: const Image(
+                    image: AssetImage(
+                      'assets/images/chatbot.png',
+                    ),
+                    height: 40,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
