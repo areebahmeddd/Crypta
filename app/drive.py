@@ -19,6 +19,7 @@ def scan_drive():
             file_metadata = []
 
             if drive_mountpoint:
+                print(f'{Fore.GREEN}[SUCCESS]{Style.RESET_ALL} Drive detected at: {drive_mountpoint}')
                 # Walk through the drive and append file metadata to list for each file found
                 for root, dirs, files in os.walk(drive_mountpoint):
                     for file in files:
