@@ -9,6 +9,7 @@ from sklearn.preprocessing import LabelEncoder
 from tensorflow.keras.utils import to_categorical
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
+import xgboost as xgb
 import socket
 import struct
 import joblib
@@ -30,7 +31,8 @@ class_mapping = {
 
 # Function to predict the network traffic
 def predict_network(data):
-  model=joblib.load('models/Network_traffic/net.bin')
+  model = xgb.XGBClassifier()
+  model.load_model('net.bin')  
   data=ipl(data)
   pred=model.predict(data)
   ans=[class_mapping[i] for i in pred ]
