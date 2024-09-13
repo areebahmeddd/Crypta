@@ -157,7 +157,7 @@ class FileTable2State extends ConsumerState<FileTable2> {
                     child: Text(
                       level,
                       style: const TextStyle(
-                          fontWeight: FontWeight.normal, color: Colors.white),
+                          fontWeight: FontWeight.normal, color: Colors.black),
                     ),
                   ),
                 ),

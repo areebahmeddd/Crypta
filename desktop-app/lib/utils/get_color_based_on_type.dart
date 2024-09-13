@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 Color getColorBasedOnType(String type) {
   switch (type) {
     case 'High':
-      return myColorFromHex("#F28B82");
+      return myColorFromHex("#DF5656");
     case 'Medium':
-      return myColorFromHex("#F7BC71");
+      return myColorFromHex("#F8A72C");
     case 'Low to Medium':
-      return myColorFromHex("#FFF4B3");
+      return myColorFromHex("#FFD65A");
     case 'Low':
       return myColorFromHex("#E0E0E0");
     default:
