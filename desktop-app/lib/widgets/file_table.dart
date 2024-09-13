@@ -15,6 +15,11 @@ class FileTableState extends ConsumerState<FileTable> {
   // For row selection, use a map to keep track of selected rows
   Map<int, bool> selectedRows = {};
 
+  bool ascending = true;
+  int sortColumnIndex = 0;
+
+  List<Map<String, String>> sortedFileData = [...fileData];
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -83,8 +88,10 @@ class FileTableState extends ConsumerState<FileTable> {
             child: DataTable2(
               columnSpacing: 20,
               horizontalMargin: 12,
-              columns: const [
-                DataColumn(
+              sortColumnIndex: sortColumnIndex,
+              sortAscending: ascending,
+              columns: [
+                const DataColumn(
                   label: Text(
                     'File',
                     style: TextStyle(
@@ -93,23 +100,56 @@ class FileTableState extends ConsumerState<FileTable> {
                   ),
                 ),
                 DataColumn(
-                  label: Text(
+                  label: const Text(
                     'Type',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  onSort: (columnIndex, ascending) {
+                    setState(() {
+                      this.ascending = ascending;
+                      sortColumnIndex = columnIndex;
+                      sortedFileData.sort((a, b) {
+                        return ascending
+                            ? a['type']!.compareTo(b['type']!)
+                            : b['type']!.compareTo(a['type']!);
+                      });
+                    });
+                  },
                 ),
                 DataColumn(
-                  label: Text(
-                    'Size',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
+                  label: const Padding(
+                    padding:  EdgeInsets.all(8.0),
+                    child:  Text(
+                      'Size',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
+                  onSort: (columnIndex, ascending) {
+                    setState(() {
+                      this.ascending = ascending;
+                      sortColumnIndex = columnIndex;
+                      sortedFileData.sort((a, b) {
+                        int sizeA = int.tryParse(a['size']!
+                                .replaceAll(' MB', '')
+                                .replaceAll(' KB', '')) ??
+                            0;
+                        int sizeB = int.tryParse(b['size']!
+                                .replaceAll(' MB', '')
+                                .replaceAll(' KB', '')) ??
+                            0;
+                        return ascending
+                            ? sizeA.compareTo(sizeB)
+                            : sizeB.compareTo(sizeA);
+                      });
+                    });
+                  },
                 ),
-                DataColumn(
-                  label: Center(
+                 DataColumn(
+                  label: const Center(
                     child: Text(
                       'Vulnerability Count',
                       style: TextStyle(
@@ -117,9 +157,23 @@ class FileTableState extends ConsumerState<FileTable> {
                       ),
                     ),
                   ),
+                  onSort: (columnIndex, ascending) {
+                    setState(() {
+                      this.ascending = ascending;
+                      sortColumnIndex = columnIndex;
+                      sortedFileData.sort((a, b) {
+                        return ascending
+                            ? int.tryParse(a['vulnerabilities']!)!
+                                .compareTo(int.tryParse(b['vulnerabilities']!)!)
+                            : int.tryParse(b['vulnerabilities']!)!
+                                .compareTo(int.tryParse(a['vulnerabilities']!)!);
+                      });
+
+                    });
+                  },
                 ),
               ],
-              rows: fileData
+              rows: sortedFileData
                   .asMap()
                   .entries
                   .map(
@@ -136,7 +190,12 @@ class FileTableState extends ConsumerState<FileTable> {
                                 shape: BoxShape.circle,
                                 color: getColorBasedOnValue(int.tryParse(
                                     entry.value['vulnerabilities']!)!)),
-                            child: Text(entry.value['vulnerabilities']!, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.bold),),
+                            child: Text(
+                              entry.value['vulnerabilities']!,
+                              textAlign: TextAlign.center,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                         )),
                       ],
