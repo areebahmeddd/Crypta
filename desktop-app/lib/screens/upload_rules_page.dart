@@ -8,6 +8,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:path/path.dart' as path;
+import 'package:url_launcher/url_launcher.dart';
 
 class UploadRulesPage extends ConsumerStatefulWidget {
   const UploadRulesPage({super.key});
@@ -19,19 +21,59 @@ class UploadRulesPage extends ConsumerStatefulWidget {
 }
 
 class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
-  PlatformFile? selectedFile;
+  File? selectedFile;
+  PlatformFile? file;
+  Map<String, dynamic> fileInfo = {};
+
   Future<void> pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
 
     if (result != null) {
       setState(() {
-        selectedFile = result.files.first;
+        file = result.files.first;
+        selectedFile = File(file!.path!);
+        getFileInfo(selectedFile!);
         val = 0;
       });
     }
   }
 
+  Future<void> getFileInfo(File file) async {
+    final fileStat = await selectedFile!.stat();
+    final fileSizeInMB = (fileStat.size / (1024));
+    final fileType = fileStat.type;
+    final fileLastModified = await file.lastModified();
+    String formattedDate =
+        '${fileLastModified.day}/${fileLastModified.month}/${fileLastModified.year}';
+    setState(() {
+      fileInfo = {
+        'name': path.basename(selectedFile!.path),
+        'size': fileSizeInMB,
+        'type': fileType,
+        'lastModified': formattedDate,
+      };
+    });
+  }
+
   var val = 0;
+
+  void _goToGithub() async {
+    const url = 'https://github.com/areebahmeddd/Crypta';
+    try {
+      await launchUrl(Uri.parse(url));
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  void _goToWebsite() async {
+    const url = '';
+    try {
+      await launchUrl(Uri.parse(url));
+    } catch (e) {
+      log(e.toString());
+    }
+  }
 
   @override
   void initState() {
@@ -221,12 +263,12 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                                 onPressed: () {
                                   // Analyze action
                                   Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const DashboardPage(),
-                                        ),
-                                      );
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const DashboardPage(),
+                                    ),
+                                  );
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: myColorFromHex('#457d58'),
@@ -271,7 +313,7 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        Text(selectedFile!.name),
+                                        Text(fileInfo['name']!),
                                       ],
                                     ),
                                     // Size
@@ -282,7 +324,8 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        Text('${selectedFile!.size} KB'),
+                                        Text(
+                                            '${fileInfo['size'].toStringAsFixed(2)} KB'),
                                       ],
                                     ),
                                     // Type
@@ -293,17 +336,18 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        Text(selectedFile!.extension!),
+                                        Text(fileInfo['type']!.toString()),
                                       ],
                                     ),
                                     // Last Modified
-                                    const Column(
+                                    Column(
                                       children: [
                                         const Text(
                                           'Last Modified:',
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
+                                        Text(fileInfo['lastModified']!),
                                       ],
                                     ),
                                   ],
@@ -321,7 +365,7 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                               children: [
                                 // Name
                                 Column(
-                                  children: const [
+                                  children: [
                                     Text(
                                       'Name:',
                                       style: TextStyle(
@@ -332,7 +376,7 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                                 ),
                                 // Size
                                 Column(
-                                  children: const [
+                                  children: [
                                     Text(
                                       'Size:',
                                       style: TextStyle(
@@ -343,7 +387,7 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                                 ),
                                 // Type
                                 Column(
-                                  children: const [
+                                  children: [
                                     Text(
                                       'Type:',
                                       style: TextStyle(
@@ -354,7 +398,7 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                                 ),
                                 // Last Modified
                                 Column(
-                                  children: const [
+                                  children: [
                                     Text(
                                       'Last Modified:',
                                       style: TextStyle(
@@ -370,6 +414,38 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                 ),
               ),
             ),
+            Positioned(
+              top: -15,
+              right: -15,
+              child: GestureDetector(
+                onTap: _goToGithub,
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  child: const Image(
+                    image: AssetImage(
+                      'assets/github-logo.png',
+                    ),
+                    height: 25,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: -15,
+              right: 30,
+              child: GestureDetector(
+                onTap: _goToWebsite,
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  child: const Image(
+                    image: AssetImage(
+                      'assets/domain.png',
+                    ),
+                    height: 25,
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),
