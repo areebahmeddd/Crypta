@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 import "../styles/Rules.css";
 import uploadIcon from "../assets/upload.png";
 import defaultRulesLogo from "../assets/logo/defaultIcon.png";
@@ -7,133 +8,140 @@ import defaultRulesFile from "../assets/static/security.yara";
 
 function Rules() {
   const navigate = useNavigate();
-  const location = useLocation(); // Use location to access passed state
+  const location = useLocation();
   const [selectedOption, setSelectedOption] = useState("");
   const [dragging, setDragging] = useState(false);
-  const [inputKey, setInputKey] = useState(Date.now()); // Unique key for file input
-  const [rulesFile, setRulesFile] = useState(null); // State for selected file
+  const [inputKey, setInputKey] = useState(Date.now());
+  const [rulesFile, setRulesFile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  // Access the files passed from the homepage
+  // Update state when files are received from the previous page
   useEffect(() => {
     if (location.state && location.state.files) {
       const files = location.state.files;
-      console.log("Files received from homepage:", files);
+      console.log("Files from Home:", files);
       if (files.length > 0) {
-        setSelectedOption("drag-drop"); // Update selected option
+        setSelectedOption("drag-drop");
       }
     }
   }, [location.state]);
 
+  // Set the option to 'drag-drop' when a drag-and-drop action is initiated
   const handleDragDropOption = () => {
     setSelectedOption("drag-drop");
   };
 
+  // Handle drag-over event to show visual feedback
   const onDragOver = (e) => {
     e.preventDefault();
     e.stopPropagation();
     setDragging(true);
   };
 
+  // Handle drag-leave event to remove visual feedback
   const onDragLeave = (e) => {
     e.preventDefault();
     e.stopPropagation();
     setDragging(false);
   };
 
+  // Handle file drop event and set the rules file
   const onDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
     setDragging(false);
     if (e.dataTransfer.files.length > 0) {
       handleDragDropOption();
-      setRulesFile(e.dataTransfer.files[0]); // Set the dropped file
+      setRulesFile(e.dataTransfer.files[0]);
     }
   };
 
+  // Handle file selection via input change event
   const onChange = (e) => {
     if (e.target.files.length > 0) {
       handleDragDropOption();
-      setRulesFile(e.target.files[0]); // Set the selected file
+      setRulesFile(e.target.files[0]);
     }
   };
 
+  // Fetch default rules file and set the rules file state
   const handleFileSelection = () => {
-    // Create a File object for the default rules file
-    const defaultFile = new File(
-      [defaultRulesFile], // File content, should be binary data or text content
-      "security.yara", // File name
-      { type: "text/plain" } // File type
-    );
-
-    // Set the default rules file as selected
-    setRulesFile(defaultFile);
-    setSelectedOption("default-file");
+    fetch(defaultRulesFile)
+      .then((response) => response.text())
+      .then((fileContent) => {
+        setRulesFile(
+          new File([fileContent], "security.yara", { type: "text/plain" })
+        );
+        setSelectedOption("default-file");
+      });
   };
 
+  // Prevent default form submission behavior
   const onSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission if needed
   };
 
+  // Reset state and navigate back to the homepage
   const handleCancel = () => {
     setSelectedOption("");
-    setRulesFile(null); // Clear the selected file
-    navigate("/"); // Navigate to the home page or previous page
+    setRulesFile(null);
+    navigate("/");
   };
+
+  // Handle file analysis submission
   const handleAnalyze = async () => {
     if (selectedOption || rulesFile) {
-      setLoading(true); // Start loading state
-      setError(""); // Clear any previous errors
-
+      setLoading(true);
+      setErrorMessage("");
       try {
         const formData = new FormData();
 
-        // Append files passed from the homepage
         if (location.state && location.state.files) {
           location.state.files.forEach((fileData) => {
-            formData.append("files", fileData.file); // Use 'files' as the key to match the backend
+            formData.append("uploadedFiles", fileData.file);
           });
         }
 
-        // Append the selected YARA rules file
         if (rulesFile) {
-          formData.append("rulesFile", rulesFile);
+          formData.append("yaraFile", rulesFile);
         }
 
-        const response = await fetch("http://127.0.0.1:8000/api/upload", {
-          method: "POST",
-          body: formData,
-        });
+        const response = await axios.post(
+          "http://127.0.0.1:8000/api/analyze",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
 
-        if (response.ok) {
-          const responseData = await response.json();
-          console.log("Response from backend:", responseData);
-
+        if (response.status === 200) {
+          const responseData = response.data;
+          console.log("Response from Backend:", responseData);
           if (responseData && responseData.processedData) {
             navigate("/dashboard", {
               state: {
                 processingMethod: selectedOption,
                 rulesFile: rulesFile ? rulesFile.name : null,
-                processedData: responseData.processedData, // Pass the processed data
+                processedData: responseData.processedData,
+                filesFromHome: location.state.files,
               },
             });
-          } 
+          }
         } else {
-          const errorData = await response.json();
-          setError(`Error: ${errorData.message || "Failed to upload files"}`);
-          alert(`Error: ${errorData.message || "Failed to upload files"}`);
+          setErrorMessage(
+            `Error: ${response.data.message || "Failed to upload files"}`
+          );
         }
       } catch (error) {
-        setError(`Error: ${error.message}`);
-        alert(`Error: ${error.message}`);
+        setErrorMessage(`Error: ${error.message}`);
       } finally {
-        setLoading(false); // End loading state
+        setLoading(false);
       }
     } else {
-      setError("Please select an option or file first.");
-      alert("Please select an option or file first.");
+      setErrorMessage("Please select a file to analyze.");
     }
   };
 
@@ -178,9 +186,9 @@ function Rules() {
               className="default-rules-logo"
             />
             <div className="default-rules-info">
-              <p>
+              <div className="default-rules-para">
                 <code>security.yara</code>
-              </p>
+              </div>
               <div
                 className={`default-rules-option ${
                   selectedOption === "default-file" ? "selected" : ""

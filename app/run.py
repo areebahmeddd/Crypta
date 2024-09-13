@@ -1,94 +1,117 @@
 import uvicorn
-from fastapi import FastAPI, File, UploadFile
-from fastapi.middleware.cors import CORSMiddleware
-from app.parse import scan_path
-from app.parse import find_type
-from app.network import scan_network
 import os
-import tempfile
+from fastapi import FastAPI, UploadFile, File, BackgroundTasks
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse, FileResponse
 
+from parse import scan_file, find_type
+from network import scan_network
+from drive import scan_drive
+from gemini import predict
 
 app = FastAPI()
-origins = [
-    '*'
-]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=['*'],
-    allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*']
 )
 
-@app.post('/api/upload')
-async def upload(files: list[UploadFile] = File(...), rulesFile: UploadFile = File(...)):
-    
-    #saving uploaded yara rules in a temp file
+@app.post('/api/analyze')
+async def analyze(uploadedFiles: list[UploadFile] = File(...), yaraFile: UploadFile = File(...)):
+    # Initialize list to store scan results and create temporary directory
+    scan_results = []
+    TEMP_DIR = 'temp'
+    os.makedirs(TEMP_DIR, exist_ok=True)
+
     try:
-        with tempfile.NamedTemporaryFile(delete=False) as yara_rules_temp:
-            yara_rules_path = yara_rules_temp.name
-            yara_rules_temp.write(await rulesFile.read())
-        
-        # Check if the file was created
-        if not os.path.isfile(yara_rules_path):
-            return {"error": "Yara rules file not created"}
+        # Save YARA rules file to temporary directory
+        rules_path = os.path.join(TEMP_DIR, yaraFile.filename)
+        with open(rules_path, 'wb') as f:
+            f.write(await yaraFile.read())
 
-        #saving uploaded folders in a temp file    
-        uploaded_file_paths = []
-        for file in files:
-            with tempfile.NamedTemporaryFile(delete=False) as file_temp:
-                file_path = file_temp.name
-                file_temp.write(await file.read())
-                uploaded_file_paths.append(file_path)
-       
-        # Check if the uploaded files were created
-        for path in uploaded_file_paths:
-            if not os.path.isfile(path):
-                return {"error": f"Uploaded file not created: {path}"}
-        
-        #scanning the uploaded files with the uploaded rules
-        results = []
-        for file_path in uploaded_file_paths:
+        # Scan each uploaded file to temporary directory
+        for file in uploadedFiles:
+            file_path = os.path.normpath(os.path.join(TEMP_DIR, file.filename))
+            file_directory  = os.path.dirname(file_path)
+            os.makedirs(file_directory , exist_ok=True)
+
+            with open(file_path, 'wb') as f:
+                f.write(await file.read())
+
+            # Determine file type and scan file based on type
             file_type = find_type(file_path)
-            if file_type == 'network':
+            if file_type == 'text':
+                file_data = scan_file(file_path, rules_path, file_type)
+                rule_counts = {} # Initialize dictionary to store rule counts
+
+                # Count the number of times each rule was triggered in the file
+                for data in file_data:
+                    rule = data['rule']
+                    # Check if rule is already in dictionary and increment count
+                    if rule in rule_counts:
+                        rule_counts[rule] += 1
+                    else:
+                        rule_counts[rule] = 1
+
+                scan_results.append({
+                    'file': os.path.basename(file_path),
+                    'rules': rule_counts,
+                    'vulnerabilities': sum(rule_counts.values())
+                })
+
+            elif file_type == 'network':
                 network_data = scan_network(file_path)
-                results.append(network_data)
-                result = {
-                    'protocol' : network_data
-                }
-            elif file_type:
-                scan_result = scan_path(file_path, yara_rules_path)
-                if scan_result is None:
-                    scan_result = {
-                        'rule': 'No matches',
-                        'component': 'N/A',
-                        'context': 'N/A'
-                    }
-                results.append(scan_result)
-                result = {
-                    'results': [
-                        {
-                            'file': os.path.basename(file_path),
-                            'rule': results['rule'],
-                            'component': results['component'],
-                            'context': results['context']
-                        }
-                    ]
-                } 
+                # Append network scan results to scan_results list as dictionary
+                scan_results.append({
+                    'file': os.path.basename(file_path),
+                    'network': network_data,
+                    'vulnerabilities': len(network_data)
+                })
 
-
-        #backend response 
-        return result
-    
-    #handle the exception 
+        return JSONResponse(content={
+            'results': scan_results,
+            'gemini': predict(scan_results)
+        })
     except Exception as e:
-        return {"error": str(e)}
-    
-
+        return JSONResponse(content={'error': str(e)})
 
 @app.post('/api/detect')
-async def detect():
+async def detect(background_tasks: BackgroundTasks):
+    # Add scan_drive function to background tasks to look for removable drives
+    background_tasks.add_task(scan_drive)
+    return JSONResponse(content={'message': 'Drive detection started.'})
+
+@app.get('/api/files')
+async def files():
+    # Get metadata of all files in the drive
+    files_metadata = scan_drive()
+    return JSONResponse(content=files_metadata)
+
+@app.get('/api/files/{file_name}')
+async def send_file(file_name: str):
+    # Send the file based on the file name in the request
+    files_metadata = scan_drive()
+    file_object = next(
+        (file for file in files_metadata if file['name'] == file_name), None
+    )
+
+    if file_object is None:
+        return JSONResponse(content={'error': 'File not found.'})
+
+    return FileResponse(filename=file_object['name'], path=file_object['path'], media_type='application/octet-stream')
+
+@app.post('/api/download')
+async def download():
+    pass
+
+@app.post('/api/export')
+async def export():
+    pass
+
+@app.post('/api/chat')
+async def chat():
     pass
 
 if __name__ == '__main__':
-    uvicorn.run(app, host='127.0.0.1', port=8000)
+    uvicorn.run('run:app', host='127.0.0.1', port=8000, reload=True)

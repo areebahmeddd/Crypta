@@ -14,8 +14,9 @@ from sklearn.utils import class_weight
 from sklearn.utils import shuffle
 
 
-def predict(new_text):
-    
+def predict_level(new_text):
+    model=tf.keras.models.load_model('Risk_level/logsfinal95.h5')
+
     # Preprocess the input text
     new_sequence = tokenizer.texts_to_sequences([new_text])
     new_padded_sequence = pad_sequences(new_sequence, maxlen=max_sequence_length)
@@ -26,7 +27,7 @@ def predict(new_text):
     predicted_class_name = label_encoder.inverse_transform([predicted_class])[0]
     return predicted_class_name
 
-class_names=['High','Low','LtoM','Med']
+class_names=['High','Low','Low to Medium','Medium']
 # Load the dataset
 risk=pd.read_csv('Risk_level/risktype.csv')
 risk = shuffle(risk)
@@ -106,5 +107,5 @@ model=tf.keras.models.load_model('Risk_level/logsfinal95.h5')
 
 # Make predictions
 new_text = "Metadata_Manipulation"
-predicted_class_name = predict(new_text)
+predicted_class_name = predict_level(new_text)
 print(f"Predicted class: {class_names[predicted_class_name]}")

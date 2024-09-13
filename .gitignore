@@ -11,7 +11,7 @@ __pycache__/
 # Output related
 *.csv
 *.bin
-*_report/
+temp/
 
 # Web related
 node_modules/

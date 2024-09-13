@@ -1,0 +1,22 @@
+{
+  "file_types": {
+    "binary": [
+      ".bmp",
+      ".bin",
+      ".dat",
+      ".gif",
+      ".jpeg",
+      ".jpg",
+      ".png",
+      ".tif",
+      ".tiff"
+    ],
+    "config": [".cfg", ".ini"],
+    "database": [".db", ".sqlite"],
+    "disk": [".aff", ".bin", ".e01", ".iso", ".vhd", ".vmdk"],
+    "memory": [".dmp", ".mem", ".raw", ".vmem"],
+    "network": [".cap", ".pcap", ".pcapng"],
+    "script": [".bat", ".js", ".pl", ".py", ".sh"],
+    "text": [".csv", ".html", ".htm", ".json", ".log", ".txt", ".xml"]
+  }
+}

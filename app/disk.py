@@ -1,144 +1,102 @@
-#! To run this script you will have to build pyewf from source. 
-# The pre-built binaries are not available for Windows.
-
-# Run these commands in ps to build pyewf from source:
-"""
-git clone https://github.com/libyal/libewf.git
-cd libewf\
-.\synclibs.ps1
-.\syncwinflexbison.ps1
-.\synczlib.ps1
-.\autogen.ps1
-"""
-
-# after this run
-# pip install .
-
-import yara
 import pytsk3
 import pyewf
-import io
+import json
+import os
+from datetime import datetime
+from typing import List, Dict, Any
+
+with open('metadata/schema.json', 'r') as file:
+    metadata = json.load(file)
 
 class EwfImgInfo(pytsk3.Img_Info):
-    def __init__(self, ewf_handle):
+    def __init__(self, ewf_handle: pyewf.handle) -> None:
         self._ewf_handle = ewf_handle
         super(EwfImgInfo, self).__init__(url="", type=pytsk3.TSK_IMG_TYPE_EXTERNAL)
 
-    def close(self):
+    def close(self) -> None:
         self._ewf_handle.close()
 
-    def read(self, offset, size):
+    def read(self, offset: int, size: int) -> bytes:
         self._ewf_handle.seek(offset)
         return self._ewf_handle.read(size)
 
-    def get_size(self):
+    def get_size(self) -> int:
         return self._ewf_handle.get_media_size()
 
-def is_image(file_name):
-    """Check if a file is an image based on its extension."""
-    return file_name.lower().endswith(('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff'))
 
-def list_and_scan_directory_recursively(fs, directory_path, yara_rules):
+def list_directory_recursively(fs: pytsk3.FS_Info, directory_path: str) -> List[Dict[str, Any]]:
+    """Recursively list the contents of a directory within the filesystem and collect file metadata."""
     directory = fs.open_dir(directory_path)
+    file_metadata = []
+
     for entry in directory:
         name = entry.info.name.name.decode()
         if name not in [".", ".."]:
+
             if entry.info.meta.type == pytsk3.TSK_FS_META_TYPE_DIR:
-                list_and_scan_directory_recursively(fs, f"{directory_path}/{name}", yara_rules)
+                try:
+                    file_metadata.extend(list_directory_recursively(fs, f"{directory_path}/{name}"))
+                except OSError as e:
+                    print(f"Error accessing directory {name}: {e}")
             else:
-                if is_image(name):
-                    try:
-                        file_data = entry.read_random(0, entry.info.meta.size)
-                        scan_data_with_yara(file_data, yara_rules, name)
-                    except Exception as e:
-                        print(f"Error processing file {name}: {e}")
+                # Collect file metadata if the file extension is supported
+                file_ext = os.path.splitext(name)[1]
+                
+                supported_extensions = [ext for extensions in metadata['file_types'].values() for ext in extensions]
+                if file_ext in supported_extensions:
+                    file_path = os.path.join(directory_path, name)
+                    # Handle time conversion and check for 0 timestamp
+                    last_modified = (
+                        datetime.fromtimestamp(entry.info.meta.mtime).strftime('%d/%m/%Y')
+                        if entry.info.meta.mtime != 0 else 'N/A'
+                    )
+                    file_metadata.append({
+                        'name': name,
+                        'path': file_path,
+                        'size': entry.info.meta.size,
+                        'type': file_ext,
+                        'last_modified': last_modified
+                    })
 
-def read_raw_sectors(image_path, start_sector, num_sectors):
-    filenames = pyewf.glob(image_path)
-    ewf_handle = pyewf.handle()
-    ewf_handle.open(filenames)
-    
-    img_info = EwfImgInfo(ewf_handle)
-    sector_size = 512
-    offset = start_sector * sector_size
-    size = num_sectors * sector_size
-    
-    data = img_info.read(offset, size)
-    ewf_handle.close()
-    
-    return data
+    return file_metadata
 
-def scan_data_with_yara(data, yara_rules, file_name):
+
+def open_e01_image(image_path: str) -> List[Dict[str, Any]]:
+    """Opens an E01 image and scans the contents of all folders."""
     try:
-        yara_matches = yara_rules.match(data=data)
-        if yara_matches:
-            print(f"YARA matches found in {file_name}:")
-            for match in yara_matches:
-                print(f"  Rule: {match.rule}")
-    except Exception as e:
-        print(f"Error scanning data: {e}")
+        # Open the EWF file using pyewf
+        filenames: List[str] = pyewf.glob(image_path)
+        ewf_handle = pyewf.handle()
+        ewf_handle.open(filenames)
 
-def open_e01_image(image_path, yara_rules):
-    filenames = pyewf.glob(image_path)
-    ewf_handle = pyewf.handle()
-    ewf_handle.open(filenames)
+        # Wrap the EWF handle with our custom Img_Info class
+        img_info = EwfImgInfo(ewf_handle)
 
-    img_info = EwfImgInfo(ewf_handle)
-    partition_table = pytsk3.Volume_Info(img_info)
-    
-    for part in partition_table:
-        if part.desc.decode() == "DOS FAT16 (0x04)" or "NTFS" in part.desc.decode():
-            print(f"Attempting to open partition: {part.desc.decode()} starting at sector {part.start}")
-            filesystem = pytsk3.FS_Info(img_info, offset=part.start * 512)
-            list_and_scan_directory_recursively(filesystem, "/", yara_rules)
-            break
-    else:
-        print("No suitable filesystem found.")
+        # Attempt to open the FAT16, FAT32, or NTFS partition
+        partition_table = pytsk3.Volume_Info(img_info)
+        for part in partition_table:
+            if (
+                part.desc.decode() == "DOS FAT16 (0x04)" or
+                part.desc.decode() == "Win95 FAT32 (0x0b)" or
+                "NTFS" in part.desc.decode()
+            ):
+                # Open the partition using its starting offset
+                filesystem = pytsk3.FS_Info(img_info, offset=part.start * 512)
 
-def parse_boot_sector(data):
-    try:
-        boot_sector_info = {
-            'OEM Name': data[0x03:0x0B].decode('ascii', errors='ignore'),
-            'Bytes per Sector': int.from_bytes(data[0x0B:0x0D], 'little'),
-            'Sectors per Cluster': data[0x0D],
-            'Reserved Sectors': int.from_bytes(data[0x0E:0x10], 'little'),
-            'Number of FATs': data[0x10],
-            'Root Directory Entries': int.from_bytes(data[0x11:0x13], 'little'),
-            'Total Sectors (16-bit)': int.from_bytes(data[0x13:0x15], 'little'),
-            'FAT Size': int.from_bytes(data[0x16:0x18], 'little'),
-            'Sectors per Track': int.from_bytes(data[0x18:0x1A], 'little'),
-            'Number of Heads': int.from_bytes(data[0x1A:0x1C], 'little'),
-            'Hidden Sectors': int.from_bytes(data[0x1C:0x20], 'little'),
-            'Total Sectors (32-bit)': int.from_bytes(data[0x20:0x24], 'little')
-        }
+                # Scan the contents of the root directory and collect file metadata
+                file_metadata = list_directory_recursively(fs=filesystem, directory_path="/")
+                ewf_handle.close()
 
-        for key, value in boot_sector_info.items():
-            print(f"{key}: {value}")
+                return file_metadata
+        else:
+            print("No suitable filesystem found.")
+            ewf_handle.close()
+
+            return []
 
     except Exception as e:
-        print(f"Error parsing boot sector: {e}")
+        print(f"An error occurred: {e}")
+        return []
 
-def print_as_hex(data):
-    print(data.hex())
 
-if __name__ == "__main__":
-    yara_rules_file = r'yara-rules\security.yara'
-    image_path = r"C:\Users\shiva\Downloads\nps-2009-canon2-gen1.E01"
-
-    yara_rules = yara.compile(filepath=yara_rules_file)
-    open_e01_image(image_path, yara_rules)
-    
-    start_sector = 0
-    num_sectors = 1
-    sector_data = read_raw_sectors(image_path, start_sector, num_sectors)
-    
-    with open('sector_data.bin', 'wb') as f:
-        f.write(sector_data)
-        
-    with open('sector_data.bin', 'rb') as f:
-        sector_data = f.read()
-    
-    parse_boot_sector(sector_data)
-    
-    print("HEX-----")
-    print_as_hex(sector_data)
+print(json.dumps(open_e01_image(r"c:\Users\shiva\Downloads\ubnist1.gen2.E01"), indent=2))
