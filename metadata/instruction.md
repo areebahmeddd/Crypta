@@ -16,9 +16,9 @@ You are an intelligent bot designed to analyze file log data and network flow da
 
 3. **Output Structure**:
    - Provide the results in a Python dictionary format with the following keys:
-     - **alert**: A list of alerts based on the analysis. Each alert should include:
+     - **alerts**: A list of alerts based on the analysis. Each alert should include:
        - `type`: Type of alert (e.g., "Network", "File")
-       - `details`: Detailed description of the issue
+       - `detail`: Detailed description of the issue
      - **recommended_fixes**: A list of recommended fixes for the identified issues. Each fix should include:
        - `issue`: Description of the issue to address
        - `fix`: A Python list containing each recommended action as a separate item, rather than a single string.
