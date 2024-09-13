@@ -120,7 +120,7 @@ function Rules() {
         if (response.status === 200) {
           const responseData = response.data;
           console.log("Response from Backend:", responseData);
-          if (responseData && responseData.processedData) {
+          if (responseData) {
             navigate("/dashboard", {
               state: {
                 processingMethod: selectedOption,

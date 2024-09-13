@@ -4,6 +4,7 @@ import axios from "axios";
 import "../styles/Home.css";
 import uploadIcon from "../assets/upload.png";
 import fileIcons from "../assets/fileIcons";
+import chatbotIcon from "../assets/logo/chat.png";
 
 function Home() {
   const navigate = useNavigate();
@@ -13,6 +14,11 @@ function Home() {
   const [uploading, setUploading] = useState(false);
   const [inputKey, setInputKey] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
+  const [showChatbot, setShowChatbot] = useState(false);
+
+  const toggleChatbot = () => {
+    setShowChatbot(!showChatbot);
+  };
 
   // Detect connected drives and fetch files from the backend
   const detectDrives = async () => {
@@ -24,9 +30,15 @@ function Home() {
 
       if (getResponse.data.length > 0) {
         const filePromises = getResponse.data.map(async (file) => {
-          const fileResponse = await axios.get(`http://127.0.0.1:8000/api/files/${file.name}`, { responseType: "blob" });
+          const fileResponse = await axios.get(
+            `http://127.0.0.1:8000/api/files/${file.name}`,
+            { responseType: "blob" }
+          );
           const fileBlob = new Blob([fileResponse.data]);
-          const fileObject = new File([fileBlob], file.name, { type: file.type, lastModified: file.lastModified });
+          const fileObject = new File([fileBlob], file.name, {
+            type: file.type,
+            lastModified: file.lastModified,
+          });
 
           return {
             file: fileObject,
@@ -213,7 +225,7 @@ function Home() {
           <div className="upload-area">
             <label htmlFor="file-upload" className="upload-label">
               <img src={uploadIcon} alt="Upload Icon" className="upload-icon" />
-              <span className="upload-text">Drag & Drop Your Folder Here</span>
+              <span className="upload-text">Drag & Drop Your Folder</span>
               <span className="upload-text choose-file">Choose Folder</span>
               <input
                 id="file-upload"
@@ -297,6 +309,24 @@ function Home() {
               </table>
             </div>
           ))}
+        </div>
+      )}
+      {/* Chatbot Icon */}
+      <div className="chatbot-icon" onClick={toggleChatbot}>
+        <img src={chatbotIcon} alt="Chatbot Icon" />
+      </div>
+
+      {/* Chatbot Popup */}
+      {showChatbot && (
+        <div className="chatbot-popup">
+          <div className="chatbot-header">
+            <h3>Chat</h3>
+            <button onClick={toggleChatbot}>✖</button>
+          </div>
+          <div className="chatbot-content">
+            {/* Chatbot UI or iframe for chatbot can go here */}
+            <p>Welcome! How can I assist you?</p>
+          </div>
         </div>
       )}
     </div>
