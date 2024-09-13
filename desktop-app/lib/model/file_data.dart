@@ -15,24 +15,24 @@ List<Map<String, String>> fileData = [
     'file': 'report.docx',
     'type': 'DOCX',
     'size': '750 KB',
-    'vulnerabilities': '0',
+    'vulnerabilities': '52',
   },
   {
     'file': 'spreadsheet.xlsx',
     'type': 'XLSX',
     'size': '2.5 MB',
-    'vulnerabilities': '3',
+    'vulnerabilities': '0',
   },
   {
     'file': 'presentation.pptx',
     'type': 'PPTX',
     'size': '4.1 MB',
-    'vulnerabilities': '7',
+    'vulnerabilities': '102',
   },
   {
     'file': 'script.js',
     'type': 'JS',
     'size': '120 KB',
-    'vulnerabilities': '10',
+    'vulnerabilities': '41',
   },
 ];

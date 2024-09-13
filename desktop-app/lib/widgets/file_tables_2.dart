@@ -1,4 +1,7 @@
 import 'package:crypta/model/file_data.dart';
+import 'package:crypta/model/iOC.dart';
+import 'package:crypta/model/vulnerability_data.dart';
+import 'package:crypta/utils/get_color_based_on_type.dart';
 import 'package:crypta/utils/hexcolor.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
@@ -47,11 +50,18 @@ class FileTable2State extends ConsumerState<FileTable2> {
                     },
                     border: TableBorder.all(color: Colors.grey, width: 1),
                     children: [
-                      _buildTableRow("Level", "Type", "Triggered Action", isHeader: true),
+                      _buildTableRow("Level", "Type", "Triggered Action",
+                          isHeader: true),
                       _buildTableRow(
                           fileData['level'] ?? "High",
                           fileData['type'] ?? "Authentication",
                           fileData['ioc'] ?? "SSH - Attempt"),
+                      for (int i = 0; i < iOC.length; i++)
+                        _buildTableRow(
+                          iOC[i]['level']!,
+                          iOC[i]['type']!,
+                          iOC[i]['ioc']!,
+                        ),
                       // Additional rows can be added here.
                     ],
                   ),
@@ -124,15 +134,35 @@ class FileTable2State extends ConsumerState<FileTable2> {
           ? const BoxDecoration(color: Colors.grey)
           : const BoxDecoration(),
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            level,
-            style: TextStyle(
-              fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
-            ),
-          ),
-        ),
+        isHeader
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  level,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              )
+            : Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  height: 30,
+                  width: 10,
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(5)),
+                    color: getColorBasedOnType(level),
+                  ),
+                  child: Center(
+                    child: Text(
+                      level,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.normal, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
@@ -184,11 +214,11 @@ class FileTable2State extends ConsumerState<FileTable2> {
         children: [
           // Top controls (e.g., Show column, Dispatch selected, pagination)
           const Padding(
-            padding:  EdgeInsets.only(bottom: 8.0),
+            padding: EdgeInsets.only(bottom: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                 Text(
+                Text(
                   "Vulnerability Summary",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
@@ -266,7 +296,7 @@ class FileTable2State extends ConsumerState<FileTable2> {
                   ),
                 ),
               ],
-              rows: fileData
+              rows: vulnerabilityData
                   .asMap()
                   .entries
                   .map(
