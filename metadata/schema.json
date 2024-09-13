@@ -13,7 +13,7 @@
     ],
     "config": [".cfg", ".ini"],
     "database": [".db", ".sqlite"],
-    "disk": [".aff", ".bin", ".e01", ".iso", ".vhd", ".vmdk"],
+    "disk": [".aff", ".e01", ".iso", ".vhd", ".vmdk"],
     "memory": [".dmp", ".mem", ".raw", ".vmem"],
     "network": [".cap", ".pcap", ".pcapng"],
     "script": [".bat", ".js", ".pl", ".py", ".sh"],

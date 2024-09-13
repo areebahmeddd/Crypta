@@ -14,13 +14,13 @@ def scan_file(file_path, rules_path, file_type):
         # Check if file is text-based and read file data with UTF-8 encoding
         if file_type == 'text':
             with open(file_path, 'r', encoding='utf-8') as file:
-                file_data = file.read()
+                file_data = file.read() # Read entire file (not line-by-line)
                 yara_results = process_results(file_data, yara_rules)
 
         # Check if file is binary-based and read file data in binary mode
         elif file_type in ['binary', 'config', 'database', 'script']:
             with open(file_path, 'rb') as file:
-                file_data = file.read()
+                file_data = file.read() # Read entire file (not line-by-line)
                 yara_results = process_results(file_data, yara_rules)
 
         if yara_results:
