@@ -1,3 +1,5 @@
+import "package:crypta/screens/analysis_page.dart";
+import "package:crypta/screens/chat_page.dart";
 import "package:crypta/screens/home_page.dart";
 import "package:crypta/utils/hexcolor.dart";
 import "package:crypta/widgets/barchart.dart";
@@ -18,6 +20,7 @@ class DashboardPage extends ConsumerStatefulWidget {
 }
 
 class DashboardPageState extends ConsumerState<DashboardPage> {
+  bool isAnalysisPage = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,14 +51,23 @@ class DashboardPageState extends ConsumerState<DashboardPage> {
                   },
                 ),
                 ListTile(
+                  leading: const Icon(Icons.analytics, color: Colors.white),
+                  title:
+                      const Text('Analysis', style: TextStyle(color: Colors.white)),
+                  onTap: () {
+                    setState(() {
+                      isAnalysisPage = true; 
+                    });
+                  },
+                ),
+                ListTile(
                   leading: const Icon(Icons.chat, color: Colors.white),
                   title:
                       const Text('Chat', style: TextStyle(color: Colors.white)),
                   onTap: () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => const HomePage()));
+                    setState(() {
+                      isAnalysisPage = false; 
+                    });
                   },
                 ),
                 ListTile(
@@ -75,59 +87,9 @@ class DashboardPageState extends ConsumerState<DashboardPage> {
           Expanded(
             child: Container(
               color: Colors.white,
-              child: const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      CustomSearchBar(),
-                      Gap(20),
-                      SizedBox(
-                        height: 500,
-                        width: double.infinity,
-                        child: FileTable(),
-                      ),
-                      Gap(20),
-                      SizedBox(
-                        height: 480,
-                        width: double.infinity,
-                        child: FileTable2(),
-                      ),
-                      Gap(20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // Gap(80),
-                          DownloadReport(),
-                          // Spacer(),
-                          Gap(20),
-                          ExportAnalysis(),
-                          // Gap(80)
-                        ],
-                      ),
-                      Gap(60),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: 500,
-                              height: 500,
-                              child: LineChartSample(),
-                            ),
-                            Gap(45),
-                            SizedBox(
-                              width: 500,
-                              height: 500,
-                              child: BarChartSample(),
-                            ),
-                            Gap(50)
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+              child:  Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: isAnalysisPage ? const AnalysisPage() : const ChatPage(),
               ),
             ),
           ),
