@@ -1,4 +1,5 @@
 import os
+import ast
 import google.generativeai as genai
 from google.generativeai import GenerativeModel
 from dotenv import load_dotenv
@@ -42,7 +43,8 @@ chat_session = llm.start_chat(history=[])
 def predict(file_data):
     # Send the file data to the model for processing
     user_message = f'File Data: {file_data}'
+    print('Sending to Gemini')
     bot_response = chat_session.send_message(user_message)
     # Filter the response to remove code formatting
     filtered_response = bot_response.text.replace('```python', '').replace('```', '')
-    return filtered_response
+    return ast.literal_eval(filtered_response)

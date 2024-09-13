@@ -7,6 +7,7 @@ from fastapi.responses import JSONResponse, FileResponse
 from parse import scan_file, find_type
 from network import scan_network
 from drive import scan_drive
+from gemini import predict
 
 app = FastAPI()
 app.add_middleware(
@@ -68,7 +69,10 @@ async def analyze(uploadedFiles: list[UploadFile] = File(...), yaraFile: UploadF
                     'vulnerabilities': len(network_data)
                 })
 
-        return JSONResponse(content=scan_results)
+        return JSONResponse(content={
+            'results': scan_results,
+            'gemini': predict(scan_results)
+        })
     except Exception as e:
         return JSONResponse(content={'error': str(e)})
 
