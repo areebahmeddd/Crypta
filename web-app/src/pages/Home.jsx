@@ -4,7 +4,6 @@ import axios from "axios";
 import "../styles/Home.css";
 import uploadIcon from "../assets/upload.png";
 import fileIcons from "../assets/fileIcons";
-import chatbotIcon from "../assets/logo/chat.png";
 
 function Home() {
   const navigate = useNavigate();
@@ -14,11 +13,6 @@ function Home() {
   const [uploading, setUploading] = useState(false);
   const [inputKey, setInputKey] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
-  const [showChatbot, setShowChatbot] = useState(false);
-
-  const toggleChatbot = () => {
-    setShowChatbot(!showChatbot);
-  };
 
   // Detect connected drives and fetch files from the backend
   const detectDrives = async () => {
@@ -309,24 +303,6 @@ function Home() {
               </table>
             </div>
           ))}
-        </div>
-      )}
-      {/* Chatbot Icon */}
-      <div className="chatbot-icon" onClick={toggleChatbot}>
-        <img src={chatbotIcon} alt="Chatbot Icon" />
-      </div>
-
-      {/* Chatbot Popup */}
-      {showChatbot && (
-        <div className="chatbot-popup">
-          <div className="chatbot-header">
-            <h3>Chat</h3>
-            <button onClick={toggleChatbot}>✖</button>
-          </div>
-          <div className="chatbot-content">
-            {/* Chatbot UI or iframe for chatbot can go here */}
-            <p>Welcome! How can I assist you?</p>
-          </div>
         </div>
       )}
     </div>

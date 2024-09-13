@@ -220,21 +220,22 @@ justify-content: center;
 }
 
 .level-high {
-background-color: #ff4d4d; /* High severity color */
+background-color: #DF5656
+; /* High severity color */
 color: #fff; /* White text */
 }
 
 .level-low-medium {
-background-color: #ff9a33; /* Medium-High severity color */
+background-color: #FFD65A; /* Medium-High severity color */
 color: #fff; /* White text */
 }
 
 .level-medium {
-background-color: #ffcc00; /* Medium severity color */
+background-color: #F8A72C; /* Medium severity color */
 color: #000; /* Black text */
 }
 
 .level-low {
-background-color: #FFFF00; /* Low severity color */
+background-color: #E0E0E0; /* Low severity color */
 color: #000; /* Black text */
 }
