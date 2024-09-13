@@ -66,100 +66,15 @@ const Dashboard = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const location = useLocation();
   const {
-    processedData = [],
-    rulesFile,
-    filesFromHome = [], // Add filesFromHome here
+    filesFromHome, // Add filesFromHome here
+    results,
+    gemini
   } = location.state || {};
 
-  // Use mock data
-  const fileData = [
-    { file: "report1.pdf", type: "PDF", size: "1.2 MB", vulnerability: 15 },
-    { file: "data2.csv", type: "CSV", size: "800 KB", vulnerability: 0 },
-    { file: "image3.png", type: "PNG", size: "1.5 MB", vulnerability: 63 },
-    { file: "document4.docx", type: "DOCX", size: "500 KB", vulnerability: 11 },
-    { file: "archive5.zip", type: "ZIP", size: "3.0 MB", vulnerability: 7 },
-    { file: "data2.csv", type: "CSV", size: "800 KB", vulnerability: 2 },
-    { file: "image3.png", type: "PNG", size: "1.5 MB", vulnerability: 3 },
-    { file: "document4.docx", type: "DOCX", size: "500 KB", vulnerability: 32 },
-    { file: "archive5.zip", type: "ZIP", size: "3.0 MB", vulnerability: 47 },
-  ];
 
-  const vulnerabilityData = [
-    {
-      file: "malware.exe",
-      type: "Malware",
-      indicators: [
-        { level: "High", type: "File Hash", indicator: "abc123hash" },
-        { level: "Medium", type: "IP Address", indicator: "192.168.1.1" },
-        { level: "Low", type: "Domain", indicator: "malicious.com" },
-      ],
-    },
-    {
-      file: "report1.pdf",
-      type: "Phishing Document",
-      indicators: [
-        { level: "High", type: "File Hash", indicator: "def456hash" },
-        {
-          level: "Low",
-          type: "Email Address",
-          indicator: "phish@malicious.com",
-        },
-        { level: "Medium", type: "URL", indicator: "malicious-link.com" },
-      ],
-    },
-    {
-      file: "document4.docx",
-      type: "Ransomware",
-      indicators: [
-        { level: "Medium", type: "File Hash", indicator: "ransom123hash" },
-        { level: "High", type: "IP Address", indicator: "203.0.113.42" },
-        { level: "Low", type: "Domain", indicator: "ransom-domain.com" },
-      ],
-    },
-    {
-      file: "archive5.zip",
-      type: "Ransomware",
-      indicators: [
-        {
-          level: "High",
-          type: "Encryption",
-          indicator: "ransomware-encryptor.exe",
-        },
-      ],
-    },
-    {
-      file: "image3.png",
-      type: "Malware",
-      indicators: [
-        { level: "Medium", type: "Virus", indicator: "malicious_code.exe" },
-      ],
-    },
-    {
-      file: "document4.docx",
-      type: "Phishing",
-      indicators: [
-        { level: "Low", type: "Email", indicator: "phishing@example.com" },
-      ],
-    },
-    {
-      file: "data2.csv",
-      type: "Cross-Site Scripting",
-      indicators: [
-        {
-          level: "Medium",
-          type: "XSS",
-          indicator: "<script>alert(1)</script>",
-        },
-      ],
-    },
-    {
-      file: "image3.png",
-      type: "Malware",
-      indicators: [
-        { level: "Low", type: "Virus", indicator: "malicious_code.exe" },
-      ],
-    },
-  ];
+  console.log('Files From Home:', filesFromHome);
+  console.log('Scan Results:', results);
+  console.log('Scan Results:', gemini);
 
   const [alerts, setAlerts] = useState([
     {
@@ -231,20 +146,36 @@ const Dashboard = () => {
     },
   };
 
-  // Extract file data and vulnerabilities from processedData
-  // const fileData = processedData.map((data) => ({
-  //   file: data.fileName,
-  //   type: data.fileType,
-  //   size: data.fileSize,
-  //   vulnerability: data.vulnerabilityCount, // Assuming vulnerabilityCount is part of processedData
-  // }));
+// Map data by matching filesFromHome with results based on file names
+const fileData = results.map((data) => {
+  // Find the matching file in filesFromHome based on the file name
+  const matchingFile = filesFromHome.find(file => file.name === data.file);
 
-  // const vulnerabilityData = processedData.map((data) => ({
-  //   file: data.fileName,
-  //   type: data.vulnerabilityType, // Assuming vulnerabilityType is part of processedData
-  //   indicators: data.indicatorsOfCompromise || [], // Assuming indicatorsOfCompromise is an array in processedData
-  // }));
+  return {
+    file: data.file, // File name from results
+    type: matchingFile?.type || 'Unknown', // File type from filesFromHome
+    size: matchingFile?.size
+      ? `${matchingFile.size} MB` // Append 'MB' if size is available
+      : 'Unknown', // Default to 'Unknown' if size is not available
+    vulnerability: data.vulnerability_count, // Vulnerability count from results
+  };
+});
 
+const vulnerabilityData = results.map((data) => {
+  // Extract indicators from data.rules
+  const indicators = Object.entries(data.rules).map(([indicator, count]) => ({
+    indicator,
+    count,
+    level: data.risk_level || 'Unknown', // Extract level from results or default to 'Unknown'
+    type: data.risk_type || 'Unknown'    // Extract type from results or default to 'Unknown'
+  })) || [];
+
+  return {
+    file: data.file, // File name from results
+    type: data.vulnerability_type, // Vulnerability type from results
+    indicators, // Include the updated indicators
+  };
+});
   const [displayedFileData, setDisplayedFileData] = useState(fileData);
   const [displayedVulnerabilityData, setDisplayedVulnerabilityData] =
     useState(vulnerabilityData);
@@ -286,40 +217,52 @@ const Dashboard = () => {
     ],
   };
 
-  const convertSizeToBytes = (sizeStr) => {
-    const units = ["B", "KB", "MB", "GB", "TB"];
-    const [size, unit] = sizeStr.split(/([a-zA-Z]+)/); // Split number and unit
+ // Helper function to convert sizes to bytes
+const convertSizeToBytes = (sizeString) => {
+  if (!sizeString || typeof sizeString !== 'string') return 0;
 
-    const unitIndex = units.indexOf(unit.toUpperCase());
-    if (unitIndex === -1) return parseFloat(size); // Fallback in case of an unknown unit
+  const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+  const sizeParts = sizeString.split(' ');
+  const sizeValue = parseFloat(sizeParts[0]);
+  const sizeUnit = sizeParts[1]?.toUpperCase() || 'B'; // Default to bytes if no unit
 
-    return parseFloat(size) * Math.pow(1024, unitIndex); // Convert to bytes
-  };
+  if (isNaN(sizeValue)) return 0; // Handle invalid size value
 
-  // Sorting function
-  const handleSort = (key) => {
-    const newOrder =
-      sortCriteria.key === key && sortCriteria.order === "asc" ? "desc" : "asc";
-    setSortCriteria({ key, order: newOrder });
+  const unitIndex = units.indexOf(sizeUnit);
+  return unitIndex > 0 ? sizeValue * Math.pow(1024, unitIndex) : sizeValue;
+};
 
-    const sortedData = [...displayedFileData].sort((a, b) => {
-      let aValue, bValue;
+// Sorting function
+const handleSort = (key) => {
+  const newOrder =
+    sortCriteria.key === key && sortCriteria.order === "asc" ? "desc" : "asc";
+  setSortCriteria({ key, order: newOrder });
 
-      if (key === "size") {
-        aValue = convertSizeToBytes(a.size);
-        bValue = convertSizeToBytes(b.size);
-      } else if (key === "vulnerability") {
-        aValue = a.vulnerability;
-        bValue = b.vulnerability;
-      }
+  const sortedData = [...displayedFileData].sort((a, b) => {
+    let aValue = 0;
+    let bValue = 0;
 
-      if (aValue < bValue) return newOrder === "asc" ? -1 : 1;
-      if (aValue > bValue) return newOrder === "asc" ? 1 : -1;
-      return 0;
-    });
+    if (key === "size") {
+      // Handle file sizes safely
+      aValue = a.size ? convertSizeToBytes(a.size) : 0;
+      bValue = b.size ? convertSizeToBytes(b.size) : 0;
+    } else if (key === "vulnerability") {
+      // Handle vulnerability safely
+      aValue = a.vulnerability !== undefined ? a.vulnerability : 0;
+      bValue = b.vulnerability !== undefined ? b.vulnerability : 0;
+    } else if (key === "type") {
+      // Sort by file type alphabetically
+      aValue = a.type?.toUpperCase() || '';
+      bValue = b.type?.toUpperCase() || '';
+    }
 
-    setDisplayedFileData(sortedData);
-  };
+    if (aValue < bValue) return newOrder === "asc" ? -1 : 1;
+    if (aValue > bValue) return newOrder === "asc" ? 1 : -1;
+    return 0;
+  });
+
+  setDisplayedFileData(sortedData);
+};
 
   // Logic for File Pagination (max two numbers shown)
   const totalFilePages = Math.ceil(fileData.length / rowsPerPage);
@@ -368,16 +311,16 @@ const Dashboard = () => {
   );
 
   const getVulnerabilityColor = (count) => {
-    if (count > 40) return "#FF0000";
-    if (count >= 30) return "#FF6F00";
-    if (count >= 21) return "#FFEB3B";
-    if (count >= 16) return "#FFC107";
-    if (count >= 11) return "#FF9800";
-    if (count >= 6) return "#FF5722";
-    if (count >= 1) return "#FF8C00";
-    return "#4CAF50";
+    if (count >= 401) return "#DF5656";  // Dark Red
+    if (count >= 301) return "#F56C6C";  // Light Red
+    if (count >= 201) return "#F8A72C";  // Orange
+    if (count >= 151) return "#FFD65A";  // Yellow
+    if (count >= 101) return "#F8E1A1";  // Light Yellow
+    if (count >= 51) return "#F8A72C";  // Orange
+    if (count >= 1) return "#FFD65A";  // Yellow
+    return "#8AC449";  // Green
   };
-
+  
   const handleSearchChange = (e) => {
     const value = e.target.value.toLowerCase();
     console.log("Search Term: ", value); // Debug to check the search term
@@ -455,7 +398,7 @@ const Dashboard = () => {
   };
 
   // Generate Excel report
-  const downloadXLSX = () => {
+  const downloadWORD = () => {
     const wb = XLSX.utils.book_new();
     const fileSheet = XLSX.utils.json_to_sheet(fileData);
     const vulnerabilitySheet = XLSX.utils.json_to_sheet(vulnerabilityData);
@@ -494,8 +437,8 @@ const Dashboard = () => {
       case "PDF":
         downloadPDF();
         break;
-      case "XLSX":
-        downloadXLSX();
+      case "WORD":
+        downloadWORD();
         break;
       case "CSV":
         downloadCSV();
@@ -564,7 +507,24 @@ const Dashboard = () => {
       <div className="dashboard__card">
         <div className="dashboard__card-header">
           <div>File</div>
-          <div>Type</div>
+          <div>
+  Type
+  <button
+    className="sort-button-custom"
+    onClick={() => handleSort("type")}
+  >
+    <span className="icon-container">
+      <FontAwesomeIcon
+        icon={
+          sortCriteria.key === "type" && sortCriteria.order === "asc"
+            ? faSortUp
+            : faSortDown
+        }
+        className="sort-icon"
+      />
+    </span>
+  </button>
+</div>
 
           <div>
             Size
@@ -782,7 +742,7 @@ const Dashboard = () => {
             {isOpen && (
               <div className="dashboard__dropdown-menu">
                 <div onClick={() => selectFormat("PDF")}>PDF</div>
-                <div onClick={() => selectFormat("XLSX")}>XLSX</div>
+                <div onClick={() => selectFormat("WORD")}>WORD</div>
                 <div onClick={() => selectFormat("CSV")}>CSV</div>
               </div>
             )}
