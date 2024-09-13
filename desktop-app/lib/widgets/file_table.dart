@@ -1,4 +1,5 @@
 import 'package:crypta/model/file_data.dart';
+import 'package:crypta/utils/get_color_based_on_value.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,11 +35,11 @@ class FileTableState extends ConsumerState<FileTable> {
         children: [
           // Top controls (e.g., Show column, Dispatch selected, pagination)
           const Padding(
-            padding:  EdgeInsets.only(bottom: 8.0),
+            padding: EdgeInsets.only(bottom: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                 Text(
+                Text(
                   "File Summary",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
@@ -108,10 +109,12 @@ class FileTableState extends ConsumerState<FileTable> {
                   ),
                 ),
                 DataColumn(
-                  label: Text(
-                    'Vulnerability Count',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
+                  label: Center(
+                    child: Text(
+                      'Vulnerability Count',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -121,16 +124,21 @@ class FileTableState extends ConsumerState<FileTable> {
                   .entries
                   .map(
                     (entry) => DataRow(
-                      // onSelectChanged: (isSelected) {
-                      //   setState(() {
-                      //     selectedRows[entry.key] = isSelected ?? false;
-                      //   });
-                      // },
                       cells: [
                         DataCell(Text(entry.value['file']!)),
                         DataCell(Text(entry.value['type']!)),
                         DataCell(Text(entry.value['size']!)),
-                        DataCell(Text(entry.value['vulnerabilities']!)),
+                        DataCell(Center(
+                          child: Container(
+                            width: 100,
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: getColorBasedOnValue(int.tryParse(
+                                    entry.value['vulnerabilities']!)!)),
+                            child: Text(entry.value['vulnerabilities']!, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.bold),),
+                          ),
+                        )),
                       ],
                     ),
                   )
@@ -152,7 +160,7 @@ class FileTableState extends ConsumerState<FileTable> {
                 const SizedBox(width: 10),
                 const Text(
                   "Page 1 of 5", // Example page info
-                  style:  TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(width: 10),
                 TextButton(
