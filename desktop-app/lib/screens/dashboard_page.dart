@@ -1,17 +1,13 @@
+import "dart:developer";
+
+import "package:crypta/providers/files_provider.dart";
 import "package:crypta/screens/analysis_page.dart";
 import "package:crypta/screens/chat_page.dart";
 import "package:crypta/screens/home_page.dart";
 import "package:crypta/utils/hexcolor.dart";
-import "package:crypta/widgets/barchart.dart";
-import "package:crypta/widgets/download_report.dart";
-import "package:crypta/widgets/export_analysis.dart";
-import "package:crypta/widgets/file_table.dart";
-import "package:crypta/widgets/file_tables_2.dart";
-import "package:crypta/widgets/linechart.dart";
-import "package:crypta/widgets/search_bar.dart";
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
-import "package:gap/gap.dart";
+import "package:url_launcher/url_launcher.dart";
 
 class DashboardPage extends ConsumerStatefulWidget {
   const DashboardPage({super.key});
@@ -21,6 +17,34 @@ class DashboardPage extends ConsumerStatefulWidget {
 
 class DashboardPageState extends ConsumerState<DashboardPage> {
   bool isAnalysisPage = true;
+
+  void _goToGithub() async {
+    const url = 'https://github.com/areebahmeddd/Crypta';
+    try {
+      await launchUrl(Uri.parse(url));
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  void _goToWebsite() async {
+    const url = '';
+    try {
+      await launchUrl(Uri.parse(url));
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  void _goToYoutube() async {
+    const url = 'https://www.youtube.com/@areebahmeddd';
+    try {
+      await launchUrl(Uri.parse(url));
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,6 +68,7 @@ class DashboardPageState extends ConsumerState<DashboardPage> {
                   title:
                       const Text('Home', style: TextStyle(color: Colors.white)),
                   onTap: () {
+                    ref.read(filesProvider.notifier).clearFiles();
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -52,11 +77,11 @@ class DashboardPageState extends ConsumerState<DashboardPage> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.analytics, color: Colors.white),
-                  title:
-                      const Text('Analysis', style: TextStyle(color: Colors.white)),
+                  title: const Text('Analysis',
+                      style: TextStyle(color: Colors.white)),
                   onTap: () {
                     setState(() {
-                      isAnalysisPage = true; 
+                      isAnalysisPage = true;
                     });
                   },
                 ),
@@ -66,7 +91,18 @@ class DashboardPageState extends ConsumerState<DashboardPage> {
                       const Text('Chat', style: TextStyle(color: Colors.white)),
                   onTap: () {
                     setState(() {
-                      isAnalysisPage = false; 
+                      isAnalysisPage = false;
+                    });
+                  },
+                ),
+                ListTile(
+                  leading:
+                      const Icon(Icons.groups_2_outlined, color: Colors.white),
+                  title:
+                      const Text('Team', style: TextStyle(color: Colors.white)),
+                  onTap: () {
+                    setState(() {
+                      isAnalysisPage = false;
                     });
                   },
                 ),
@@ -78,7 +114,40 @@ class DashboardPageState extends ConsumerState<DashboardPage> {
                     // Handle navigation or actions here
                   },
                 ),
-                // Add more items as needed
+                const Spacer(),
+                ListTile(
+                  leading: const Image(
+                    image: AssetImage(
+                      'assets/images/github-logo.png',
+                    ),
+                    height: 22,
+                  ),
+                  title: const Text('Github',
+                      style: TextStyle(color: Colors.white)),
+                  onTap: _goToGithub,
+                ),
+                ListTile(
+                  leading: const Image(
+                    image: AssetImage(
+                      'assets/images/domain.png',
+                    ),
+                    height: 22,
+                  ),
+                  title: const Text('Website',
+                      style: TextStyle(color: Colors.white)),
+                  onTap: _goToWebsite,
+                ),
+                ListTile(
+                  leading: const Image(
+                    image: AssetImage(
+                      'assets/images/youtube.png',
+                    ),
+                    height: 22,
+                  ),
+                  title: const Text('Youtube',
+                      style: TextStyle(color: Colors.white)),
+                  onTap: _goToYoutube,
+                ),
               ],
             ),
           ),
@@ -87,7 +156,7 @@ class DashboardPageState extends ConsumerState<DashboardPage> {
           Expanded(
             child: Container(
               color: Colors.white,
-              child:  Padding(
+              child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: isAnalysisPage ? const AnalysisPage() : const ChatPage(),
               ),

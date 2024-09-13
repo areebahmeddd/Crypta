@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:crypta/providers/files_provider.dart';
 import 'package:crypta/screens/upload_rules_page.dart';
 import 'package:crypta/utils/hexcolor.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,19 +18,26 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class HomePageState extends ConsumerState<HomePage> {
-  PlatformFile? _selectedFile;
+  // PlatformFile? _selectedFile;
   List<Map<String, String>> uploadedFilesMetadata = [];
 
   double _progress = 0.0;
 
-  Future<void> pickFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+  // Future<void> pickFile() async {
+  //   FilePickerResult? result = await FilePicker.platform.pickFiles();
 
-    if (result != null) {
-      setState(() {
-        _selectedFile = result.files.first;
-      });
-    }
+  //   if (result != null) {
+  //     setState(() {
+  //       _selectedFile = result.files.first;
+  //     });
+  //   }
+  // }
+
+  @override
+  void initState() {
+    _progress = 0.0;
+    uploadedFilesMetadata = [];
+    super.initState();
   }
 
   void _goToGithub() async {
@@ -42,8 +48,18 @@ class HomePageState extends ConsumerState<HomePage> {
       log(e.toString());
     }
   }
+
   void _goToWebsite() async {
     const url = '';
+    try {
+      await launchUrl(Uri.parse(url));
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  void _goToYoutube() async {
+    const url = 'https://www.youtube.com/@areebahmeddd';
     try {
       await launchUrl(Uri.parse(url));
     } catch (e) {
@@ -59,7 +75,8 @@ class HomePageState extends ConsumerState<HomePage> {
       final fileType = fileStat.type;
       final fileExtension = file.path.split('.').last;
       final fileLastModified = await file.lastModified();
-      String formattedDate = '${fileLastModified.day}/${fileLastModified.month}/${fileLastModified.year}';
+      String formattedDate =
+          '${fileLastModified.day}/${fileLastModified.month}/${fileLastModified.year}';
       setState(() {
         uploadedFilesMetadata.add({
           'name': path.basename(file.path),
@@ -163,7 +180,7 @@ class HomePageState extends ConsumerState<HomePage> {
                                         ),
                                       ),
                                       child: const Text(
-                                        'Detect Drive',
+                                        'Detect',
                                         style: TextStyle(color: Colors.white),
                                       ),
                                     ),
@@ -230,7 +247,7 @@ class HomePageState extends ConsumerState<HomePage> {
                                     child: LinearProgressIndicator(
                                       value: _progress,
                                       backgroundColor: Colors.grey,
-                                      color: Colors.green,
+                                      color: myColorFromHex('#457d58'),
                                     ),
                                   ),
                                   const Gap(20),
@@ -306,10 +323,10 @@ class HomePageState extends ConsumerState<HomePage> {
                   ref.watch(filesProvider).isEmpty
                       ? const SizedBox()
                       : Expanded(
-                          flex: 2,
+                          flex: 3,
                           child: Padding(
                             padding:
-                                const EdgeInsets.all(8.0).copyWith(right: 100),
+                                const EdgeInsets.all(8.0).copyWith(right: 150),
                             child: ListView.builder(
                               itemCount: uploadedFilesMetadata.length,
                               itemBuilder: (context, index) {
@@ -385,8 +402,8 @@ class HomePageState extends ConsumerState<HomePage> {
                                               ),
                                             ),
                                             TextSpan(
-                                              text: '${uploadedFilesMetadata[index]
-                                                  ['extension']!} \n',
+                                              text:
+                                                  '${uploadedFilesMetadata[index]['extension']!} \n',
                                               style: const TextStyle(
                                                 fontWeight: FontWeight.normal,
                                                 fontSize: 14,
@@ -440,7 +457,7 @@ class HomePageState extends ConsumerState<HomePage> {
               ),
             ),
             Positioned(
-              top: -15,
+              top: -10,
               right: -15,
               child: GestureDetector(
                 onTap: _goToGithub,
@@ -448,7 +465,7 @@ class HomePageState extends ConsumerState<HomePage> {
                   padding: const EdgeInsets.all(16),
                   child: const Image(
                     image: AssetImage(
-                      'assets/github-logo.png',
+                      'assets/images/github-logo.png',
                     ),
                     height: 25,
                   ),
@@ -456,7 +473,7 @@ class HomePageState extends ConsumerState<HomePage> {
               ),
             ),
             Positioned(
-              top: -15,
+              top: -10,
               right: 30,
               child: GestureDetector(
                 onTap: _goToWebsite,
@@ -464,13 +481,49 @@ class HomePageState extends ConsumerState<HomePage> {
                   padding: const EdgeInsets.all(16),
                   child: const Image(
                     image: AssetImage(
-                      'assets/domain.png',
+                      'assets/images/domain.png',
                     ),
                     height: 25,
                   ),
                 ),
               ),
-            )
+            ),
+            Positioned(
+              top: -11,
+              right: 80,
+              child: GestureDetector(
+                onTap: _goToYoutube,
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  child: const Image(
+                    image: AssetImage(
+                      'assets/images/youtube.png',
+                    ),
+                    height: 30,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 5,
+              right: 10,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: myColorFromHex('#457d58'),
+                  shape: const CircleBorder(side: BorderSide.none),
+                ),
+                onPressed: () {},
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  child: const Image(
+                    image: AssetImage(
+                      'assets/images/chatbot.png',
+                    ),
+                    height: 40,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

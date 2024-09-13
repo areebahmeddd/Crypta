@@ -1,4 +1,3 @@
-import 'package:crypta/model/file_data.dart';
 import 'package:crypta/model/iOC.dart';
 import 'package:crypta/model/vulnerability_data.dart';
 import 'package:crypta/utils/get_color_based_on_type.dart';
@@ -323,7 +322,7 @@ class FileTable2State extends ConsumerState<FileTable2> {
                               onPressed: () =>
                                   showDetailedFileDialog(context, entry.value),
                               child: const Text(
-                                'view',
+                                'View',
                                 style: TextStyle(color: Colors.white),
                               ),
                             ),
