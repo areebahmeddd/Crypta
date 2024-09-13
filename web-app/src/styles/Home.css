@@ -208,6 +208,7 @@
   font-size: 18px;
   color: #333;
   align-content: flex-start;
+  overflow-wrap: anywhere;
 }
 
 .file-metadata-table {
@@ -229,6 +230,7 @@
 
 .metadata-value {
   text-align: left;
+  overflow-wrap: anywhere;
 }
 
 .file-size {
@@ -331,6 +333,7 @@
   transition: border-color 0.3s ease;
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
   align-items: start; /* Center content horizontally */
   justify-content: center;
   margin-bottom: 20px;
