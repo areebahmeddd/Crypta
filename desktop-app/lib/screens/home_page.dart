@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:path/path.dart' as path;
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -41,6 +42,14 @@ class HomePageState extends ConsumerState<HomePage> {
       log(e.toString());
     }
   }
+  void _goToWebsite() async {
+    const url = '';
+    try {
+      await launchUrl(Uri.parse(url));
+    } catch (e) {
+      log(e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +62,7 @@ class HomePageState extends ConsumerState<HomePage> {
       String formattedDate = '${fileLastModified.day}/${fileLastModified.month}/${fileLastModified.year}';
       setState(() {
         uploadedFilesMetadata.add({
-          'name': file.path.split('/').last,
+          'name': path.basename(file.path),
           'size': '$fileSizeInMB MB',
           'type': fileType.toString(),
           'extension': fileExtension,
@@ -300,7 +309,7 @@ class HomePageState extends ConsumerState<HomePage> {
                           flex: 2,
                           child: Padding(
                             padding:
-                                const EdgeInsets.all(8.0).copyWith(right: 60),
+                                const EdgeInsets.all(8.0).copyWith(right: 100),
                             child: ListView.builder(
                               itemCount: uploadedFilesMetadata.length,
                               itemBuilder: (context, index) {
@@ -440,6 +449,22 @@ class HomePageState extends ConsumerState<HomePage> {
                   child: const Image(
                     image: AssetImage(
                       'assets/github-logo.png',
+                    ),
+                    height: 25,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: -15,
+              right: 30,
+              child: GestureDetector(
+                onTap: _goToWebsite,
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  child: const Image(
+                    image: AssetImage(
+                      'assets/domain.png',
                     ),
                     height: 25,
                   ),
