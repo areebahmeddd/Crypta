@@ -14,6 +14,7 @@ def scan_network(file_path):
         # Process the packets and serialize the network traffic summary into JSON format
         network_summary = process_packet(captured_packets)
         formatted_data = serialize_network(network_summary)
+        print(f'{Fore.GREEN}[SUCCESS]{Style.RESET_ALL} Network scan completed for {os.path.basename(file_path)}')
         return formatted_data
     except Exception as e:
         print(f'{Fore.RED}[ERROR]{Style.RESET_ALL} Error occurred while scanning {os.path.basename(file_path)}: {e}')
@@ -53,7 +54,7 @@ def process_packet(captured_packets):
                 # ARP Packets
                 if packet.haslayer(ARP):
                     arp_data = {
-                        'Timestamp': packet.time,
+                        # 'Timestamp': packet.time,
                         'Source IP': packet[ARP].psrc,
                         'Destination IP': packet[ARP].pdst,
                         'Source MAC': packet[ARP].hwsrc,
@@ -67,7 +68,7 @@ def process_packet(captured_packets):
                 # DHCP Packets
                 elif packet.haslayer(DHCP):
                     dhcp_data = {
-                        'Timestamp': packet.time,
+                        # 'Timestamp': packet.time,
                         'Source IP': packet[BOOTP].ciaddr,
                         'Destination IP': packet[BOOTP].yiaddr,
                         'Source MAC': packet[Ether].src,
@@ -83,7 +84,7 @@ def process_packet(captured_packets):
                 # TCP Packets
                 if packet.haslayer(TCP):
                     tcp_data = {
-                        'Timestamp': packet.time,
+                        # 'Timestamp': packet.time,
                         'Source IP': packet[IP].src,
                         'Destination IP': packet[IP].dst,
                         'Source Port': packet[TCP].sport,
@@ -97,7 +98,7 @@ def process_packet(captured_packets):
                     # FTP Packets
                     if packet[TCP].dport in [20, 21] or packet[TCP].sport in [20, 21]:
                         ftp_data = {
-                            'Timestamp': packet.time,
+                            # 'Timestamp': packet.time,
                             'Source IP': packet[IP].src,
                             'Destination IP': packet[IP].dst,
                             'Source Port': packet[TCP].sport,
@@ -112,7 +113,7 @@ def process_packet(captured_packets):
                 elif packet.haslayer(UDP):
                     if packet.haslayer(DNS):
                         dns_data = {
-                            'Timestamp': packet.time,
+                            # 'Timestamp': packet.time,
                             'Source IP': packet[IP].src,
                             'Destination IP': packet[IP].dst,
                             'Flow Duration': flow_duration(flow_key, flow_tracker),
@@ -122,7 +123,7 @@ def process_packet(captured_packets):
                         network_data['DNS Queries'].append(dns_data)
                     else:
                         udp_data = {
-                            'Timestamp': packet.time,
+                            # 'Timestamp': packet.time,
                             'Source IP': packet[IP].src,
                             'Destination IP': packet[IP].dst,
                             'Source Port': packet[UDP].sport,
@@ -136,7 +137,7 @@ def process_packet(captured_packets):
                 # ICMP Packets
                 elif packet.haslayer(ICMP):
                     icmp_data = {
-                        'Timestamp': packet.time,
+                        # 'Timestamp': packet.time,
                         'Source IP': packet[IP].src,
                         'Destination IP': packet[IP].dst,
                         'Flow Duration': flow_duration(flow_key, flow_tracker),
@@ -148,7 +149,7 @@ def process_packet(captured_packets):
             # Dot11 Frames (Wireless Frames)
             if packet.haslayer(Dot11):
                 frame_data = {
-                    'Timestamp': packet.time,
+                    # 'Timestamp': packet.time,
                     'Source IP': packet.addr2 if hasattr(packet, 'addr2') else 'Unknown',
                     'Destination IP': packet.addr1 if hasattr(packet, 'addr1') else 'Unknown',
                     'Flow Duration': flow_duration(flow_key, flow_tracker),
@@ -163,7 +164,7 @@ def process_packet(captured_packets):
             # SNMP Packets
             if packet.haslayer(SNMP):
                 snmp_data = {
-                    'Timestamp': packet.time,
+                    # 'Timestamp': packet.time,
                     'Source IP': packet[IP].src,
                     'Destination IP': packet[IP].dst,
                     'Flow Duration': flow_duration(flow_key, flow_tracker),
@@ -175,7 +176,7 @@ def process_packet(captured_packets):
             # HTTP Requests
             if packet.haslayer(HTTPRequest):
                 http_data = {
-                    'Timestamp': packet.time,
+                    # 'Timestamp': packet.time,
                     'Source IP': packet[IP].src,
                     'Destination IP': packet[IP].dst,
                     'Method': packet[HTTPRequest].Method.decode('utf-8'),

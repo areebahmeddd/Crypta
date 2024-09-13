@@ -40,27 +40,37 @@ async def analyze(uploadedFiles: list[UploadFile] = File(...), yaraFile: UploadF
 
             # Determine file type and scan file based on type
             file_type = find_type(file_path)
-            if file_type == 'network':
+            if file_type == 'text':
+                file_data = scan_file(file_path, rules_path, file_type)
+                rule_counts = {} # Initialize dictionary to store rule counts
+
+                # Count the number of times each rule was triggered in the file
+                for data in file_data:
+                    rule = data['rule']
+                    # Check if rule is already in dictionary and increment count
+                    if rule in rule_counts:
+                        rule_counts[rule] += 1
+                    else:
+                        rule_counts[rule] = 1
+
+                scan_results.append({
+                    'file': os.path.basename(file_path),
+                    'rules': rule_counts,
+                    'vulnerabilities': sum(rule_counts.values())
+                })
+
+            elif file_type == 'network':
                 network_data = scan_network(file_path)
                 # Append network scan results to scan_results list as dictionary
                 scan_results.append({
                     'file': os.path.basename(file_path),
-                    'network': network_data
+                    'network': network_data,
+                    'vulnerabilities': len(network_data)
                 })
-
-            else:
-                file_data = scan_file(file_path, rules_path, file_type)
-                # Extend file scan results to scan_results list as dictionary for each file
-                scan_results.extend({
-                    'file': os.path.basename(file_path),
-                    'rule': data['rule'],
-                    'component': data['component'],
-                    'content': data['content']
-                } for data in file_data)
 
         return JSONResponse(content=scan_results)
     except Exception as e:
-        return JSONResponse(content={'error': e})
+        return JSONResponse(content={'error': str(e)})
 
 @app.post('/api/detect')
 async def detect(background_tasks: BackgroundTasks):

@@ -66,10 +66,6 @@ def find_type(file_path):
     name, extension = os.path.splitext(file_path)
     extension = extension.lower()
 
-    # Check if file extension matches known network capture file types
-    if extension in ['.pcap', '.cap', '.pcapng']:
-        return 'network'
-
     # Check if file extension matches known file types in metadata
     for file_type, extensions in file_types.items():
         if extension in extensions:
