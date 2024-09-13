@@ -8,7 +8,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-
+import 'package:path/path.dart' as path;
 class UploadRulesPage extends ConsumerStatefulWidget {
   const UploadRulesPage({super.key});
 
@@ -19,16 +19,37 @@ class UploadRulesPage extends ConsumerStatefulWidget {
 }
 
 class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
-  PlatformFile? selectedFile;
+  File? selectedFile;
+  PlatformFile? file;
+  Map<String, dynamic> fileInfo = {};
+
   Future<void> pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
 
     if (result != null) {
       setState(() {
-        selectedFile = result.files.first;
+        file = result.files.first;
+        selectedFile = File(file!.path!);
+        getFileInfo(selectedFile!);
         val = 0;
       });
     }
+  }
+
+  Future<void> getFileInfo(File file) async {
+    final fileStat = await selectedFile!.stat();
+      final fileSizeInMB = (fileStat.size / (1024));
+      final fileType = fileStat.type;
+      final fileLastModified = await file.lastModified();
+      String formattedDate = '${fileLastModified.day}/${fileLastModified.month}/${fileLastModified.year}';
+    setState(() {
+      fileInfo = {
+        'name': path.basename(selectedFile!.path),
+        'size': fileSizeInMB,
+        'type': fileType,
+        'lastModified': formattedDate,
+      };
+    });
   }
 
   var val = 0;
@@ -271,7 +292,7 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        Text(selectedFile!.name),
+                                        Text(fileInfo['name']!),
                                       ],
                                     ),
                                     // Size
@@ -282,7 +303,7 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        Text('${selectedFile!.size} KB'),
+                                        Text('${fileInfo['size'].toStringAsFixed(2)} KB'),
                                       ],
                                     ),
                                     // Type
@@ -293,17 +314,19 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        Text(selectedFile!.extension!),
+                                        Text(fileInfo['type']!.toString()),
                                       ],
                                     ),
                                     // Last Modified
-                                    const Column(
+                                     Column(
                                       children: [
-                                         Text(
+                                         const Text(
                                           'Last Modified:',
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
+
                                         ),
+                                        Text(fileInfo['lastModified']!),
                                       ],
                                     ),
                                   ],

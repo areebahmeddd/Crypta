@@ -58,7 +58,7 @@ class FileTable2State extends ConsumerState<FileTable2> {
                   const SizedBox(height: 16),
                   const Text(
                     "Recommended Fixes",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                   const SizedBox(height: 8),
                   Text(

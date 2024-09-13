@@ -7,14 +7,14 @@ import 'package:crypta/widgets/chat_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ChatbotScreen extends ConsumerStatefulWidget {
-  const ChatbotScreen({super.key});
+class ChatPage extends ConsumerStatefulWidget {
+  const ChatPage({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _ChatbotScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _ChatPageState();
 }
 
-class _ChatbotScreenState extends ConsumerState<ChatbotScreen> {
+class _ChatPageState extends ConsumerState<ChatPage> {
   final _userMessage = TextEditingController();
   final _scrollController = ScrollController();
 
@@ -58,66 +58,64 @@ class _ChatbotScreenState extends ConsumerState<ChatbotScreen> {
       });
     }
 
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: Container(
-                child: ListView.separated(
-                    controller: _scrollController,
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (context, idx) {
-                      if (idx < messages.length) {
-                        return ChatItem(message: messages[idx]);
-                      } else if (isLoading) {
-                        return const Center(
-                            child: CircularProgressIndicator());
-                      } else {
-                        return const SizedBox.shrink();
-                      }
-                    },
-                    separatorBuilder: (context, idx) =>
-                        const Padding(padding: EdgeInsets.only(top: 10)),
-                    itemCount: messages.length),
-              ),
+    return Stack(children: [
+      Column(
+        children: [
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.only(top: 24),
+              child: ListView.separated(
+                  controller: _scrollController,
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (context, idx) {
+                    if (idx < messages.length) {
+                      return ChatItem(message: messages[idx]);
+                    } else if (isLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  },
+                  separatorBuilder: (context, idx) =>
+                      const Padding(padding: EdgeInsets.only(top: 10)),
+                  itemCount: messages.length),
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16)
-                  .copyWith(bottom: 8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                          hintText: 'Start your conversation here...',
-                          labelStyle: TextStyle(color: Colors.black),
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: InputBorder.none),
-                      keyboardType: TextInputType.text,
-                      controller: _userMessage,
-                    ),
+          ),
+          Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.white,
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                        hintText: 'Start your conversation here...',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: InputBorder.none),
+                    keyboardType: TextInputType.text,
+                    controller: _userMessage,
                   ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.mic),
-                  ),
-                  IconButton(
-                    onPressed: sendPromptAndGetResponse,
-                    icon: const Icon(Icons.send),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.mic),
+                ),
+                IconButton(
+                  onPressed: sendPromptAndGetResponse,
+                  icon: const Icon(Icons.send),
+                ),
+              ],
+            ),
+          )
+        ],
       ),
-    );
+      
+    ]);
   }
 }

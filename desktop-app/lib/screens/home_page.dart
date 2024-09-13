@@ -49,6 +49,8 @@ class HomePageState extends ConsumerState<HomePage> {
       final fileSizeInMB = (fileStat.size / (1024 * 1024)).toStringAsFixed(2);
       final fileType = fileStat.type;
       final fileExtension = file.path.split('.').last;
+      final fileLastModified = await file.lastModified();
+      String formattedDate = '${fileLastModified.day}/${fileLastModified.month}/${fileLastModified.year}';
       setState(() {
         uploadedFilesMetadata.add({
           'name': file.path.split('/').last,
@@ -56,6 +58,7 @@ class HomePageState extends ConsumerState<HomePage> {
           'type': fileType.toString(),
           'extension': fileExtension,
           'path': file.path,
+          'last modified': formattedDate,
         });
       });
     }
@@ -373,8 +376,25 @@ class HomePageState extends ConsumerState<HomePage> {
                                               ),
                                             ),
                                             TextSpan(
+                                              text: '${uploadedFilesMetadata[index]
+                                                  ['extension']!} \n',
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 14,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                            const TextSpan(
+                                              text: 'Last Modified: ',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                                color: Colors.black87,
+                                              ),
+                                            ),
+                                            TextSpan(
                                               text: uploadedFilesMetadata[index]
-                                                  ['extension']!,
+                                                  ['last modified']!,
                                               style: const TextStyle(
                                                 fontWeight: FontWeight.normal,
                                                 fontSize: 14,
