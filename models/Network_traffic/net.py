@@ -30,7 +30,7 @@ class_mapping = {
 
 # Function to predict the network traffic
 def predict_network(data):
-  model=joblib.load('ML/Network_traffic/net.bin')
+  model=joblib.load('models/Network_traffic/net.bin')
   data=ipl(data)
   pred=model.predict(data)
   ans=[class_mapping[i] for i in pred ]

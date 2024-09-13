@@ -15,7 +15,7 @@ from sklearn.utils import shuffle
 
 
 def predict_level(new_text):
-    model=tf.keras.models.load_model('Risk_level/logsfinal95.h5')
+    model=tf.keras.models.load_model('models/Risk_level/logsfinal95.h5')
 
     # Preprocess the input text
     new_sequence = tokenizer.texts_to_sequences([new_text])
