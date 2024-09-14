@@ -8,7 +8,7 @@ from parse import scan_file, find_type
 from network import scan_network
 from drive import scan_drive
 from gemini import predict, summarize
-from disk import process_disk_image
+# from disk import process_disk_image
 
 app = FastAPI()
 app.add_middleware(

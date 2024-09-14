@@ -58,11 +58,14 @@ class DashboardPageState extends ConsumerState<DashboardPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const Center(
-                  child: DrawerHeader(
-                    child: Text(
-                      'Dashboard',
-                      style: TextStyle(color: Colors.white, fontSize: 24),
+                const SizedBox(
+                  height: 90,
+                  child: Center(
+                    child: DrawerHeader(
+                      child: Text(
+                        'Dashboard',
+                        style: TextStyle(color: Colors.white, fontSize: 24),
+                      ),
                     ),
                   ),
                 ),

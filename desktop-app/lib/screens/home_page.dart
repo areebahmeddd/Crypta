@@ -125,9 +125,11 @@ class HomePageState extends ConsumerState<HomePage> {
 
             await getFileMetadatas(fileEntity);
 
-            await Future.delayed(const Duration(milliseconds: 500));
+            await Future.delayed(const Duration(milliseconds: 100));
           }
         }
+
+
       }
     }
 
@@ -307,17 +309,20 @@ class HomePageState extends ConsumerState<HomePage> {
                                   const SizedBox(width: 20),
                                   ElevatedButton(
                                     onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const UploadRulesPage(),
-                                        ),
-                                      );
+                                      _progress != 1.0
+                                          ? null
+                                          : Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const UploadRulesPage(),
+                                              ),
+                                            );
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          myColorFromHex('#457d58'),
+                                      backgroundColor: _progress != 1.0
+                                          ? Colors.grey
+                                          : myColorFromHex('#457d58'),
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 100, vertical: 25),
                                       shape: RoundedRectangleBorder(
@@ -512,7 +517,7 @@ class HomePageState extends ConsumerState<HomePage> {
               ),
             ),
             Positioned(
-              top: -11,
+              top: -9,
               right: 90,
               child: GestureDetector(
                 onTap: _goToWebsite,
