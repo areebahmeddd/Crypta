@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:crypta/providers/files_metadata_provider.dart';
 import 'package:crypta/providers/files_provider.dart';
 import 'package:crypta/screens/upload_rules_page.dart';
 import 'package:crypta/utils/hexcolor.dart';
@@ -78,6 +79,14 @@ class HomePageState extends ConsumerState<HomePage> {
       String formattedDate =
           '${fileLastModified.day}/${fileLastModified.month}/${fileLastModified.year}';
       setState(() {
+        ref.read(filesMetadataProvider.notifier).addFileMetadata({
+          'name': path.basename(file.path),
+          'size': '$fileSizeInMB MB',
+          'type': fileType.toString(),
+          'extension': fileExtension,
+          'path': file.path,
+          'last modified': formattedDate,
+        });
         uploadedFilesMetadata.add({
           'name': path.basename(file.path),
           'size': '$fileSizeInMB MB',
@@ -124,7 +133,7 @@ class HomePageState extends ConsumerState<HomePage> {
 
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0).copyWith(top: 0, right: 0),
         child: Stack(
           children: [
             Center(
@@ -217,8 +226,11 @@ class HomePageState extends ConsumerState<HomePage> {
                                       ),
                                     ),
                                     Gap(60),
-                                    Icon(Icons.cloud_upload,
-                                        size: 50, color: Colors.grey),
+                                    Image(
+                                      image: AssetImage(
+                                          'assets/images/upload.png'),
+                                      height: 100,
+                                    ),
                                     SizedBox(height: 10),
                                     Text(
                                       'Drag and drop a folder here or',
@@ -271,6 +283,11 @@ class HomePageState extends ConsumerState<HomePage> {
                                             .watch(filesProvider.notifier)
                                             .clearFiles();
                                         uploadedFilesMetadata = [];
+
+                                        ref
+                                            .watch(
+                                                filesMetadataProvider.notifier)
+                                            .clearFilesMetadata();
                                       });
                                     },
                                     style: ElevatedButton.styleFrom(
@@ -325,8 +342,8 @@ class HomePageState extends ConsumerState<HomePage> {
                       : Expanded(
                           flex: 3,
                           child: Padding(
-                            padding:
-                                const EdgeInsets.all(8.0).copyWith(right: 150),
+                            padding: const EdgeInsets.all(8.0)
+                                .copyWith(right: 100, top: 30),
                             child: ListView.builder(
                               itemCount: uploadedFilesMetadata.length,
                               itemBuilder: (context, index) {
@@ -440,6 +457,12 @@ class HomePageState extends ConsumerState<HomePage> {
                                               .removeFile(
                                                   uploadedFilesMetadata[index]
                                                       ['path']!);
+                                          ref
+                                              .read(filesMetadataProvider
+                                                  .notifier)
+                                              .removeFileMetadata(
+                                                  uploadedFilesMetadata[index]
+                                                      ['path']!);
                                           setState(() {
                                             uploadedFilesMetadata
                                                 .removeAt(index);
@@ -458,7 +481,7 @@ class HomePageState extends ConsumerState<HomePage> {
             ),
             Positioned(
               top: -10,
-              right: -15,
+              right: -1,
               child: GestureDetector(
                 onTap: _goToGithub,
                 child: Container(
@@ -474,23 +497,7 @@ class HomePageState extends ConsumerState<HomePage> {
             ),
             Positioned(
               top: -10,
-              right: 30,
-              child: GestureDetector(
-                onTap: _goToWebsite,
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  child: const Image(
-                    image: AssetImage(
-                      'assets/images/domain.png',
-                    ),
-                    height: 25,
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              top: -11,
-              right: 80,
+              right: 40,
               child: GestureDetector(
                 onTap: _goToYoutube,
                 child: Container(
@@ -505,8 +512,24 @@ class HomePageState extends ConsumerState<HomePage> {
               ),
             ),
             Positioned(
+              top: -11,
+              right: 90,
+              child: GestureDetector(
+                onTap: _goToWebsite,
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  child: const Image(
+                    image: AssetImage(
+                      'assets/images/domain.png',
+                    ),
+                    height: 25,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
               bottom: 5,
-              right: 10,
+              right: 5,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: myColorFromHex('#457d58'),

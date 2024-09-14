@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:crypta/apis/analyze_file.dart';
+import 'package:crypta/providers/analysis_provider.dart';
 import 'package:crypta/providers/files_provider.dart';
 import 'package:crypta/screens/dashboard_page.dart';
 import 'package:crypta/utils/hexcolor.dart';
@@ -95,6 +97,29 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
 
   @override
   Widget build(BuildContext context) {
+    Future<void> uploadFiles() async {
+      final files = ref.read(filesProvider);
+      final yaraFile = File('assets/security.yara');
+      final response = await analyzeFile(files, yaraFile);
+      log(response.toString());
+
+      if (response['status'] == 'success') {
+        ref.read(analysisProvider.notifier).saveAnalysis(response['data']);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const DashboardPage(),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Failed to upload file'),
+          ),
+        );
+      }
+    }
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -269,16 +294,7 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                               ),
                               const SizedBox(width: 20),
                               ElevatedButton(
-                                onPressed: () {
-                                  // Analyze action
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const DashboardPage(),
-                                    ),
-                                  );
-                                },
+                                onPressed: uploadFiles,
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: myColorFromHex('#457d58'),
                                   padding: const EdgeInsets.symmetric(
