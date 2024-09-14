@@ -282,18 +282,36 @@
 }
 
 .dashboard__alert-section {
-  margin-bottom: 20px; /* Space from other sections */
+  margin-bottom: 40px; /* Space from other sections */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .dashboard__alert-title {
-  font-size: 1.75rem; /* Larger font size for the title */
-  margin-bottom: 5px; /* Space between title and separator */
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #333;
+  font-weight: bold;
+
 }
 
 .dashboard__alert-separator {
-  border: 0; /* Remove default border */
-  border-top: 1px solid #ddd; /* Separator line */
-  margin-bottom: 10px; /* Space between separator and alert list */
+  border: 0;
+  height: 1px;
+  background-color: #ddd;
+  margin-bottom: 20px;
+}
+
+.dashboard__alert-group {
+  margin-bottom: 20px;
+}
+
+.dashboard__alert-type {
+  font-size: 20px;
+  color: #555;
+  margin-bottom: 10px;
+  font-weight: 600;
 }
 
 .dashboard__alert-list {

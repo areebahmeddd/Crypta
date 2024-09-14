@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/Modal.css"; // Ensure this path is correct
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -8,41 +8,13 @@ import {
 
 const ModalPage = ({ isOpen, onClose, data }) => {
   const [filePage, setFilePage] = useState(1);
-  const rowsPerPage = 5;
+  const rowsPerPage = 3;
   const indicators = data?.indicators || [];
   const totalFilePages = Math.ceil(indicators.length / rowsPerPage);
   const [showAllFixes, setShowAllFixes] = useState(false); // State to toggle recommended fixes
-  // const recommendedFixes = data?.recommendedFixes || [];
+  const [showAllFixesGlobal, setShowAllFixesGlobal] = useState(false); // Global "Show More/Less" state
 
-  // Mock data for recommended fixes
-  const recommendedFixes = [
-    {
-      id: 1,
-      message:
-        "Critical system update required. Please update your software to ensure security.",
-    },
-    {
-      id: 2,
-      message:
-        "Unauthorized access attempt detected. Review your security settings immediately.",
-    },
-    {
-      id: 3,
-      message:
-        "New vulnerability discovered in your application. Apply the latest patch to address the issue.",
-    },
-    {
-      id: 4,
-      message:
-        "Backup failure detected. Ensure your backup system is functioning properly to avoid data loss.",
-    },
-    {
-      id: 5,
-      message:
-        "High CPU usage alert. Check for any processes that might be consuming excessive resources.",
-    },
-    // More mock data...
-  ];
+  const recommendedFixes = data?.recommendedFixes || [];
 
   // Calculate page numbers to show
   const maxPageNumbersToShow = 2;
@@ -61,9 +33,18 @@ const ModalPage = ({ isOpen, onClose, data }) => {
     (filePage - 1) * rowsPerPage,
     filePage * rowsPerPage
   );
+
   const displayedFixes = showAllFixes
     ? recommendedFixes
     : recommendedFixes.slice(0, 3);
+
+
+  const toggleShowMore = (index) => {
+    setShowAllFixes((prevState) => ({
+      ...prevState,
+      [index]: !prevState[index], // Toggle for each specific fix item
+    }));
+  };
 
   // Function to get the class name based on the level
   const getLevelClass = (level) => {
@@ -155,26 +136,67 @@ const ModalPage = ({ isOpen, onClose, data }) => {
           </div>
         </div>
 
-        {/* Recommended Fixes Section */}
-        <div className="dashboard__alert-section">
-          <h2 className="dashboard__alert-title">Recommended Fixes</h2>
-          <hr className="dashboard__alert-separator" />
-          <ul className="dashboard__alert-list">
-            {displayedFixes.map((fix) => (
-              <li key={fix.id} className="dashboard__alert-item">
-                {fix.message}
-              </li>
-            ))}
-          </ul>
-          {recommendedFixes.length > 3 && (
-            <button
-              className="dashboard__show-more"
-              onClick={() => setShowAllFixes(!showAllFixes)}
-            >
-              {showAllFixes ? "Show Less" : "Show More"}
-            </button>
-          )}
-        </div>
+        <div className="dashboard_r_alert-section">
+      <h2 className="dashboard_r_alert-title">Recommended Fixes</h2>
+      <hr className="dashboard_r_alert-separator" />
+
+      {/* Loop through the recommended fixes data */}
+      {recommendedFixes.length > 0 ? (
+        recommendedFixes
+          .slice(0, showAllFixesGlobal ? recommendedFixes.length : 3)
+          .map((fixItem, index) => (
+            <div key={index} className="dashboard_r_alert-group">
+              {/* Section for the Issue */}
+              <div className="dashboard_r_alert-issue">
+              <div className="dashboard_r_alert-issue-row">
+                  <h3 className="dashboard_r_alert-issue-title"> {index + 1}. Issue:</h3> {/* Add index here */}
+                  <p className="dashboard_r_alert-issue-description">
+                    {fixItem.issue}
+                  </p>
+                </div>
+              </div>
+
+              {/* Section for the Fixes */}
+              <div className="dashboard_r_alert-fixes">
+                <h3 className="dashboard_r_alert-fixes-title">
+                  Recommended Fixes:
+                </h3>
+                <ul className="dashboard_fix_alert-list">
+                  {fixItem.fix
+                    .slice(0, showAllFixes[index] ? fixItem.fix.length : 3)
+                    .map((fixDetail, idx) => (
+                      <li key={idx} className="dashboard_r_alert-item">
+                        {fixDetail}
+                      </li>
+                    ))}
+                </ul>
+
+                {/* Show more/less button for individual fixes */}
+                {fixItem.fix.length > 3 && (
+                  <button
+                    className="dashboard__show-more"
+                    onClick={() => toggleShowMore(index)}
+                  >
+                    {showAllFixes[index] ? "Show Less" : "Show More"}
+                  </button>
+                )}
+              </div>
+            </div>
+          ))
+      ) : (
+        <p>No recommended fixes available.</p>
+      )}
+
+      {/* Global Show more/less button */}
+      {recommendedFixes.length > 3 && (
+        <button
+          className="dashboard__show-more"
+          onClick={() => setShowAllFixesGlobal(!showAllFixesGlobal)}
+        >
+          {showAllFixesGlobal ? "Show Less" : "Show More"}
+        </button>
+      )}
+    </div>
       </div>
     </div>
   );

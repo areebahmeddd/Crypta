@@ -7,11 +7,13 @@ import Dashboard from "./pages/Dashboard.jsx";
 import About from "./pages/About.jsx";
 import Team from "./pages/Team.jsx";
 import Contact from "./pages/Contact.jsx";
+import Layout from "./components/Chatbot.jsx"
 
 function App() {
   return (
     <Router>
       <div>
+      <Layout>
         <Navbar /> {/* Add Navbar here */}
         <Routes>
           <Route path="/" element={<Home />} />
@@ -21,6 +23,7 @@ function App() {
           <Route path="/team" element={<Team />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>
+        </Layout>
       </div>
     </Router>
   );
