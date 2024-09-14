@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:crypta/apis/analyze_file.dart';
+import 'package:crypta/apis/analyze_file_api.dart';
 import 'package:crypta/providers/analysis_provider.dart';
 import 'package:crypta/providers/files_provider.dart';
 import 'package:crypta/screens/dashboard_page.dart';
