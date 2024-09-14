@@ -71,39 +71,22 @@ const Dashboard = () => {
     gemini
   } = location.state || {};
 
+  const alerts = gemini?.alerts || [];
+  const recommendedFixes = gemini?.recommended_fixes || [];
+
+  // Group alerts by their type
+const groupedAlerts = alerts.reduce((acc, alert) => {
+  const { type, detail } = alert;
+  if (!acc[type]) {
+    acc[type] = [];
+  }
+  acc[type].push(detail);
+  return acc;
+}, {});
 
   console.log('Files From Home:', filesFromHome);
   console.log('Scan Results:', results);
   console.log('Scan Results:', gemini);
-
-  const [alerts, setAlerts] = useState([
-    {
-      id: 1,
-      message:
-        "Critical system update required. Please update your software to ensure security.",
-    },
-    {
-      id: 2,
-      message:
-        "Unauthorized access attempt detected. Review your security settings immediately.",
-    },
-    {
-      id: 3,
-      message:
-        "New vulnerability discovered in your application. Apply the latest patch to address the issue.",
-    },
-    {
-      id: 4,
-      message:
-        "Backup failure detected. Ensure your backup system is functioning properly to avoid data loss.",
-    },
-    {
-      id: 5,
-      message:
-        "High CPU usage alert. Check for any processes that might be consuming excessive resources.",
-    },
-    // More alerts...
-  ]);
 
   const options = {
     responsive: true,
@@ -358,7 +341,14 @@ const handleSort = (key) => {
   };
 
   const handleViewClick = (data) => {
-    setSelectedData(data);
+    // Combine the data and recommendedFixes into a single object
+    const combinedData = {
+      ...data, // This spreads the properties of the data object
+      recommendedFixes // Add recommendedFixes to the combined object
+    };
+  
+    // Set the combined data and open the modal
+    setSelectedData(combinedData);
     setIsModalOpen(true);
   };
 
@@ -699,26 +689,35 @@ const handleSort = (key) => {
         data={selectedData}
       />
 
-      <div className="dashboard__alert-section">
-        <h2 className="dashboard__alert-title">Alerts</h2>
-        <hr className="dashboard__alert-separator" />
+ <div className="dashboard__alert-section">
+    <h2 className="dashboard__alert-title">Alerts</h2>
+    <hr className="dashboard__alert-separator" />
+
+    {/* Loop through the grouped alerts by type */}
+    {Object.keys(groupedAlerts).map((type, index) => (
+      <div key={index} className="dashboard__alert-group">
+        <h3 className="dashboard__alert-type">{type} Alerts</h3> {/* Alert type header */}
         <ul className="dashboard__alert-list">
-          {alerts.slice(0, showAllAlerts ? alerts.length : 3).map((alert) => (
-            <li key={alert.id} className="dashboard__alert-item">
-              {alert.message}
+          {groupedAlerts[type].slice(0, showAllAlerts ? groupedAlerts[type].length : 3).map((detail, idx) => (
+            <li key={idx} className="dashboard__alert-item">
+              {detail} {/* Display alert details */}
             </li>
           ))}
         </ul>
-        {alerts.length > 3 && (
-          <button
-            className="dashboard__show-more"
-            onClick={() => setShowAllAlerts(!showAllAlerts)}
-          >
-            {showAllAlerts ? "Show Less" : "Show More"}
-          </button>
-        )}
       </div>
+    ))}
 
+    {/* Show more/less button if needed */}
+    {alerts.length > 3 && (
+      <button
+        className="dashboard__show-more"
+        onClick={() => setShowAllAlerts(!showAllAlerts)}
+      >
+        {showAllAlerts ? "Show Less" : "Show More"}
+      </button>
+    )}
+  </div>
+  
       <div className="dashboard__buttons-container">
         {/* Download Button Section */}
         <div className="dashboard__download-section">
