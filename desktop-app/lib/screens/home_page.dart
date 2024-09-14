@@ -125,7 +125,7 @@ class HomePageState extends ConsumerState<HomePage> {
 
             await getFileMetadatas(fileEntity);
 
-            await Future.delayed(const Duration(milliseconds: 500));
+            await Future.delayed(const Duration(milliseconds: 100));
           }
         }
       }
@@ -512,7 +512,7 @@ class HomePageState extends ConsumerState<HomePage> {
               ),
             ),
             Positioned(
-              top: -11,
+              top: -9,
               right: 90,
               child: GestureDetector(
                 onTap: _goToWebsite,

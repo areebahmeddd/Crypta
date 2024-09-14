@@ -135,6 +135,7 @@ class _IocState extends State<Ioc> {
               const SizedBox(height: 12),
               SizedBox(
                 height: 200,
+                width: double.infinity,
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -144,15 +145,19 @@ class _IocState extends State<Ioc> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              '${i + 1}. Issue:',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                              ),
+                            Row(
+                              children: [
+                                Text(
+                                  '${i + 1}. Issue:',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                Text(recommendations[i]['issue']),
+                              ],
                             ),
-                            const SizedBox(height: 8),
-                            Text(recommendations[i]['issue']),
+                            
                             const SizedBox(height: 8),
                             const Text(
                               'Action:',
