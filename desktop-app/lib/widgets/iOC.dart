@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:crypta/utils/get_color_based_on_type.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 class Ioc extends StatefulWidget {
   final Map<String, dynamic> result;
@@ -146,6 +147,7 @@ class _IocState extends State<Ioc> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
                                   '${i + 1}. Issue:',
@@ -154,7 +156,8 @@ class _IocState extends State<Ioc> {
                                     fontSize: 14,
                                   ),
                                 ),
-                                Text(recommendations[i]['issue']),
+                                const Gap(4),
+                                Text(recommendations[i]['issue'], style: const TextStyle(fontSize: 14),),
                               ],
                             ),
                             
