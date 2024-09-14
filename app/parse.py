@@ -61,10 +61,15 @@ def process_file(file_path, rules_path):
     else:
         print(f'{Fore.RED}[ERROR]{Style.RESET_ALL} Unsupported file type: {Fore.CYAN}{file_path}{Style.RESET_ALL}')
 
-def find_type(file_path):
-    # Determine file type based on file extension
-    name, extension = os.path.splitext(file_path)
+def find_type(file_path: str) -> str:
+    '''Determine file type based on file extension or name.'''
+    file_name_with_extension = os.path.basename(file_path).lower()
+    name, extension = os.path.splitext(file_name_with_extension)
     extension = extension.lower()
+
+    # Special case for registry files
+    if file_name_with_extension in ['ntuser.dat', 'sam', 'security', 'software', 'system'] or extension == '.hiv':
+        return 'registry'
 
     # Check if file extension matches known file types in metadata
     for file_type, extensions in file_types.items():

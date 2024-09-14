@@ -9,6 +9,7 @@ from network import scan_network
 from drive import scan_drive
 from gemini import predict, summarize
 from disk import process_disk_image
+from registry import process_registry_hive
 
 app = FastAPI()
 app.add_middleware(
@@ -87,6 +88,18 @@ async def analyze(uploadedFiles: list[UploadFile] = File(...), yaraFile: UploadF
                     'risk_type': 'Malware',
                     'vulnerability_type': 'Disk',
                     'vulnerability_count': len(disk_data)
+                })
+            
+            elif file_type == 'registry':
+                registry_data = process_registry_hive(file_path)
+                # Append registry scan results to scan_results list as dictionary
+                scan_results.append({
+                    'file': os.path.basename(file_path),
+                    'registry': registry_data,
+                    'risk_level': 'High',
+                    'risk_type': 'Malware',
+                    'vulnerability_type': 'Registry',
+                    'vulnerability_count': len(registry_data)
                 })
 
         return JSONResponse(content={

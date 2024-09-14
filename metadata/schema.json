@@ -16,6 +16,7 @@
     "disk": [".aff", ".e01", ".iso", ".vhd", ".vmdk"],
     "memory": [".dmp", ".mem", ".raw", ".vmem"],
     "network": [".cap", ".pcap", ".pcapng"],
+    "registry": [".hiv", "ntuser.dat", "sam", "security", "software", "system"],
     "script": [".bat", ".js", ".pl", ".py", ".sh"],
     "text": [".csv", ".html", ".htm", ".json", ".log", ".txt", ".xml"]
   }
