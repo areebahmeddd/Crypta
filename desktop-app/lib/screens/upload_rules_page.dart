@@ -133,12 +133,13 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
           isAnalysing
               ? Container(
                   child: Center(
-                    child: Lottie.asset('assets/lottie/loading.json', height: 400),
+                    child:
+                        Lottie.asset('assets/lottie/loading.json', height: 400),
                   ),
                 )
               : Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Center(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Center(
                     child: Container(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -200,14 +201,14 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                                     ],
                                   ),
                                 ),
-                      
+
                                 const SizedBox(height: 30),
-                      
+
                                 // OR divider
                                 const Text('--OR--'),
-                      
+
                                 const SizedBox(height: 30),
-                      
+
                                 // Default Rules
                                 Padding(
                                   padding: const EdgeInsets.only(left: 70),
@@ -235,6 +236,7 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                                                     val == 0
                                                         ? val = 1
                                                         : val = 0;
+                                                    
                                                   });
                                                 },
                                                 child: Container(
@@ -287,9 +289,9 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                                     ],
                                   ),
                                 ),
-                      
+
                                 const SizedBox(height: 40),
-                      
+
                                 // Back and Analyze Buttons
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -315,10 +317,15 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                                     ),
                                     const SizedBox(width: 20),
                                     ElevatedButton(
-                                      onPressed: uploadFiles,
+                                      onPressed:
+                                          val == 0 && selectedFile == null
+                                              ? () {}
+                                              : uploadFiles,
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor:
-                                            myColorFromHex('#457d58'),
+                                            val == 0 && selectedFile == null
+                                                ? Colors.grey
+                                                : myColorFromHex('#457d58'),
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 100, vertical: 25),
                                         shape: RoundedRectangleBorder(
@@ -337,7 +344,7 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                             ),
                           ),
                           const SizedBox(height: 30),
-                      
+
                           // File Info
                           val == 0
                               ? selectedFile == null
@@ -468,7 +475,7 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                       ),
                     ),
                   ),
-              ),
+                ),
           Positioned(
             top: -10,
             right: -15,
