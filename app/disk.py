@@ -10,9 +10,6 @@ from typing import List, Dict, Any
 with open('metadata/schema.json', 'r') as file:
     metadata = json.load(file)
 
-rules = yara.compile(filepath='yara-rules/security.yara')
-
-
 class EwfImage(pytsk3.Img_Info):
     """A class to wrap EWF handle for reading .E01 image files."""
 
@@ -34,7 +31,7 @@ class EwfImage(pytsk3.Img_Info):
         return self._ewf_handle.get_media_size()
 
 
-def gather_file_metadata(fs: pytsk3.FS_Info, directory_path: str) -> List[Dict[str, Any]]:
+def gather_file_metadata(fs: pytsk3.FS_Info, directory_path: str, rules_path: str) -> List[Dict[str, Any]]:
     """Recursively traverse directories and gather metadata from supported files."""
     try:
         directory = fs.open_dir(directory_path)
@@ -50,7 +47,7 @@ def gather_file_metadata(fs: pytsk3.FS_Info, directory_path: str) -> List[Dict[s
             try:
                 if entry.info.meta.type == pytsk3.TSK_FS_META_TYPE_DIR:
                     # Recursively traverse subdirectories
-                    file_metadata.extend(gather_file_metadata(fs, f"{directory_path}/{name}"))
+                    file_metadata.extend(gather_file_metadata(fs, f"{directory_path}/{name}", rules_path))
                 else:
                     file_ext = os.path.splitext(name)[1]
                     supported_extensions = [
@@ -63,6 +60,8 @@ def gather_file_metadata(fs: pytsk3.FS_Info, directory_path: str) -> List[Dict[s
                             datetime.fromtimestamp(entry.info.meta.mtime).strftime('%d/%m/%Y')
                             if entry.info.meta.mtime != 0 else 'N/A'
                         )
+                        
+                        rules = yara.compile(filepath=rules_path)
 
                         # Read file content and run YARA rules if the file size is valid
                         yara_matches = []
@@ -89,8 +88,10 @@ def gather_file_metadata(fs: pytsk3.FS_Info, directory_path: str) -> List[Dict[s
     return file_metadata
 
 
-def process_disk_image(image_path: str) -> List[Dict[str, Any]]:
+def process_disk_image(image_path: str, rules_path: str) -> List[Dict[str, Any]]:
     """Open an E01 image, traverse file systems, and return metadata of supported files."""
+    
+    print(f"Processing disk image: {image_path}")
     if not os.path.exists(image_path):
         print(f"Image path does not exist: {image_path}")
         return []
@@ -106,7 +107,7 @@ def process_disk_image(image_path: str) -> List[Dict[str, Any]]:
         for partition in partition_table:
             if any(fs in partition.desc.decode() for fs in ["DOS FAT16", "Win95 FAT32", "NTFS"]):
                 filesystem = pytsk3.FS_Info(ewf_image, offset=partition.start * 512)
-                file_metadata = gather_file_metadata(filesystem, "/")
+                file_metadata = gather_file_metadata(filesystem, "/", rules_path)
                 ewf_handle.close()
                 return file_metadata
 
@@ -117,3 +118,8 @@ def process_disk_image(image_path: str) -> List[Dict[str, Any]]:
         print(f"An error occurred: {e}")
 
     return []
+
+# Example usage
+if (__name__ == "__main__"):
+    image_metadata = process_disk_image(r"C:\Users\shiva\Downloads\ubnist1.gen2.E01", "yara-rules/security.yara")
+    print(json.dumps(image_metadata, indent=2))

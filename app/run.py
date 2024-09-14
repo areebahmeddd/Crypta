@@ -8,6 +8,7 @@ from parse import scan_file, find_type
 from network import scan_network
 from drive import scan_drive
 from gemini import predict, summarize
+from disk import process_disk_image
 
 app = FastAPI()
 app.add_middleware(
@@ -74,6 +75,18 @@ async def analyze(uploadedFiles: list[UploadFile] = File(...), yaraFile: UploadF
                     'risk_type': 'Firewall Bypass',
                     'vulnerability_type': 'Network',
                     'vulnerability_count': len(network_data)
+                })
+            
+            elif file_type == 'disk':
+                disk_data = process_disk_image(file_path, rules_path)
+                # Append disk scan results to scan_results list as dictionary
+                scan_results.append({
+                    'file': os.path.basename(file_path),
+                    'disk': disk_data,
+                    'risk_level': 'High',
+                    'risk_type': 'Malware',
+                    'vulnerability_type': 'Disk',
+                    'vulnerability_count': len(disk_data)
                 })
 
         return JSONResponse(content={
