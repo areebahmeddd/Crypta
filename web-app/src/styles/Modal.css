@@ -4,12 +4,12 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100%; /* Change to 100% for full viewport height */
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 1000;/* Allow scrolling if modal content overflows */
 }
 
 .modal-content {
@@ -17,23 +17,28 @@
   border-radius: 12px;
   width: 90%;
   max-width: 900px;
+  max-height: 90vh; /* Ensure modal height is within viewport height */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .modal-header {
-  padding: 16px;
   border-bottom: 1px solid #e0e0e0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: #f5f5f5;
+  position: relative;
 }
 
-.modal-header h2 {
-  margin: 0;
-  font-size: 1.5rem;
+.modal-header h2{
+  justify-content: space-between;
+  align-items: center;
+ margin-top: 20px;
+ margin-left: 50px;
 }
 
 .modal-close-btn {
@@ -55,8 +60,9 @@
 }
 
 .indicator-card {
-  padding: 16px;
+  padding: 12px;
   background: #fafafa;
+  flex: 1; /* Allow the card to grow and shrink as needed */ /* Allow scrolling inside the card if needed */
 }
 
 .indicator-table {
@@ -71,7 +77,7 @@
 .indicator-table-header {
   display: flex;
   background: #e0e0e0;
-  padding: 12px;
+  padding: 10px;
   font-weight: bold;
 }
 
@@ -87,7 +93,7 @@
 
 .indicator-table-row {
   display: flex;
-  padding: 12px;
+  padding: 8px;
   border-bottom: 1px solid #e0e0e0;
   align-items: center;
   transition: background 0.2s;
@@ -154,88 +160,117 @@
 
 /* Modal.css or appropriate stylesheet */
 
-/* Adjusted CSS for Recommended Fixes section */
-
-.dashboard__alert-section {
-margin-bottom: 20px; /* Space from other sections */
-margin-left: 20px;
-max-height: 400px; /* Set a max height for the section */
-overflow-y: auto;
+/* Styling for Recommended Fixes Section */
+.dashboard_r_alert-section {
+  margin-bottom: 20px;
+  margin-left: 20px;
+  max-height: 400px; /* Adjust as needed */
+  overflow-y: auto;
 }
 
-.dashboard__alert-title {
-font-size: 1.75rem; /* Larger font size for the title */
-margin-bottom: 5px; /* Space between title and separator */
+.dashboard_r_alert-title {
+  font-size: 1.75rem;
+  margin-bottom: 10px;
 }
 
-.dashboard__alert-separator {
-border: 0; /* Remove default border */
-border-top: 1px solid #ddd; /* Separator line */
-margin-bottom: 10px; /* Space between separator and alert list */
+.dashboard_r_alert-separator {
+  border: 0;
+  border-top: 1px solid #ddd;
+  margin-bottom: 10px;
 }
 
-.dashboard__alert-list {
-list-style-type: disc; /* Bullet points for the list */
-padding-left: 20px; /* Space for bullet points */
-margin: 0; /* Remove default margin */
+.dashboard_r_alert-group {
+  margin-bottom: 15px;
 }
 
-.dashboard__alert-item {
-margin-bottom: 10px; /* Space between alert items */
-font-size: 16px; /* Font size for alert text */
+.dashboard_r_alert-issue{
+  margin-bottom: 10px;
 }
 
-/* Optional: Show more/less button styling to match the design */
+.dashboard_r_alert-fixes {
+  margin-bottom: 10px;
+}
+
+.dashboard_r_alert-issue-row {
+  display: flex;
+  align-items: center;
+}
+
+.dashboard_r_alert-issue-title,
+.dashboard_r_alert-fixes-title {
+  margin-bottom: 2px;
+  font-size: 18px;
+  color: #555;
+  font-weight: 600;
+}
+
+.dashboard_r_alert-issue-description {
+  font-size: 18px;
+  color: #000000;
+  margin-left: 10px;
+  flex-grow: 1;
+}
+
+.dashboard_fix_alert-list {
+  list-style-type: disc; /* Bullet points for the fixes */
+  padding-left: 20px;
+  margin: 0;
+}
+
+.dashboard_r_alert-item {
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
 .dashboard__show-more {
-background: none; /* No background */
-border: none; /* Remove border */
-color: #457d58; /* Button color */
-cursor: pointer; /* Pointer cursor on hover */
-font-size: 16px; /* Font size */
-margin-top: 10px; /* Space above button */
-transition: background-color 0.3s ease;
+  background: none;
+  border: none;
+  color: #457d58;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
 }
 
 .dashboard__show-more:hover {
-text-decoration: underline;/* Darker shade on hover */
+  text-decoration: underline;
 }
 
 .dashboard__show-more:disabled {
-background-color: #ccc; /* Grey background for disabled state */
-cursor: not-allowed;
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
 /* Style for the Level column */
 .level-column {
-width: 50%;
-padding: 10px;
-border-radius: 4px;
-font-weight: bold;
-margin-left: 25%;
+  width: 50%;
+  padding: 10px;
+  border-radius: 4px;
+  font-weight: bold;
+  margin-left: 25%;
 }
 
 /* Define color styles for each level */
 .level_all {
-justify-content: center;
+  justify-content: center;
 }
 
 .level-high {
-background-color: #DF5656
-; /* High severity color */
-color: #fff; /* White text */
+  background-color: #DF5656; /* High severity color */
+  color: #fff; /* White text */
 }
 
 .level-low-medium {
-background-color: #FFD65A; /* Medium-High severity color */
-color: #fff; /* White text */
+  background-color: #FFD65A; /* Medium-High severity color */
+  color: #fff; /* White text */
 }
 
 .level-medium {
-background-color: #F8A72C; /* Medium severity color */
-color: #000; /* Black text */
+  background-color: #F8A72C; /* Medium severity color */
+  color: #000; /* Black text */
 }
 
 .level-low {
-background-color: #E0E0E0; /* Low severity color */
-color: #000; /* Black text */
+  background-color: #E0E0E0; /* Low severity color */
+  color: #000; /* Black text */
 }
