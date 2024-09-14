@@ -118,8 +118,3 @@ def process_disk_image(image_path: str, rules_path: str) -> List[Dict[str, Any]]
         print(f"An error occurred: {e}")
 
     return []
-
-# Example usage
-if (__name__ == "__main__"):
-    image_metadata = process_disk_image(r"C:\Users\shiva\Downloads\ubnist1.gen2.E01", "yara-rules/security.yara")
-    print(json.dumps(image_metadata, indent=2))
