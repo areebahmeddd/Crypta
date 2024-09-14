@@ -57,49 +57,18 @@ class FileTableState extends ConsumerState<FileTable> {
                   "File Summary",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                // Dropdown and button
-                // Row(
-                //   children: [
-                //     DropdownButton<String>(
-                //       value: 'All Column',
-                //       items: ['All Column', 'File', 'Type', 'Size']
-                //           .map((String value) {
-                //         return DropdownMenuItem<String>(
-                //           value: value,
-                //           child: Text(value),
-                //         );
-                //       }).toList(),
-                //       onChanged: (String? newValue) {
-                //         // Handle dropdown change
-                //       },
-                //     ),
-                //     const SizedBox(width: 10),
-                //     // ElevatedButton(
-                //     //   onPressed: () {
-                //     //     // Handle dispatch action
-                //     //   },
-                //     //   style: ElevatedButton.styleFrom(
-                //     //     backgroundColor: myColorFromHex('#457d58'),
-                //     //     padding: const EdgeInsets.symmetric(horizontal: 20),
-                //     //     shape: RoundedRectangleBorder(
-                //     //       borderRadius: BorderRadius.circular(8),
-                //     //     ),
-                //     //   ),
-                //     //   child: const Text("DISPATCH SELECTED", style: TextStyle(color: Colors.white)),
-                //     // ),
-                //   ],
-                // ),
               ],
             ),
           ),
           // Data table
           ConstrainedBox(
-            constraints: const BoxConstraints(maxHeight: 400),
+            constraints: const BoxConstraints(maxHeight: 200),
             child: DataTable2(
               columnSpacing: 20,
               horizontalMargin: 12,
               sortColumnIndex: sortColumnIndex,
               sortAscending: ascending,
+              minWidth: 200,
               columns: [
                 const DataColumn(
                   label: Text(
@@ -191,15 +160,15 @@ class FileTableState extends ConsumerState<FileTable> {
                   (file) => file['name'] == result.value['file'],
                   orElse: () => {}, // Return null if no match is found
                 );
-
+            
                 String size = '';
                 String type = '';
-
+            
                 if (matchingFile.isNotEmpty) {
                   // Access size and type
                   size = matchingFile['size']!;
                   type = matchingFile['type']!;
-
+            
                   log('File size: $size');
                   log('File type: $type');
                 } else {
@@ -235,7 +204,7 @@ class FileTableState extends ConsumerState<FileTable> {
           Text('No. of Files: ${sortedFileData.length}'),
           // Pagination Controls
           Padding(
-            padding: const EdgeInsets.only(top: 10.0),
+            padding: const EdgeInsets.only(top: 4.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
