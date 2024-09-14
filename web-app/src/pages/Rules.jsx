@@ -123,12 +123,12 @@ function Rules() {
           if (responseData) {
             navigate("/dashboard", {
               state: {
-                processingMethod: selectedOption,
-                rulesFile: rulesFile ? rulesFile.name : null,
-                processedData: responseData.processedData,
                 filesFromHome: location.state.files,
-              },
-            });
+                results: responseData.results, // Assuming responseData is the data you received from the backend
+                gemini: responseData.gemini, // If you also need to pass gemini data
+              }
+              }
+            );            
           }
         } else {
           setErrorMessage(
