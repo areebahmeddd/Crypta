@@ -1,5 +1,6 @@
 import "dart:developer";
 
+import "package:crypta/providers/analysis_provider.dart";
 import "package:crypta/providers/files_provider.dart";
 import "package:crypta/screens/analysis_page.dart";
 import "package:crypta/screens/chat_page.dart";
@@ -57,10 +58,12 @@ class DashboardPageState extends ConsumerState<DashboardPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const DrawerHeader(
-                  child: Text(
-                    'Dashboard',
-                    style: TextStyle(color: Colors.white, fontSize: 24),
+                const Center(
+                  child: DrawerHeader(
+                    child: Text(
+                      'Dashboard',
+                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    ),
                   ),
                 ),
                 ListTile(
@@ -69,6 +72,7 @@ class DashboardPageState extends ConsumerState<DashboardPage> {
                       const Text('Home', style: TextStyle(color: Colors.white)),
                   onTap: () {
                     ref.read(filesProvider.notifier).clearFiles();
+                    ref.read(analysisProvider.notifier).clearAnalysis();
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -76,9 +80,11 @@ class DashboardPageState extends ConsumerState<DashboardPage> {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.analytics, color: Colors.white),
-                  title: const Text('Analysis',
-                      style: TextStyle(color: Colors.white)),
+                  leading: Icon(Icons.analytics,
+                      color: isAnalysisPage ? Colors.black : Colors.white),
+                  title: Text('Analysis',
+                      style: TextStyle(
+                          color: isAnalysisPage ? Colors.black : Colors.white)),
                   onTap: () {
                     setState(() {
                       isAnalysisPage = true;
@@ -118,17 +124,6 @@ class DashboardPageState extends ConsumerState<DashboardPage> {
                 ListTile(
                   leading: const Image(
                     image: AssetImage(
-                      'assets/images/github-logo.png',
-                    ),
-                    height: 22,
-                  ),
-                  title: const Text('Github',
-                      style: TextStyle(color: Colors.white)),
-                  onTap: _goToGithub,
-                ),
-                ListTile(
-                  leading: const Image(
-                    image: AssetImage(
                       'assets/images/domain.png',
                     ),
                     height: 22,
@@ -136,6 +131,17 @@ class DashboardPageState extends ConsumerState<DashboardPage> {
                   title: const Text('Website',
                       style: TextStyle(color: Colors.white)),
                   onTap: _goToWebsite,
+                ),
+                ListTile(
+                  leading: const Image(
+                    image: AssetImage(
+                      'assets/images/github-logo.png',
+                    ),
+                    height: 22,
+                  ),
+                  title: const Text('Github',
+                      style: TextStyle(color: Colors.white)),
+                  onTap: _goToGithub,
                 ),
                 ListTile(
                   leading: const Image(
