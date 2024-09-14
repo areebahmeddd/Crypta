@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:crypta/utils/get_color_based_on_type.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 class Ioc extends StatefulWidget {
   final Map<String, dynamic> result;
@@ -135,6 +136,7 @@ class _IocState extends State<Ioc> {
               const SizedBox(height: 12),
               SizedBox(
                 height: 200,
+                width: double.infinity,
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -144,15 +146,21 @@ class _IocState extends State<Ioc> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              '${i + 1}. Issue:',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${i + 1}. Issue:',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                const Gap(4),
+                                Text(recommendations[i]['issue'], style: const TextStyle(fontSize: 14),),
+                              ],
                             ),
-                            const SizedBox(height: 8),
-                            Text(recommendations[i]['issue']),
+                            
                             const SizedBox(height: 8),
                             const Text(
                               'Action:',

@@ -51,7 +51,7 @@ class FileTable2State extends ConsumerState<FileTable2> {
           ),
           // Data table
           SizedBox(
-            height: 300,
+            height: 200,
             child: DataTable2(
               columnSpacing: 20,
               horizontalMargin: 16,
@@ -122,6 +122,8 @@ class FileTable2State extends ConsumerState<FileTable2> {
                   .toList(),
             ),
           ),
+
+          Text('No. of files: ${analysis['results'].length}', style: const TextStyle(color: Colors.grey),),
         ],
       ),
     );

@@ -8,8 +8,12 @@ from parse import scan_file, find_type
 from network import scan_network
 from drive import scan_drive
 from gemini import predict, summarize
+<<<<<<< HEAD
 from disk import process_disk_image
 from registry import process_registry_hive
+=======
+# from disk import process_disk_image
+>>>>>>> 3a51509b87c489ca926cdc801cb3edcff28cc8a1
 
 app = FastAPI()
 app.add_middleware(
