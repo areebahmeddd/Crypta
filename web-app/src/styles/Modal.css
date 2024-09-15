@@ -194,6 +194,7 @@
 .dashboard_r_alert-issue-row {
   display: flex;
   align-items: center;
+  align-items: flex-start;
 }
 
 .dashboard_r_alert-issue-title,
@@ -202,6 +203,7 @@
   font-size: 18px;
   color: #555;
   font-weight: 600;
+  min-width: 75px;
 }
 
 .dashboard_r_alert-issue-description {
@@ -209,17 +211,18 @@
   color: #000000;
   margin-left: 10px;
   flex-grow: 1;
+  word-wrap: break-word; 
 }
 
 .dashboard_fix_alert-list {
   list-style-type: disc; /* Bullet points for the fixes */
-  padding-left: 20px;
+  padding-left: 40px;
   margin: 0;
 }
 
 .dashboard_r_alert-item {
   margin-bottom: 8px;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .dashboard__show-more {

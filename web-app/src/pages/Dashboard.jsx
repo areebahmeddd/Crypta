@@ -1,7 +1,9 @@
 // src/components/Dashboard.js
 import React, { useState, useCallback, useEffect } from "react";
+import axios from 'axios';
 import Modal from "react-modal";
-import ModalPage from "../pages/Modal";
+import ModalPage from "../components/Modal";
+import DashboardCharts from '../components/Graph';
 import { useLocation } from "react-router-dom";
 import jsPDF from "jspdf";
 import * as XLSX from "xlsx";
@@ -22,29 +24,6 @@ import {
   faSortDown,
 } from "@fortawesome/free-solid-svg-icons";
 import _ from "lodash";
-import { Line, Bar } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
 
 Modal.setAppElement("#root"); // For accessibility
 
@@ -87,48 +66,7 @@ const groupedAlerts = alerts.reduce((acc, alert) => {
   console.log('Files From Home:', filesFromHome);
   console.log('Scan Results:', results);
   console.log('Scan Results:', gemini);
-
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: "top",
-        labels: {
-          color: "#333", // Darker color for better readability
-          font: {
-            size: 14, // Increase font size
-          },
-        },
-      },
-      tooltip: {
-        backgroundColor: "#333", // Dark tooltip background
-        titleColor: "#fff", // White tooltip title
-        bodyColor: "#fff", // White tooltip body
-        borderColor: "#ddd", // Light border color
-        borderWidth: 1, // Border width for tooltip
-      },
-    },
-    scales: {
-      x: {
-        grid: {
-          borderColor: "#ddd", // Light grid line color
-        },
-        ticks: {
-          color: "#333", // Darker color for axis ticks
-        },
-      },
-      y: {
-        grid: {
-          borderColor: "#ddd", // Light grid line color
-        },
-        ticks: {
-          color: "#333", // Darker color for axis ticks
-        },
-      },
-    },
-  };
-
+ 
 // Map data by matching filesFromHome with results based on file names
 const fileData = results.map((data) => {
   // Find the matching file in filesFromHome based on the file name
@@ -159,46 +97,10 @@ const vulnerabilityData = results.map((data) => {
     indicators, // Include the updated indicators
   };
 });
+
   const [displayedFileData, setDisplayedFileData] = useState(fileData);
   const [displayedVulnerabilityData, setDisplayedVulnerabilityData] =
     useState(vulnerabilityData);
-
-  // Prepare data for charts
-  const fileTypes = fileData.reduce((acc, data) => {
-    acc[data.type] = (acc[data.type] || 0) + 1;
-    return acc;
-  }, {});
-
-  const vulnerabilities = vulnerabilityData.reduce((acc, data) => {
-    acc[data.type] = (acc[data.type] || 0) + 1;
-    return acc;
-  }, {});
-
-  const fileTypeData = {
-    labels: Object.keys(fileTypes),
-    datasets: [
-      {
-        label: "File Types",
-        data: Object.values(fileTypes),
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
-        borderColor: "rgba(75, 192, 192, 1)",
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const vulnerabilityDataSet = {
-    labels: Object.keys(vulnerabilities),
-    datasets: [
-      {
-        label: "Vulnerabilities",
-        data: Object.values(vulnerabilities),
-        backgroundColor: "rgba(153, 102, 255, 0.2)",
-        borderColor: "rgba(153, 102, 255, 1)",
-        borderWidth: 1,
-      },
-    ],
-  };
 
  // Helper function to convert sizes to bytes
 const convertSizeToBytes = (sizeString) => {
@@ -294,11 +196,7 @@ const handleSort = (key) => {
   );
 
   const getVulnerabilityColor = (count) => {
-    if (count >= 401) return "#DF5656";  // Dark Red
-    if (count >= 301) return "#F56C6C";  // Light Red
-    if (count >= 201) return "#F8A72C";  // Orange
-    if (count >= 151) return "#FFD65A";  // Yellow
-    if (count >= 101) return "#F8E1A1";  // Light Yellow
+    if (count >= 101) return "#DF5656";  // Dark Red
     if (count >= 51) return "#F8A72C";  // Orange
     if (count >= 1) return "#FFD65A";  // Yellow
     return "#8AC449";  // Green
@@ -367,25 +265,42 @@ const handleSort = (key) => {
   };
 
   // Generate PDF report
-  const downloadPDF = () => {
-    const doc = new jsPDF();
-    doc.text("File Details Report", 20, 10);
-    doc.autoTable({
-      head: [["File", "Type", "Size", "Vulnerability"]],
-      body: fileData.map(({ file, type, size, vulnerability }) => [
-        file,
-        type,
-        size,
-        vulnerability,
-      ]),
-    });
-    doc.text("Vulnerability Information", 20, 40);
-    doc.autoTable({
-      head: [["File", "Vulnerability Type", "Indicators"]],
-      body: vulnerabilityData.map(({ file, type }) => [file, type]),
-    });
-    doc.save("report.pdf");
-  };
+  async function downloadPDF() {
+      // Define the data to be sent to the backend
+      const requestData = {
+          data: {
+            fileData: fileData,
+            vulnerabilityData: vulnerabilityData
+        },
+          type: 'PDF'
+      };
+
+      try {
+          // Send POST request to the backend
+          const response = await axios.post("http://127.0.0.1:8000/api/download", requestData, {
+              responseType: 'blob'  // Important for handling file downloads
+          });
+  
+          // Create a Blob from the response
+          const blob = new Blob([response.data], { type: 'application/pdf' });
+  
+          // Create a link element
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = 'report.pdf'; // You can set the filename here
+  
+          // Append to the DOM and click the link to trigger download
+          document.body.appendChild(link);
+          link.click();
+  
+          // Remove the link after download
+          document.body.removeChild(link);
+      } catch (error) {
+          console.error('Error generating PDF:', error);
+      }
+  }
+  
+
 
   // Generate Excel report
   const downloadWORD = () => {
@@ -449,11 +364,63 @@ const handleSort = (key) => {
     setIsExportMenuOpen(false); // Close the dropdown after selecting a format
   };
 
-  // Handle export action
-  const handleExport = () => {
-    // Your export logic here, e.g., sending the selected format to the backend
-    console.log(`Exporting in ${selectedExportFormat} format`);
+  const exportJSON = () => {
+    // Combine the data into a single object
+    const combinedData = {
+        fileData: fileData,
+        vulnerabilityData: vulnerabilityData
+    };
+
+    // Convert the combined data to a JSON string
+    const jsonString = JSON.stringify(combinedData, null, 2);  // Pretty-print with 2 spaces
+
+    // Create a Blob from the JSON string
+    const blob = new Blob([jsonString], { type: 'application/json' });
+
+    // Create a link element
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'data.json';  // Name of the file to be downloaded
+
+    // Append to the DOM and click the link to trigger download
+    document.body.appendChild(link);
+    link.click();
+
+    // Remove the link after download
+    document.body.removeChild(link);
+};
+
+  const exportXML = () => {
+    // Implementation for exporting as XML
   };
+  
+  const exportTEXT = () => {
+    // Implementation for exporting as TEXT
+  };
+  
+  const exportMD = () => {
+    // Implementation for exporting as MD
+  };
+  
+const handleExport = () => {
+  switch (selectedExportFormat) {
+    case "JSON":
+      exportJSON();
+      break;
+    case "XML":
+      exportXML();
+      break;
+    case "TEXT":
+      exportTEXT();
+      break;
+    case "MD":
+      exportMD();
+      break;
+    default:
+      break;
+  }
+};
+
 
   return (
     <div className="dashboard__container">
@@ -493,7 +460,7 @@ const handleSort = (key) => {
       </div>
 
       {/* File Details Card */}
-      <h2>File Details</h2>
+      <h2>File Summary</h2>
       <div className="dashboard__card">
         <div className="dashboard__card-header">
           <div>File</div>
@@ -618,7 +585,7 @@ const handleSort = (key) => {
       </div>
 
       {/* Vulnerability Information Card */}
-      <h2>Vulnerability Information</h2>
+      <h2>Vulnerability Summary</h2>
       <div className="dashboard_v_card">
         <div className="dashboard_v_card-header">
           <div>File</div>
@@ -782,19 +749,9 @@ const handleSort = (key) => {
         </div>
       </div>
 
-      <h1 className="graph__title">Graphs</h1>
-      <hr className="dashboard__separator" />
-      <div className="dashboard__charts">
-        <div className="dashboard__chart-container">
-          <h2>File Types Distribution</h2>
-          <Bar data={fileTypeData} options={{ responsive: true }} />
-        </div>
-
-        <div className="dashboard__chart-container">
-          <h2>Vulnerability Types Distribution</h2>
-          <Line data={vulnerabilityDataSet} options={{ responsive: true }} />
-        </div>
-      </div>
+      <div>
+      <DashboardCharts fileData={fileData} vulnerabilityData={vulnerabilityData} />
+    </div>
     </div>
   );
 };

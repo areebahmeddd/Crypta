@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import "../styles/Rules.css";
+import LoadingPage from '../pages/Loading'; 
 import uploadIcon from "../assets/upload.png";
 import defaultRulesLogo from "../assets/logo/defaultIcon.png";
 import defaultRulesFile from "../assets/static/security.yara";
@@ -15,6 +16,7 @@ function Rules() {
   const [rulesFile, setRulesFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isNavigating, setIsNavigating] = useState(false);
 
   // Update state when files are received from the previous page
   useEffect(() => {
@@ -93,6 +95,7 @@ function Rules() {
   const handleAnalyze = async () => {
     if (selectedOption || rulesFile) {
       setLoading(true);
+      setIsNavigating(true);
       setErrorMessage("");
       try {
         const formData = new FormData();
@@ -139,6 +142,7 @@ function Rules() {
         setErrorMessage(`Error: ${error.message}`);
       } finally {
         setLoading(false);
+        setIsNavigating(false); 
       }
     } else {
       setErrorMessage("Please select a file to analyze.");
@@ -146,6 +150,8 @@ function Rules() {
   };
 
   return (
+    <>
+    {isNavigating ? <LoadingPage /> : (
     <div className="options-containers">
       <div className="options-wrappers">
         <h2 className="headers">Upload YARA Rules</h2>
@@ -255,6 +261,8 @@ function Rules() {
         ) : null}
       </div>
     </div>
+     )}
+     </>
   );
 }
 
