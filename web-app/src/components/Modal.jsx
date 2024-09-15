@@ -159,7 +159,7 @@ const ModalPage = ({ isOpen, onClose, data }) => {
               {/* Section for the Fixes */}
               <div className="dashboard_r_alert-fixes">
                 <h3 className="dashboard_r_alert-fixes-title">
-                  Recommended Fixes:
+                  Actions
                 </h3>
                 <ul className="dashboard_fix_alert-list">
                   {fixItem.fix
@@ -186,8 +186,6 @@ const ModalPage = ({ isOpen, onClose, data }) => {
       ) : (
         <p>No recommended fixes available.</p>
       )}
-
-      {/* Global Show more/less button */}
       {recommendedFixes.length > 3 && (
         <button
           className="dashboard__show-more"

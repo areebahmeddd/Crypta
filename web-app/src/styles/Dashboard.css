@@ -293,7 +293,7 @@
   margin-bottom: 10px;
   color: #333;
   font-weight: bold;
-
+  
 }
 
 .dashboard__alert-separator {
@@ -450,37 +450,4 @@
   .dashboard__dropdown-toggle {
     width: 100%; /* Ensure full width on small screens */
   }
-}
-
-  /* Container for the charts */
-
-  .graph__title {
-    font-size: 2rem;
-    margin-bottom: 10px;
-    text-align: center;
-    width: 100%;
-    margin-top: 70px;
-  }
-
-.dashboard__charts {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px; /* Space between the charts */
-  flex-wrap: wrap; /* Allow wrapping on smaller screens */
-}
-
-/* Individual chart container */
-.dashboard__chart-container {
-  flex: 1;
-  min-width: 300px; /* Minimum width for each chart */
-  max-width: 45%; /* Maximum width for each chart container */
-  box-sizing: border-box;
-  height: 400PX;
-}
-
-/* Optional: Adjust the chart titles if needed */
-.dashboard__chart-container h2 {
-  text-align: center;
-  margin-bottom: 10px;
-  margin-top: 20px;
 }
