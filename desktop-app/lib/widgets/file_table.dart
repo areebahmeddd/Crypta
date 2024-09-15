@@ -62,7 +62,7 @@ class FileTableState extends ConsumerState<FileTable> {
           ),
           // Data table
           ConstrainedBox(
-            constraints: const BoxConstraints(maxHeight: 200),
+            constraints: const BoxConstraints(maxHeight: 250),
             child: DataTable2(
               columnSpacing: 20,
               horizontalMargin: 12,

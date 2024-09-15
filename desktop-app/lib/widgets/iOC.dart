@@ -104,7 +104,7 @@ class _IocState extends State<Ioc> {
               const SizedBox(height: 16),
               // Table with 4 columns
               SizedBox(
-                height: 410,
+                height: 375,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: Table(

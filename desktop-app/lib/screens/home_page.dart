@@ -128,8 +128,6 @@ class HomePageState extends ConsumerState<HomePage> {
             await Future.delayed(const Duration(milliseconds: 100));
           }
         }
-
-
       }
     }
 
@@ -484,54 +482,168 @@ class HomePageState extends ConsumerState<HomePage> {
                 ],
               ),
             ),
+            // Positioned(
+            //   top: -10,
+            //   right: -1,
+            //   child: GestureDetector(
+            //     onTap: _goToGithub,
+            //     child: Container(
+            //       padding: const EdgeInsets.all(16),
+            //       child: const Row(
+            //         children: [
+            //           Text(
+            //             'Github',
+            //             style: const TextStyle(
+            //               color: Colors.black,
+            //               fontWeight: FontWeight.bold,
+            //             ),
+            //           ),
+            //           const Image(
+            //             image: AssetImage(
+            //               'assets/images/github-logo.png',
+            //             ),
+            //             height: 25,
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Positioned(
               top: -10,
-              right: -1,
-              child: GestureDetector(
-                onTap: _goToGithub,
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  child: const Image(
-                    image: AssetImage(
-                      'assets/images/github-logo.png',
+              right: 1,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: _goToYoutube,
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      child: const Row(
+                        children: [
+                          const Text(
+                            'Website',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Gap(6),
+                          const Image(
+                            image: AssetImage(
+                              'assets/images/domain.png',
+                            ),
+                            height: 20,
+                          ),
+                        ],
+                      ),
                     ),
-                    height: 25,
                   ),
-                ),
+                  GestureDetector(
+                    onTap: _goToYoutube,
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      child: const Row(
+                        children: [
+                          const Text(
+                            'Youtube',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Gap(6),
+                          const Image(
+                            image: AssetImage(
+                              'assets/images/youtube.png',
+                            ),
+                            height: 20,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: _goToYoutube,
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      child: const Row(
+                        children: [
+                          const Text(
+                            'Github',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Gap(6),
+                          const Image(
+                            image: AssetImage(
+                              'assets/images/github-logo.png',
+                            ),
+                            height: 20,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            Positioned(
-              top: -10,
-              right: 40,
-              child: GestureDetector(
-                onTap: _goToYoutube,
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  child: const Image(
-                    image: AssetImage(
-                      'assets/images/youtube.png',
-                    ),
-                    height: 30,
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              top: -9,
-              right: 90,
-              child: GestureDetector(
-                onTap: _goToWebsite,
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  child: const Image(
-                    image: AssetImage(
-                      'assets/images/domain.png',
-                    ),
-                    height: 25,
-                  ),
-                ),
-              ),
-            ),
+            // Positioned(
+            //   top: -10,
+            //   right: 40,
+            //   child: GestureDetector(
+            //     onTap: _goToYoutube,
+            //     child: Container(
+            //       padding: const EdgeInsets.all(16),
+            //       child: const Row(
+            //         children: [
+            //           const Text(
+            //             'Youtube',
+            //             style: TextStyle(
+            //               color: Colors.black,
+            //               fontWeight: FontWeight.bold,
+            //             ),
+            //           ),
+            //           const Image(
+            //             image: AssetImage(
+            //               'assets/images/youtube.png',
+            //             ),
+            //             height: 30,
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            // Positioned(
+            //   top: -9,
+            //   right: 90,
+            //   child: GestureDetector(
+            //     onTap: _goToWebsite,
+            //     child: Container(
+            //       padding: const EdgeInsets.all(16),
+            //       child: const Row(
+            //         children: [
+            //           const Text(
+            //             'Website',
+            //             style: TextStyle(
+            //               color: Colors.black,
+            //               fontWeight: FontWeight.bold,
+            //             ),
+            //           ),
+            //           const Image(
+            //             image: AssetImage(
+            //               'assets/images/domain.png',
+            //             ),
+            //             height: 25,
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Positioned(
               bottom: 5,
               right: 5,
