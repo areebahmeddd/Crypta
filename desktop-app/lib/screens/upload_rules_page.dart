@@ -138,7 +138,7 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                   ),
                 )
               : Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16.0).copyWith(top: 0, right: 0),
                   child: Center(
                     child: Container(
                       child: Column(
@@ -236,7 +236,6 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                                                     val == 0
                                                         ? val = 1
                                                         : val = 0;
-                                                    
                                                   });
                                                 },
                                                 child: Container(
@@ -264,10 +263,10 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                                                         ),
                                                 ),
                                               ),
-                                              const Gap(15),
+                                              const Gap(10),
                                               const SizedBox(width: 6),
                                               const Text(
-                                                'Default Rules',
+                                                'security.yara',
                                                 style: TextStyle(
                                                     fontSize: 16,
                                                     fontWeight:
@@ -277,7 +276,7 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                                           ),
                                           const SizedBox(width: 8),
                                           const Text(
-                                            'security.yara',
+                                            'Default rules',
                                             style: TextStyle(
                                                 fontSize: 14,
                                                 color: Color.fromARGB(
@@ -476,57 +475,145 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                     ),
                   ),
                 ),
+          //
           Positioned(
             top: -10,
-            right: -15,
-            child: GestureDetector(
-              onTap: _goToGithub,
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                child: const Image(
-                  image: AssetImage(
-                    'assets/images/github-logo.png',
+            right: 1,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                GestureDetector(
+                  onTap: _goToYoutube,
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    child: const Row(
+                      children: [
+                        const Text(
+                          'Website',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Gap(6),
+                        const Image(
+                          image: AssetImage(
+                            'assets/images/domain.png',
+                          ),
+                          height: 20,
+                        ),
+                      ],
+                    ),
                   ),
-                  height: 25,
                 ),
-              ),
+                GestureDetector(
+                  onTap: _goToYoutube,
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    child: const Row(
+                      children: [
+                        const Text(
+                          'Youtube',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Gap(6),
+                        const Image(
+                          image: AssetImage(
+                            'assets/images/youtube.png',
+                          ),
+                          height: 20,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: _goToYoutube,
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    child: const Row(
+                      children: [
+                        const Text(
+                          'Github',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Gap(6),
+                        const Image(
+                          image: AssetImage(
+                            'assets/images/github-logo.png',
+                          ),
+                          height: 20,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          Positioned(
-            top: -10,
-            right: 30,
-            child: GestureDetector(
-              onTap: _goToWebsite,
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                child: const Image(
-                  image: AssetImage(
-                    'assets/images/domain.png',
-                  ),
-                  height: 25,
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            top: -11,
-            right: 80,
-            child: GestureDetector(
-              onTap: _goToYoutube,
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                child: const Image(
-                  image: AssetImage(
-                    'assets/images/youtube.png',
-                  ),
-                  height: 30,
-                ),
-              ),
-            ),
-          ),
+          // Positioned(
+          //   top: -10,
+          //   right: 40,
+          //   child: GestureDetector(
+          //     onTap: _goToYoutube,
+          //     child: Container(
+          //       padding: const EdgeInsets.all(16),
+          //       child: const Row(
+          //         children: [
+          //           const Text(
+          //             'Youtube',
+          //             style: TextStyle(
+          //               color: Colors.black,
+          //               fontWeight: FontWeight.bold,
+          //             ),
+          //           ),
+          //           const Image(
+          //             image: AssetImage(
+          //               'assets/images/youtube.png',
+          //             ),
+          //             height: 30,
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          // Positioned(
+          //   top: -9,
+          //   right: 90,
+          //   child: GestureDetector(
+          //     onTap: _goToWebsite,
+          //     child: Container(
+          //       padding: const EdgeInsets.all(16),
+          //       child: const Row(
+          //         children: [
+          //           const Text(
+          //             'Website',
+          //             style: TextStyle(
+          //               color: Colors.black,
+          //               fontWeight: FontWeight.bold,
+          //             ),
+          //           ),
+          //           const Image(
+          //             image: AssetImage(
+          //               'assets/images/domain.png',
+          //             ),
+          //             height: 25,
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //   ),
+          // ),
           Positioned(
             bottom: 5,
-            right: 10,
+            right: 5,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: myColorFromHex('#457d58'),

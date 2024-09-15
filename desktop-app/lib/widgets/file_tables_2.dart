@@ -51,7 +51,7 @@ class FileTable2State extends ConsumerState<FileTable2> {
           ),
           // Data table
           SizedBox(
-            height: 200,
+            height: 250,
             child: DataTable2(
               columnSpacing: 20,
               horizontalMargin: 16,
