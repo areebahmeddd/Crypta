@@ -8,12 +8,14 @@ from parse import scan_file, find_type
 from network import scan_network
 from drive import scan_drive
 from gemini import predict, summarize
-<<<<<<< HEAD
+
 from disk import process_disk_image
 from registry import process_registry_hive
-=======
-# from disk import process_disk_image
->>>>>>> 3a51509b87c489ca926cdc801cb3edcff28cc8a1
+
+from models.Risk_type.risk_model import predict_type
+from models.Risk_level.risk import predict_level
+from models.Network_traffic.net import predict_network
+
 
 app = FastAPI()
 app.add_middleware(
@@ -64,14 +66,15 @@ async def analyze(uploadedFiles: list[UploadFile] = File(...), yaraFile: UploadF
                 scan_results.append({
                     'file': os.path.basename(file_path),
                     'rules': rule_counts,
-                    'risk_level': 'Low', # DUMMY VALUES FOR NOW
-                    'risk_type': 'File Error',
+                    'risk_level': predict_level(rule), # DUMMY VALUES FOR NOW
+                    'risk_type': predict_level(rule),
                     'vulnerability_type': 'Text',
                     'vulnerability_count': sum(rule_counts.values())
                 })
 
             elif file_type == 'network':
                 network_data = scan_network(file_path)
+                print(network_data)
                 # Append network scan results to scan_results list as dictionary
                 scan_results.append({
                     'file': os.path.basename(file_path),
@@ -84,15 +87,18 @@ async def analyze(uploadedFiles: list[UploadFile] = File(...), yaraFile: UploadF
             
             elif file_type == 'disk':
                 disk_data = process_disk_image(file_path, rules_path)
-                # Append disk scan results to scan_results list as dictionary
-                scan_results.append({
-                    'file': os.path.basename(file_path),
-                    'disk': disk_data,
-                    'risk_level': 'High',
-                    'risk_type': 'Malware',
-                    'vulnerability_type': 'Disk',
-                    'vulnerability_count': len(disk_data)
-                })
+                
+                for disk_file in disk_data:
+                    for rule in disk_file['yara_matches']:
+                        # Append disk scan results to scan_results list as dictionary
+                        scan_results.append({
+                            'file': os.path.basename(file_path),
+                            'disk': disk_data,
+                            'risk_level': predict_level(rule),
+                            'risk_type': predict_level(rule),
+                            'vulnerability_type': 'Disk',
+                            'vulnerability_count': len(disk_data)
+                        })
             
             elif file_type == 'registry':
                 registry_data = process_registry_hive(file_path)
@@ -100,15 +106,15 @@ async def analyze(uploadedFiles: list[UploadFile] = File(...), yaraFile: UploadF
                 scan_results.append({
                     'file': os.path.basename(file_path),
                     'registry': registry_data,
-                    'risk_level': 'High',
-                    'risk_type': 'Malware',
+                    'risk_level': predict_level(rule),
+                    'risk_type': predict_level(rule),
                     'vulnerability_type': 'Registry',
                     'vulnerability_count': len(registry_data)
                 })
 
         return JSONResponse(content={
             'results': scan_results,
-            'gemini': predict(scan_results, 'Analyze')
+            # 'gemini': predict(scan_results, 'Analyze')
         })
     except Exception as e:
         return JSONResponse(content={'error': str(e)})

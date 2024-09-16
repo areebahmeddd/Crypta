@@ -63,9 +63,9 @@ def process_file(file_path, rules_path):
 
 def find_type(file_path: str) -> str:
     '''Determine file type based on file extension or name.'''
-    file_name_with_extension = os.path.basename(file_path).lower()
+    file_name_with_extension = str(os.path.basename(file_path)).lower()
     name, extension = os.path.splitext(file_name_with_extension)
-    extension = extension.lower()
+    extension = str(extension).lower()
 
     # Special case for registry files
     if file_name_with_extension in ['ntuser.dat', 'sam', 'security', 'software', 'system'] or extension == '.hiv':

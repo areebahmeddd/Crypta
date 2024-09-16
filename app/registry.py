@@ -25,3 +25,8 @@ def process_registry_hive(file_path: str) -> List[Dict[str, Any]]:
     reg = RegistryHive(file_path)
     entries = [serialize_subkey(entry) for entry in reg.recurse_subkeys()]
     return entries
+
+if __name__ == '__main__':
+    # Test the registry processing function
+    registry_entries = process_registry_hive(r"C:\Users\shiva\Downloads\hives\SECURITY")
+    print(json.dumps(registry_entries, indent=2))

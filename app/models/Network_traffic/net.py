@@ -32,7 +32,7 @@ class_mapping = {
 # Function to predict the network traffic
 def predict_network(data):
   model = xgb.XGBClassifier()
-  model.load_model('net.bin')  
+  model.load_model('app/models/Network_traffic/net.bin')
   data=ipl(data)
   pred=model.predict(data)
   ans=[class_mapping[i] for i in pred ]
@@ -56,41 +56,42 @@ def ipl(data):
   return data
 
 
-data = pd.read_csv('network1%.csv')
-data[' Source IP'] = data[' Source IP'].apply(ip_to_int)
-data[' Destination IP'] = data[' Destination IP'].apply(ip_to_int)
-data[' Timestamp'] = pd.to_datetime(data[' Timestamp'])
-# Convert the datetime to UNIX time (seconds since 1970-01-01)
-data[' Timestamp'] = data[' Timestamp'].astype('int64') // 10**6  # Convert nanoseconds to seconds
+# data = pd.read_csv('network1%.csv')
+# data[' Source IP'] = data[' Source IP'].apply(ip_to_int)
+# data[' Destination IP'] = data[' Destination IP'].apply(ip_to_int)
+# data[' Timestamp'] = pd.to_datetime(data[' Timestamp'])
+# # Convert the datetime to UNIX time (seconds since 1970-01-01)
+# data[' Timestamp'] = data[' Timestamp'].astype('int64') // 10**6  # Convert nanoseconds to seconds
 
-sampled_df = data.sample(frac=1).reset_index(drop=True)
+# sampled_df = data.sample(frac=1).reset_index(drop=True)
 
-#preprocess the data
-X = sampled_df[[' Source IP',' Source Port',' Destination IP',' Destination Port',' Protocol',' Timestamp',' Flow Duration',' Total Fwd Packets', ' Total Backward Packets']]
-y = sampled_df[' Label']
-X = X.values.reshape(-1, X.shape[1], 1)  # Reshape for CNN input
+# #preprocess the data
+# X = sampled_df[[' Source IP',' Source Port',' Destination IP',' Destination Port',' Protocol',' Timestamp',' Flow Duration',' Total Fwd Packets', ' Total Backward Packets']]
+# y = sampled_df[' Label']
+# X = X.values.reshape(-1, X.shape[1], 1)  # Reshape for CNN input
 
-label_encoder = LabelEncoder()
-y = label_encoder.fit_transform(y)
+# label_encoder = LabelEncoder()
+# y = label_encoder.fit_transform(y)
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-#reshape X_train to 2D
-X_train = X_train.reshape(X_train.shape[0], -1)
-X_test= X_test.reshape(X_test.shape[0], -1)
+# #reshape X_train to 2D
+# X_train = X_train.reshape(X_train.shape[0], -1)
+# X_test= X_test.reshape(X_test.shape[0], -1)
 
-# Create a random forest classifier
-model= RandomForestClassifier(n_estimators=100)
-model.fit(X_train, y_train)
+# # Create a random forest classifier
+# model= RandomForestClassifier(n_estimators=100)
+# model.fit(X_train, y_train)
 
-# Make predictions
-y_pred = model.predict(X_test)
-accuracyt = accuracy_score(y_test, y_pred)
-print(" Accuracy Test:", accuracyt)
+# # Make predictions
+# y_pred = model.predict(X_test)
+# accuracyt = accuracy_score(y_test, y_pred)
+# print(" Accuracy Test:", accuracyt)
 
 #joblib.dump(model, '/content/drive/MyDrive/networkanalysis.pkl')
 
-new_data = pd.read_csv('network1%.csv') # Load the new data csv file without labels
+# new_data = pd.read_csv('network1%.csv') # Load the new data csv file without labels
 #order of the columns is Source IP, Source Port, Destination IP, Destination Port, Protocol, Timestamp, Flow Duration, Total Fwd Packets, Total Backward Packets
-predictions = predict_network(new_data)
-print(predictions)
+if __name__ == '__main__':
+  predictions = predict_network(new_data)
+  print(predictions)

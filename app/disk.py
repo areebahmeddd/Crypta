@@ -118,3 +118,10 @@ def process_disk_image(image_path: str, rules_path: str) -> List[Dict[str, Any]]
         print(f"An error occurred: {e}")
 
     return []
+
+if __name__ == '__main__':
+    # Test the disk image processing function
+    disk_image_path = r"C:\Users\shiva\Downloads\e01_folder\ubnist1.gen2.E01"
+    yara_rules_path = r'yara-rules\security.yara'
+    disk_data = process_disk_image(disk_image_path, yara_rules_path)
+    print(json.dumps(disk_data, indent=2))
