@@ -6,8 +6,12 @@ import 'package:crypta/widgets/download_report.dart';
 import 'package:crypta/widgets/export_analysis.dart';
 import 'package:crypta/widgets/file_table.dart';
 import 'package:crypta/widgets/file_tables_2.dart';
+import 'package:crypta/widgets/filesize_distribution.dart';
 import 'package:crypta/widgets/linechart.dart';
+import 'package:crypta/widgets/piechart.dart';
 import 'package:crypta/widgets/search_bar.dart';
+import 'package:crypta/widgets/vulnerability_distribution.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -59,20 +63,41 @@ class _AnalysisPageState extends State<AnalysisPage> {
             const Gap(60),
             const SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              child: Row(
+              child: Column(
                 children: [
-                  SizedBox(
-                    width: 500,
-                    height: 500,
-                    child: LineChartSample(),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 500,
+                        height: 500,
+                        child: LineChartSample(),
+                      ),
+                      Gap(45),
+                      SizedBox(
+                        width: 500,
+                        height: 500,
+                        child: FileSizeDistribution(),
+                      ),
+                      Gap(50)
+                    ],
                   ),
-                  Gap(45),
-                  SizedBox(
-                    width: 500,
-                    height: 500,
-                    child: BarChartSample(),
+                  Gap(50),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 500,
+                        height: 500,
+                        child: VulnerabilityCountDistribution(),
+                      ),
+                      Gap(45),
+                      SizedBox(
+                        width: 500,
+                        height: 500,
+                        child: Piechart(),
+                      ),
+                      Gap(50)
+                    ],
                   ),
-                  Gap(50)
                 ],
               ),
             )

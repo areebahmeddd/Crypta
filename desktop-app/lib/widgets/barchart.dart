@@ -15,7 +15,7 @@ class _BarChartSampleState extends State<BarChartSample> {
         alignment: BarChartAlignment.spaceAround,
         maxY: 100, // Define the maximum value for the Y-axis
         barTouchData:
-            BarTouchData(enabled: false), // Disable touch interactions
+            BarTouchData(enabled: true), // Disable touch interactions
         titlesData: FlTitlesData(
           show: true,
           bottomTitles: AxisTitles(
