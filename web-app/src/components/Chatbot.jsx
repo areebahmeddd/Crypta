@@ -1,13 +1,19 @@
 // Layout.js
-import React from 'react';
+import React, { useState } from 'react';
 import chatbotIcon from '../assets/logo/chat.png'; // Adjust the path
+import searchLogo from '../assets/logo/Chatbotupload.png'; // Import your logo image
 import "../styles/Chatbot.css";
 
 const Layout = ({ children }) => {
-  const [showChatbot, setShowChatbot] = React.useState(false);
+  const [showChatbot, setShowChatbot] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const toggleChatbot = () => {
     setShowChatbot(!showChatbot);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
   };
 
   return (
@@ -29,6 +35,15 @@ const Layout = ({ children }) => {
           </div>
           <div className="chatbot-content">
             <p>Welcome! How can I assist you?</p>
+          </div>
+          <div className="chatbot-search">
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
+            <img src={searchLogo} alt="Search Logo" className="search-logo" /> {/* Use your logo image */}
           </div>
         </div>
       )}

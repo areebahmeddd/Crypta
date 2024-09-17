@@ -1,0 +1,114 @@
+/* src/styles/Team.css */
+
+.team-page {
+  text-align: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.team-header {
+  margin-bottom: 40px;
+}
+
+.team-header h1 {
+  color: #333;
+  font-size: 2.5em;
+}
+
+.team-header p {
+  color: #555;
+  font-size: 1.2em;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Grid for the top 4 members */
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.team-bottom-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* Adjust or remove if necessary */
+  margin-top: 20px;
+}
+
+.team-bottom-row > .team-card {
+  flex: 1; /* Ensures that the cards take equal width */
+  max-width: 300px;
+}
+
+.team-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+  max-width: 300px;
+  margin: 0; /* Remove margin to avoid extra space */
+}
+
+.team-photo {
+  width: 100%;
+  aspect-ratio: 1 / 1; /* Ensures the image is square */
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.team-info {
+  margin-top: 15px;
+}
+
+.team-info h3 {
+  font-size: 1.5em;
+  margin: 10px 0;
+}
+
+.team-info h4 {
+  font-size: 1.2em;
+  color: #666;
+}
+
+.team-email a {
+  font-size: 1em;
+  color: #333;
+  text-decoration: none;
+}
+
+.team-email a:hover {
+  text-decoration: underline;
+}
+
+.team-links {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 0.9em;
+  text-decoration: none;
+  color: white;
+}
+
+.github-btn {
+  background-color: #333;
+}
+
+.linkedin-btn {
+  background-color: #0e76a8;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.btn svg {
+  margin-right: 4px;
+  font-size: 1.5em; /* Increase font size to make the icon larger */
+}

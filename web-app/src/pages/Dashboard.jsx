@@ -459,202 +459,201 @@ const handleExport = () => {
         </div>
       </div>
 
-      {/* File Details Card */}
       <h2>File Summary</h2>
-      <div className="dashboard__card">
-        <div className="dashboard__card-header">
-          <div>File</div>
-          <div>
-  Type
-  <button
-    className="sort-button-custom"
-    onClick={() => handleSort("type")}
-  >
-    <span className="icon-container">
-      <FontAwesomeIcon
-        icon={
-          sortCriteria.key === "type" && sortCriteria.order === "asc"
-            ? faSortUp
-            : faSortDown
-        }
-        className="sort-icon"
-      />
-    </span>
-  </button>
+<div className="dashboard__card">
+  <div className="dashboard__card-header">
+    <div>File</div>
+    <div>
+      Type
+      <button className="sort-button-custom" onClick={() => handleSort("type")}>
+        <span className="icon-container">
+          <FontAwesomeIcon
+            icon={
+              sortCriteria.key === "type" && sortCriteria.order === "asc"
+                ? faSortUp
+                : faSortDown
+            }
+            className="sort-icon"
+          />
+        </span>
+      </button>
+    </div>
+    <div>
+      Size
+      <button className="sort-button-custom" onClick={() => handleSort("size")}>
+        <span className="icon-container">
+          <FontAwesomeIcon
+            icon={
+              sortCriteria.key === "size" && sortCriteria.order === "asc"
+                ? faSortUp
+                : faSortDown
+            }
+            className="sort-icon"
+          />
+        </span>
+      </button>
+    </div>
+    <div>
+      Vulnerability Count
+      <button className="sort-button-custom" onClick={() => handleSort("vulnerability")}>
+        <span className="icon-container">
+          <FontAwesomeIcon
+            icon={
+              sortCriteria.key === "vulnerability" && sortCriteria.order === "asc"
+                ? faSortUp
+                : faSortDown
+            }
+            className="sort-icon"
+          />
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <div className="dashboard__card-body">
+    {currentFilePageData.map((data, index) => (
+      <div key={index} className="dashboard__card-row">
+        <div>{data.file}</div>
+        <div>{data.type}</div>
+        <div>{data.size}</div>
+        <div>
+          <div
+            className="vul_count"
+            style={{
+              backgroundColor: getVulnerabilityColor(data.vulnerability), // Background color based on the vulnerability count
+              padding: "5px 0", // Adjust padding as needed
+              borderRadius: "5px", // Optional: for rounded corners
+              display: "inline-block", // Makes the div fit the content size
+            }}
+          >
+            {data.vulnerability}
+          </div>
+        </div>
+
+        {/* Handle network data if available */}
+        {data.network && Array.isArray(data.network) && (
+          <div className="network-section">
+            <h4>Network Data:</h4>
+            <ul>
+              {data.network.map((networkItem, idx) => (
+                <li key={idx}>{networkItem}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    ))}
+  </div>
+
+  {/* Total Files */}
+  <div className="total-files">Total Files: {fileData.length}</div>
+
+  {/* Pagination Controls */}
+  <div className="pagination-controls">
+    <button
+      className="pagination-btn"
+      onClick={() => handleFilePageChange("prev")}
+      disabled={filePage === 1}
+    >
+      <FontAwesomeIcon icon={faChevronLeft} />
+    </button>
+
+    {Array.from({ length: endFilePage - startFilePage + 1 }, (_, i) => {
+      const pageNumber = startFilePage + i;
+      return (
+        <button
+          key={pageNumber}
+          className={`pagination-number ${filePage === pageNumber ? "active" : ""}`}
+          onClick={() => handleFilePageChange(pageNumber)}
+        >
+          {pageNumber}
+        </button>
+      );
+    })}
+
+    <button
+      className="pagination-btn-r"
+      onClick={() => handleFilePageChange("next")}
+      disabled={filePage === totalFilePages}
+    >
+      <FontAwesomeIcon icon={faChevronRight} />
+    </button>
+  </div>
 </div>
 
-          <div>
-            Size
-            <button
-              className="sort-button-custom"
-              onClick={() => handleSort("size")}
-            >
-              <span className="icon-container">
-                <FontAwesomeIcon
-                  icon={
-                    sortCriteria.key === "size" && sortCriteria.order === "asc"
-                      ? faSortUp
-                      : faSortDown
-                  }
-                  className="sort-icon"
-                />
-              </span>
-            </button>
+{/* Vulnerability Information Card */}
+<h2>Vulnerability Summary</h2>
+<div className="dashboard_v_card">
+  <div className="dashboard_v_card-header">
+    <div>File</div>
+    <div>Vulnerability Type</div>
+    <div>Indicators of Compromise</div>
+  </div>
+  <div className="dashboard_v_card-body">
+    {currentVulnerabilityPageData.map((data, index) => (
+      <div key={index} className="dashboard_v_card-row">
+        <div>{data.file}</div>
+        <div>{data.type}</div>
+        <div>
+          <button className="dashboard__view-btn" onClick={() => handleViewClick(data)}>
+            View
+          </button>
+        </div>
+
+        {/* Handle network data if available in the vulnerability section */}
+        {data.network && Array.isArray(data.network) && (
+          <div className="network-section">
+            <h4>Network Data:</h4>
+            <ul>
+              {data.network.map((networkItem, idx) => (
+                <li key={idx}>{networkItem}</li>
+              ))}
+            </ul>
           </div>
-
-          <div>
-            Vulnerability Count
-            <button
-              className="sort-button-custom"
-              onClick={() => handleSort("vulnerability")}
-            >
-              <span className="icon-container">
-                <FontAwesomeIcon
-                  icon={
-                    sortCriteria.key === "vulnerability" &&
-                    sortCriteria.order === "asc"
-                      ? faSortUp
-                      : faSortDown
-                  }
-                  className="sort-icon"
-                />
-              </span>
-            </button>
-          </div>
-        </div>
-
-        <div className="dashboard__card-body">
-          {currentFilePageData.map((data, index) => (
-            <div key={index} className="dashboard__card-row">
-              <div>{data.file}</div>
-              <div>{data.type}</div>
-              <div>{data.size}</div>
-              <div>
-                <div
-                  className="vul_count"
-                  style={{
-                    backgroundColor: getVulnerabilityColor(data.vulnerability), // Background color based on the vulnerability count
-                    padding: "5px 0", // Adjust padding as needed
-                    borderRadius: "5px", // Optional: for rounded corners
-                    display: "inline-block", // Makes the div fit the content size
-                  }}
-                >
-                  {data.vulnerability}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Total Files */}
-        <div className="total-files">Total Files: {fileData.length}</div>
-
-        {/* Pagination Controls */}
-        <div className="pagination-controls">
-          <button
-            className="pagination-btn"
-            onClick={() => handleFilePageChange("prev")}
-            disabled={filePage === 1}
-          >
-            <FontAwesomeIcon icon={faChevronLeft} />
-          </button>
-
-          {Array.from({ length: endFilePage - startFilePage + 1 }, (_, i) => {
-            const pageNumber = startFilePage + i;
-            return (
-              <button
-                key={pageNumber}
-                className={`pagination-number ${
-                  filePage === pageNumber ? "active" : ""
-                }`}
-                onClick={() => handleFilePageChange(pageNumber)}
-              >
-                {pageNumber}
-              </button>
-            );
-          })}
-
-          <button
-            className="pagination-btn-r"
-            onClick={() => handleFilePageChange("next")}
-            disabled={filePage === totalFilePages}
-          >
-            <FontAwesomeIcon icon={faChevronRight} />
-          </button>
-        </div>
+        )}
       </div>
+    ))}
+  </div>
 
-      {/* Vulnerability Information Card */}
-      <h2>Vulnerability Summary</h2>
-      <div className="dashboard_v_card">
-        <div className="dashboard_v_card-header">
-          <div>File</div>
-          <div>Vulnerability Type</div>
-          <div>Indicators of Compromise</div>
-        </div>
-        <div className="dashboard_v_card-body">
-          {currentVulnerabilityPageData.map((data, index) => (
-            <div key={index} className="dashboard_v_card-row">
-              <div>{data.file}</div>
-              <div>{data.type}</div>
-              <div>
-                <button
-                  className="dashboard__view-btn"
-                  onClick={() => handleViewClick(data)}
-                >
-                  View
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+  {/* Total Files */}
+  <div className="total-v-files">Total Files: {vulnerabilityData.length}</div>
 
-        {/* Total Files */}
-        <div className="total-v-files">
-          Total Files: {vulnerabilityData.length}
-        </div>
+  {/* Pagination Controls */}
+  <div className="pagination-controls">
+    <button
+      className="pagination-btn"
+      onClick={() => handleVulnPageChange("prev")}
+      disabled={vulnPage === 1}
+    >
+      <FontAwesomeIcon icon={faChevronLeft} />
+    </button>
 
-        {/* Pagination Controls */}
-        <div className="pagination-controls">
-          <button
-            className="pagination-btn"
-            onClick={() => handleVulnPageChange("prev")}
-            disabled={vulnPage === 1}
-          >
-            <FontAwesomeIcon icon={faChevronLeft} />
-          </button>
+    {Array.from({ length: endVulnPage - startVulnPage + 1 }, (_, i) => {
+      const pageNumber = startVulnPage + i;
+      return (
+        <button
+          key={pageNumber}
+          className={`pagination-number ${vulnPage === pageNumber ? "active" : ""}`}
+          onClick={() => handleVulnPageChange(pageNumber)}
+        >
+          {pageNumber}
+        </button>
+      );
+    })}
 
-          {Array.from({ length: endVulnPage - startVulnPage + 1 }, (_, i) => {
-            const pageNumber = startVulnPage + i;
-            return (
-              <button
-                key={pageNumber}
-                className={`pagination-number ${
-                  vulnPage === pageNumber ? "active" : ""
-                }`}
-                onClick={() => handleVulnPageChange(pageNumber)}
-              >
-                {pageNumber}
-              </button>
-            );
-          })}
+    <button
+      className="pagination-btn-r"
+      onClick={() => handleVulnPageChange("next")}
+      disabled={vulnPage === totalVulnPages}
+    >
+      <FontAwesomeIcon icon={faChevronRight} />
+    </button>
+  </div>
+</div>
 
-          <button
-            className="pagination-btn-r"
-            onClick={() => handleVulnPageChange("next")}
-            disabled={vulnPage === totalVulnPages}
-          >
-            <FontAwesomeIcon icon={faChevronRight} />
-          </button>
-        </div>
-      </div>
+{/* Modal */}
+<ModalPage isOpen={isModalOpen} onClose={handleCloseModal} data={selectedData} />
 
-      {/* Modal */}
-      <ModalPage
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        data={selectedData}
-      />
 
  <div className="dashboard__alert-section">
     <h2 className="dashboard__alert-title">Alerts</h2>

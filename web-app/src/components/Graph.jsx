@@ -42,9 +42,7 @@ const DashboardCharts = ({ fileData = [], vulnerabilityData = [] }) => {
   }, {});
 
   return (
-    <div className="dashboard-charts-container">
-              <h1 className="charts__title">Graphs</h1>
-              <hr className="charts__separator" />
+    <div className="dashboard-charts-container">  
       {/* File Type Line Chart */}
       <div className="chart-container line-chart-container">
         <h2>File Type Distribution</h2>

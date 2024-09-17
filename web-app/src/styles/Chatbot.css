@@ -22,7 +22,7 @@
   /* Chatbot Popup */
   .chatbot-popup {
     position: fixed;
-    bottom: 80px;
+    bottom: 100px;
     right: 20px;
     width: 300px;
     height: 400px;
@@ -59,3 +59,35 @@
     cursor: pointer;
   }
   
+/* Chatbot.css */
+.chatbot-search {
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #ddd;
+  padding-top: 8px;
+  margin-bottom: 8px;
+  position: relative; /* Ensure the container is positioned relatively */
+}
+
+.chatbot-search input {
+  flex: 1;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 8px 16px;
+  padding-right: 48px; /* Add padding to the right to make space for the logo */
+  margin-right: 1px;
+  outline: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+}
+
+.search-logo {
+  position: absolute;
+  right: 8px; /* Position the logo inside the input, adjust as needed */
+  top: 50%;
+  transform: translateY(-50%); /* Center the logo vertically */
+  width: 36px; /* Adjust as needed */
+  height: 36px; /* Adjust as needed */
+  cursor: pointer;
+  margin-top: 4px;
+}
