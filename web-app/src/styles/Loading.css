@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 
 .loading-page {
-    background: #f0f0f0; /* Light gray background for a whitish tone */
+    background: #ffffff; /* Light gray background for a whitish tone */
     color: black; /* Dark text color for better contrast */
     width: 100vw;
     height: 100vh;
@@ -17,8 +17,7 @@
 
 .loading-text.glitch {
     font-family: 'Orbitron', sans-serif; /* Apply the new font */
-    font-size: 5rem;
-    font-weight: bold;
+    font-size: 1.5rem;
     text-transform: uppercase;
     position: relative;
     text-shadow: 0.05em 0 0 #00d4ff, -0.03em -0.04em 0 #d400ff, /* Adjusted colors */
