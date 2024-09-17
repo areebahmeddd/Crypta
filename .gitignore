@@ -9,7 +9,8 @@ __pycache__/
 *.e01
 
 # Output related
-*.csv
+*.pdf
+*.docx
 *.bin
 temp/
 
