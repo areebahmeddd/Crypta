@@ -185,13 +185,13 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                                       ),
                                       const SizedBox(height: 8),
                                       const Text(
-                                        'Drag and drop a file here or',
+                                        'Drag & Drop Your File',
                                         style: TextStyle(color: Colors.grey),
                                       ),
                                       TextButton(
                                         onPressed: pickFile,
                                         child: const Text(
-                                          'Choose file',
+                                          'Choose File',
                                           style: TextStyle(
                                             color: Colors.blue,
                                             fontWeight: FontWeight.bold,
@@ -205,7 +205,7 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                                 const SizedBox(height: 30),
 
                                 // OR divider
-                                const Text('--OR--'),
+                                const Text('————— OR —————'),
 
                                 const SizedBox(height: 30),
 
@@ -276,7 +276,7 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
                                           ),
                                           const SizedBox(width: 8),
                                           const Text(
-                                            'Default rules',
+                                            'Default Rules',
                                             style: TextStyle(
                                                 fontSize: 14,
                                                 color: Color.fromARGB(

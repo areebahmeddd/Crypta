@@ -6,16 +6,16 @@ from fastapi.responses import JSONResponse, FileResponse
 
 from parse import scan_file, find_type
 from network import scan_network
+# from disk import scan_disk
+# from memory import scan_memory
+# from registry import scan_registry
+# from process import scan_process
 from drive import scan_drive
 from gemini import predict, summarize
 
-from disk import process_disk_image
-from registry import process_registry_hive
-
-from models.Risk_type.risk_model import predict_type
-from models.Risk_level.risk import predict_level
-from models.Network_traffic.net import predict_network
-
+from models.risk.risk_level import predict_level
+from models.risk.risk_type import predict_type
+from models.network_traffic.network import predict_network
 
 app = FastAPI()
 app.add_middleware(
@@ -55,66 +55,64 @@ async def analyze(uploadedFiles: list[UploadFile] = File(...), yaraFile: UploadF
 
                 # Count the number of times each rule was triggered in the file
                 for data in file_data:
-                    rule = data['rule']
+                    rule_name = data['triggered_action']
                     # Check if rule is already in dictionary and increment count
-                    if rule in rule_counts:
-                        rule_counts[rule] += 1
+                    if rule_name in rule_counts:
+                        rule_counts[rule_name] += 1
                     else:
-                        rule_counts[rule] = 1
+                        rule_counts[rule_name] = 1
 
                 # Append text scan results to scan_results list as dictionary
                 scan_results.append({
                     'file': os.path.basename(file_path),
-                    'rules': rule_counts,
-                    'risk_level': predict_level(rule), # DUMMY VALUES FOR NOW
-                    'risk_type': predict_level(rule),
-                    'vulnerability_type': 'Text',
+                    'yara': rule_counts,
+                    'risk_level': predict_level(rule_name),
+                    'risk_type': predict_type(rule_name),
+                    'vulnerability_type': 'Text File',
                     'vulnerability_count': sum(rule_counts.values())
                 })
 
             elif file_type == 'network':
                 network_data = scan_network(file_path)
-                print(network_data)
                 # Append network scan results to scan_results list as dictionary
                 scan_results.append({
                     'file': os.path.basename(file_path),
                     'network': network_data,
                     'risk_level': 'High',
-                    'risk_type': 'Firewall Bypass',
-                    'vulnerability_type': 'Network',
+                    'risk_type': predict_network(network_data),
+                    'vulnerability_type': 'Network Traffic',
                     'vulnerability_count': len(network_data)
                 })
-            
+
             elif file_type == 'disk':
-                disk_data = process_disk_image(file_path, rules_path)
-                
-                for disk_file in disk_data:
-                    for rule in disk_file['yara_matches']:
+                disk_data = scan_disk(file_path, rules_path)
+                for data in disk_data:
+                    for rule_name in data['triggered_action']:
                         # Append disk scan results to scan_results list as dictionary
                         scan_results.append({
                             'file': os.path.basename(file_path),
                             'disk': disk_data,
-                            'risk_level': predict_level(rule),
-                            'risk_type': predict_level(rule),
-                            'vulnerability_type': 'Disk',
-                            'vulnerability_count': len(disk_data)
+                            'risk_level': predict_level(rule_name),
+                            'risk_type': predict_type(rule_name),
+                            'vulnerability_type': 'Disk Image',
+                            'vulnerability_count': len(data)
                         })
-            
-            elif file_type == 'registry':
-                registry_data = process_registry_hive(file_path)
-                # Append registry scan results to scan_results list as dictionary
+
+            elif file_type == 'memory':
+                memory_data = scan_memory(file_path, rules_path)
+                # Append memory scan results to scan_results list as dictionary
                 scan_results.append({
                     'file': os.path.basename(file_path),
-                    'registry': registry_data,
-                    'risk_level': predict_level(rule),
-                    'risk_type': predict_level(rule),
-                    'vulnerability_type': 'Registry',
-                    'vulnerability_count': len(registry_data)
+                    'memory': memory_data,
+                    'risk_level': predict_level(rule_name),
+                    'risk_type': predict_type(rule_name),
+                    'vulnerability_type': 'Memory Dump',
+                    'vulnerability_count': len(memory_data)
                 })
 
         return JSONResponse(content={
             'results': scan_results,
-            # 'gemini': predict(scan_results, 'Analyze')
+            'gemini': predict(scan_results, 'Analyze')
         })
     except Exception as e:
         return JSONResponse(content={'error': str(e)})

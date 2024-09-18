@@ -1,13 +1,11 @@
-/* General Container Styles */
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  background-color: #f7f9fc; /* Light background color */
+  background-color: #f7f9fc;
   padding: 20px;
   max-width: 2000px;
-  
 }
 
 .content-container {
@@ -49,11 +47,11 @@
 }
 
 .drive-container {
-  background-color: #ffffff; /* White background for the upload box */
+  background-color: #ffffff;
   border-radius: 1rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 32rem; /* Max width for the upload box */
+  max-width: 32rem;
   padding: 1.5rem;
   border: 2px #d1d5db;
   transition: border-color 0.3s ease;
@@ -61,15 +59,14 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  margin-bottom: 40px; 
+  margin-bottom: 40px;
 }
 
 .drive-label {
-  font-size: 1.5rem; /* Larger font size for header */
-  font-weight: 600; /* Bold font weight */
-  color: #333; /* Darker text color for better contrast */
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
   text-align: left;
-
 }
 
 .detect-drive-button {
@@ -106,36 +103,35 @@
   padding: 5px 0;
 }
 
-/* Upload Box Styles */
 .upload-box {
-  background-color: #ffffff; /* White background for the upload box */
+  background-color: #ffffff;
   padding: 1.5rem;
-  border-radius: 1rem; /* Rounded corners */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 32rem; /* Max width for the upload box */
-  border: 2px dashed #d1d5db; /* Dashed border */
+  max-width: 32rem;
+  border: 2px dashed #d1d5db;
   transition: border-color 0.3s ease;
-  margin-bottom: 40px; /* Smooth border color transition */
+  margin-bottom: 40px;
 }
 
 .upload-box.dragging {
-  border-color: #519b69; /* Border color when dragging */
+  border-color: #519b69;
 }
 
 .header {
-  font-size: 1.5rem; /* Larger font size for header */
-  font-weight: 600; /* Bold font weight */
+  font-size: 1.5rem;
+  font-weight: 600;
   margin-bottom: 1.5rem;
 }
 
 .hidden {
-  display: none; /* This hides the default file input */
+  display: none;
 }
 
 .upload-area {
   padding: 2rem;
-  border-radius: 0.5rem; /* Rounded corners */
+  border-radius: 0.5rem;
   margin-bottom: 1.5rem;
   display: flex;
   flex-direction: column;
@@ -148,45 +144,45 @@
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  font-size: 1rem; /* Adjusted font size */
+  font-size: 1rem;
 }
 
 .upload-icon {
-  width: 4rem; /* Adjusted icon size */
-  height: 4rem; /* Adjusted icon size */
+  width: 4rem;
+  height: 4rem;
   margin-bottom: 1rem;
-  color: #519b69; /* Icon color */
+  color: #519b69;
 }
 
 .upload-text {
   color: #333;
-  font-size: 16px; /* Text color */
+  font-size: 16px;
 }
 
 .choose-file {
   text-decoration: underline;
-  margin-bottom: 1.5rem; /* Underline for "Choose file" */
+  margin-bottom: 1.5rem;
 }
 
 .file-info {
   margin-top: 20px;
-  border-bottom: 1px solid #ddd; /* Light gray horizontal line */
-  padding-bottom: 10px; /* Adds some space below the content */
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
   margin-bottom: 5px;
   width: 90%;
-  
 }
 
 .file-info:last-child {
-  border-bottom: none; /* Remove the line from the last item */
+  border-bottom: none;
 }
+
 .file-details {
   display: flex;
-  color: #6b7280; /* Gray text color */
+  color: #6b7280;
   margin-bottom: 0.5rem;
   align-items: center;
   padding-left: 15px;
-  justify-content: space-between; 
+  justify-content: space-between;
 }
 
 .file-desc {
@@ -196,7 +192,7 @@
 }
 
 .file-icon {
-  margin-right:12px;
+  margin-right: 12px;
   width: 2rem;
   height: 2rem;
 }
@@ -213,19 +209,19 @@
 
 .file-metadata-table {
   width: 100%;
-  border-collapse: collapse; /* Ensures no space between table cells */
+  border-collapse: collapse;
 }
 
 .file-metadata-table td {
-  padding: 2px 25px; /* Adds spacing between the content */
+  padding: 2px 25px;
   vertical-align: top;
-  width: 50%; /* Aligns the text to the top of the cell */
+  width: 50%;
 }
 
 .metadata-label {
   text-align: left;
   font-weight: bold;
-  padding-right: 20px; /* Creates space between label and value */
+  padding-right: 20px;
 }
 
 .metadata-value {
@@ -246,59 +242,59 @@
 
 .buttons {
   display: flex;
-  justify-content: space-between; /* Space between buttons */
+  justify-content: space-between;
   gap: 1rem;
   margin-top: 1rem;
 }
 
 .cancel-button,
 .submit-button {
-  flex: 1; /* Make both buttons take up equal space */
+  flex: 1;
   padding: 0.5rem;
-  border-radius: 0.5rem; /* Rounded corners */
-  font-size: 1.25rem; /* Smaller font size */
+  border-radius: 0.5rem;
+  font-size: 1.25rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .cancel-button {
-  background-color: #f0eded; /* Gray background */
-  color: #333; /* Dark text */
+  background-color: #f0eded;
+  color: #333;
 }
 
 .cancel-button:hover {
-  background-color: #c5c9c7; /* Darker gray on hover */
+  background-color: #c5c9c7;
 }
 
 .submit-button {
-  background-color: #457d58; /* Blue background */
-  color: #fff; /* White text */
+  background-color: #457d58;
+  color: #fff;
 }
 
 .submit-button:hover {
-  background-color: #519b69; /* Darker blue on hover */
+  background-color: #519b69;
 }
 
 .submit-button:disabled {
-  background-color: #e5e7eb; /* Gray background for disabled state */
+  background-color: #e5e7eb;
   cursor: not-allowed;
   color: #9c9a9a;
 }
 
 .options-container {
-  background-color: #ffffff; /* White background */
-  border-radius: 0.75rem; /* Rounded corners */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 20px;
   width: 100%;
-  max-width: 28rem; /* Max width for the options container */
+  max-width: 28rem;
   margin-top: 20px;
-  align-items: start; /* Space from the upload box */
+  align-items: start;
 }
 
 .options-container h3 {
   margin-bottom: 15px;
-  font-size: 1.25rem; /* Slightly larger font size */
+  font-size: 1.25rem;
 }
 
 .options {
@@ -310,7 +306,7 @@
 
 .option-button {
   padding: 10px 20px;
-  background-color: #457d58; /* Blue background */
+  background-color: #457d58;
   color: white;
   border: none;
   border-radius: 5px;
@@ -320,21 +316,21 @@
 }
 
 .option-button:hover {
-  background-color: #519b69; /* Darker blue on hover */
+  background-color: #519b69;
 }
 
 .metadata-container {
-  background-color: #ffffff; /* White background for the upload box */
-  border-radius: 1rem; /* Rounded corners */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  background-color: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 32rem; /* Max width for the upload box */
+  max-width: 32rem;
   border: 2px #d1d5db;
   transition: border-color 0.3s ease;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  align-items: start; /* Center content horizontally */
+  align-items: start;
   justify-content: center;
   margin-bottom: 20px;
   padding-left: 50px;
@@ -367,28 +363,25 @@
   margin-bottom: 5px;
 }
 
-/* Container for progress bar */
 .progress-bar {
   position: relative;
   width: 100%;
-  height: 22px; /* Adjust height to be slim */
-  background-color: #e0e0e0; /* Light grey background color for the container */
-  border-radius: 10px; /* Slightly rounded corners for the container */
-  margin-top: 0.5rem; /* Margin to create space above */
-  margin-bottom: 1rem; /* Margin to create space below */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for a sleek effect */
+  height: 22px;
+  background-color: #e0e0e0;
+  border-radius: 10px;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Inner progress bar */
 .progress-bar-inner {
-  height: 100%; /* Full height of the container */
-  background-color: #457d58; /* Green progress color */
-  border-radius: 8px; /* Match rounded corners of the container */
-  transition: width 0.3s ease; /* Smooth transition for width changes */
+  height: 100%;
+  background-color: #457d58;
+  border-radius: 8px;
+  transition: width 0.3s ease;
   padding: 12px;
 }
 
-/* Percentage text inside the progress bar */
 .upload-percentage {
   display: flex;
   position: absolute;
@@ -397,8 +390,8 @@
   transform: translate(-50%, -50%);
   color: #ffffff;
   font-weight: bold;
-  font-size: 0.9rem; 
+  font-size: 0.9rem;
   align-items: center;
   justify-content: center;
-  height: 24px; /*? Adjust height to match progress bar */
+  height: 24px;
 }

@@ -1,50 +1,48 @@
-/* Graph.css */
 .charts__title {
-    margin-top: 40px;
-    text-align: center;
-    font-size: 2rem;
-    color: #333; /* Adjust as needed */
-  }
-  
-  .charts__separator {
-    width: 100%;
-    border: 0;
-    border-top: 3px solid #ccc; /* Customize color and thickness */
-    margin-bottom: 25px;
-  }
+  margin-top: 40px;
+  text-align: center;
+  font-size: 2rem;
+  color: #333;
+}
+
+.charts__separator {
+  width: 100%;
+  border: 0;
+  border-top: 3px solid #ccc;
+  margin-bottom: 25px;
+}
 
 .dashboard-charts-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: space-between;
-  }
-  
-  .chart-container {
-    flex: 1 1 45%;
-    box-sizing: border-box;
-  }
-  
-  .line-chart-container {
-    flex: 1 1 45%;
-  }
-  
-  .bar-chart-container {
-    flex: 1 1 45%;
-  }
-  
-  .pie-chart-container {
-    flex: 1 1 18%;
-    margin-left: 100px;
-  }
-  
-  .chart-container h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 20px;
-  }
-  
-  .chart-container canvas {
-    max-width: 100%;
-  }
-  
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.chart-container {
+  flex: 1 1 45%;
+  box-sizing: border-box;
+}
+
+.line-chart-container {
+  flex: 1 1 45%;
+}
+
+.bar-chart-container {
+  flex: 1 1 45%;
+}
+
+.pie-chart-container {
+  flex: 1 1 18%;
+  margin-left: 100px;
+}
+
+.chart-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.chart-container canvas {
+  max-width: 100%;
+}

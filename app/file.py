@@ -38,7 +38,7 @@ def process_results(file_data, yara_rules):
     if yara_matches:
         # Add triggered YARA rules to results list
         for match in yara_matches:
-            yara_results.append({'rule': match.rule})
+            yara_results.append({'triggered_action': match.rule})
     else:
-        yara_results.append({'rule': 'No YARA rules matched'})
+        yara_results.append({'triggered_action': 'No YARA rules matched'})
     return yara_results

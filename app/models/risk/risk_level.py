@@ -27,11 +27,11 @@ def predict_level(new_text):
     # predicted_class_name = label_encoder.inverse_transform([predicted_class])[0]
     return class_names[predicted_class]
 
-model=tf.keras.models.load_model('app/models/Risk_level/logsfinal95.h5')
+model=tf.keras.models.load_model('app/models/risk/logsfinal95.h5')
 
 class_names=['High','Low','Low to Medium','Medium']
 # Load the dataset
-risk=pd.read_csv('app/models/Risk_level/risktype.csv')
+risk=pd.read_csv('app/models/risk/risk.csv')
 risk = shuffle(risk)
 # Convert the Risk_Label to numerical values
 label_encoder = LabelEncoder()
@@ -56,7 +56,7 @@ max_sequence_length = max(len(seq) for seq in sequences)
 # embeddings_index = {}
 # vocab_size = len(tokenizer.word_index) + 1  # +1 because of zero padding
 # embedding_dim = 100
-# with open('Risk_level/glove.6B.100d.txt') as f:
+# with open('risk/glove.6B.100d.txt') as f:
 #      for line in f:
 #          values = line.split()
 #          word = values[0]
@@ -105,7 +105,7 @@ max_sequence_length = max(len(seq) for seq in sequences)
 # #model.save('/content/drive/MyDrive/logsfinal95.h5')
 
 # # Load the model
-# model=tf.keras.models.load_model('Risk_level/logsfinal95.h5')
+# model=tf.keras.models.load_model('risk/logsfinal95.h5')
 
 # Make predictions
 if __name__ == '__main__':

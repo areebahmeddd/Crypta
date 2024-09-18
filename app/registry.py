@@ -1,32 +1,30 @@
 from regipy.registry import RegistryHive
 import json
-from typing import Any, Dict, List, Union
 
-def serialize_value(value: Any) -> Union[str, None]:
-    '''Convert value to a JSON-serializable format.'''
+def scan_registry(file_path):
+    # Load the registry hive and recursively scan all subkeys
+    registry_hive = RegistryHive(file_path)
+    subkey_entries = [serialize_subkey(subkey) for subkey in registry_hive.recurse_subkeys()]
+    return subkey_entries
+
+def serialize_subkey(subkey):
+    # Serialize subkey data to a dictionary
+    subkey_data = {
+        'subkey_name': subkey.subkey_name,
+        'path': subkey.path,
+        'timestamp': subkey.timestamp if isinstance(subkey.timestamp, str) else subkey.timestamp.isoformat() if subkey.timestamp else None,
+        'values': {value.name: serialize_value(value.value) for value in subkey.values},
+        'values_count': subkey.values_count
+    }
+    return subkey_data
+
+def serialize_value(value):
+    # Serialize registry value data to a dictionary
     try:
         return value.decode('utf-8')
     except (AttributeError, UnicodeDecodeError):
         return value.hex() if isinstance(value, bytes) else str(value)
 
-def serialize_subkey(entry: Any) -> Dict[str, Any]:
-    '''Convert Subkey object to a dictionary.'''
-    entry_dict = {
-        'subkey_name': entry.subkey_name,
-        'path': entry.path,
-        'timestamp': entry.timestamp if isinstance(entry.timestamp, str) else entry.timestamp.isoformat() if entry.timestamp else None,
-        'values': {value.name: serialize_value(value.value) for value in entry.values},
-        'values_count': entry.values_count
-    }
-    return entry_dict
-
-def process_registry_hive(file_path: str) -> List[Dict[str, Any]]:
-    '''Process the registry hive and return entries as a JSON string.'''
-    reg = RegistryHive(file_path)
-    entries = [serialize_subkey(entry) for entry in reg.recurse_subkeys()]
-    return entries
-
 if __name__ == '__main__':
-    # Test the registry processing function
-    registry_entries = process_registry_hive(r"C:\Users\shiva\Downloads\hives\SECURITY")
+    registry_entries = scan_registry(r'C:\Users\shiva\Downloads\hives\SECURITY')
     print(json.dumps(registry_entries, indent=2))

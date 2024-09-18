@@ -117,10 +117,10 @@ class _IocState extends State<Ioc> {
                     children: [
                       buildTableRow("Level", "Type", "Triggered Action",
                           isHeader: true),
-                      for (var rule in widget.result['rules'].entries!)
+                      for (var rule in widget.result['yara'].entries!)
                         buildTableRow(
-                          "low",
-                          "authentication",
+                          "Low",
+                          "Authentication",
                           rule.key,
                         ),
                       // Additional rows can be added here.

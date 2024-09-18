@@ -32,7 +32,7 @@ class_mapping = {
 # Function to predict the network traffic
 def predict_network(data):
   model = xgb.XGBClassifier()
-  model.load_model('app/models/Network_traffic/net.bin')
+  model.load_model('app/models/network_traffic/net.bin')
   data=ipl(data)
   pred=model.predict(data)
   ans=[class_mapping[i] for i in pred ]

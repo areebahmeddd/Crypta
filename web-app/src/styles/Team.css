@@ -1,5 +1,3 @@
-/* src/styles/Team.css */
-
 .team-page {
   text-align: center;
   padding: 20px;
@@ -11,7 +9,7 @@
 }
 
 .team-header h1 {
-  color: #333;
+  color: #457d58;
   font-size: 2.5em;
 }
 
@@ -22,7 +20,7 @@
 
 .team-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Grid for the top 4 members */
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   max-width: 1200px;
   margin: 0 auto;
@@ -31,12 +29,12 @@
 .team-bottom-row {
   display: flex;
   justify-content: center;
-  gap: 20px; /* Adjust or remove if necessary */
+  gap: 20px;
   margin-top: 20px;
 }
 
 .team-bottom-row > .team-card {
-  flex: 1; /* Ensures that the cards take equal width */
+  flex: 1;
   max-width: 300px;
 }
 
@@ -47,12 +45,12 @@
   padding: 20px;
   text-align: center;
   max-width: 300px;
-  margin: 0; /* Remove margin to avoid extra space */
+  margin: 0;
 }
 
 .team-photo {
   width: 100%;
-  aspect-ratio: 1 / 1; /* Ensures the image is square */
+  aspect-ratio: 1 / 1;
   object-fit: cover;
   border-radius: 10px;
 }
@@ -110,5 +108,5 @@
 
 .btn svg {
   margin-right: 4px;
-  font-size: 1.5em; /* Increase font size to make the icon larger */
+  font-size: 1.5em;
 }

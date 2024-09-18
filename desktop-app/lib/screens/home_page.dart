@@ -233,12 +233,12 @@ class HomePageState extends ConsumerState<HomePage> {
                                     ),
                                     SizedBox(height: 10),
                                     Text(
-                                      'Drag and drop a folder here or',
+                                      'Drag & Drop Your Folder',
                                       style: TextStyle(color: Colors.grey),
                                     ),
                                     SizedBox(height: 10),
                                     Text(
-                                      'Choose folder',
+                                      'Choose Folder',
                                       style: TextStyle(
                                           color: Colors.blue,
                                           fontWeight: FontWeight.bold),

@@ -1,15 +1,14 @@
-/* Modal.css */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%; /* Change to 100% for full viewport height */
+  height: 100%;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;/* Allow scrolling if modal content overflows */
+  z-index: 1000;
 }
 
 .modal-content {
@@ -17,7 +16,7 @@
   border-radius: 12px;
   width: 90%;
   max-width: 900px;
-  max-height: 90vh; /* Ensure modal height is within viewport height */
+  max-height: 90vh;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   position: relative;
@@ -34,11 +33,11 @@
   position: relative;
 }
 
-.modal-header h2{
+.modal-header h2 {
   justify-content: space-between;
   align-items: center;
- margin-top: 20px;
- margin-left: 50px;
+  margin-top: 20px;
+  margin-left: 50px;
 }
 
 .modal-close-btn {
@@ -62,7 +61,7 @@
 .indicator-card {
   padding: 12px;
   background: #fafafa;
-  flex: 1; /* Allow the card to grow and shrink as needed */ /* Allow scrolling inside the card if needed */
+  flex: 1;
 }
 
 .indicator-table {
@@ -158,13 +157,10 @@
   background: #45a049;
 }
 
-/* Modal.css or appropriate stylesheet */
-
-/* Styling for Recommended Fixes Section */
 .dashboard_r_alert-section {
   margin-bottom: 20px;
   margin-left: 20px;
-  max-height: 400px; /* Adjust as needed */
+  max-height: 400px;
   overflow-y: auto;
 }
 
@@ -183,7 +179,7 @@
   margin-bottom: 15px;
 }
 
-.dashboard_r_alert-issue{
+.dashboard_r_alert-issue {
   margin-bottom: 10px;
 }
 
@@ -211,11 +207,11 @@
   color: #000000;
   margin-left: 10px;
   flex-grow: 1;
-  word-wrap: break-word; 
+  word-wrap: break-word;
 }
 
 .dashboard_fix_alert-list {
-  list-style-type: disc; /* Bullet points for the fixes */
+  list-style-type: disc;
   padding-left: 40px;
   margin: 0;
 }
@@ -244,7 +240,6 @@
   cursor: not-allowed;
 }
 
-/* Style for the Level column */
 .level-column {
   width: 50%;
   padding: 10px;
@@ -253,27 +248,26 @@
   margin-left: 25%;
 }
 
-/* Define color styles for each level */
 .level_all {
   justify-content: center;
 }
 
 .level-high {
-  background-color: #DF5656; /* High severity color */
-  color: #fff; /* White text */
+  background-color: #df5656;
+  color: #fff;
 }
 
 .level-low-medium {
-  background-color: #FFD65A; /* Medium-High severity color */
-  color: #fff; /* White text */
+  background-color: #ffd65a;
+  color: #fff;
 }
 
 .level-medium {
-  background-color: #F8A72C; /* Medium severity color */
-  color: #000; /* Black text */
+  background-color: #f8a72c;
+  color: #000;
 }
 
 .level-low {
-  background-color: #E0E0E0; /* Low severity color */
-  color: #000; /* Black text */
+  background-color: #e0e0e0;
+  color: #000;
 }

@@ -1,61 +1,42 @@
 import psutil
 
-def build_process_dict():
-    
-    #Build a dictionary where keys are parent process IDs (PPIDs) and values are lists of child process IDs (PIDs).
-    
-    process_dict = {}
-    
-    # Iterate over all processes
-    for proc in psutil.process_iter(['pid', 'ppid']):
-        try:
-            pid = proc.info['pid']
-            ppid = proc.info['ppid']
-            
-            if ppid not in process_dict:
-                process_dict[ppid] = []
-            process_dict[ppid].append(pid)
-        
-        except (psutil.NoSuchProcess, psutil.AccessDenied) as e:
-            # Handle process exceptions
-            print(f"Error: {e}")
-    # print(process_dict)
-    return process_dict
+def list_process():
+    # Iterate over all running processes and print process ID, name, and parent process ID
+    for process in psutil.process_iter(['pid', 'name', 'ppid']):
+        print(f'PID: {process.info["pid"]}, Name: {process.info["name"]}, PPID: {process.info["ppid"]}')
 
-def detect_anomalies():
-    
-    #Detect anomalies in the parent-child process relationships.
-    
-    process_dict = build_process_dict()
-    f=0
-    # Check for anomalies
+def scan_process():
+    # Map all running processes to their parent process
+    process_tree = map_process()
+    anomalies_found = False
 
-    for ppid, children in process_dict.items():
-        # Fetch the parent process
-        try:
-            parent = psutil.Process(ppid)
-        except psutil.NoSuchProcess:
-            continue
-        
-        # Check each child
-        for child_pid in children:
-            try:
-                child = psutil.Process(child_pid)
-                if child.ppid() != ppid:
-                    print(f"Anomaly Detected: Child process {child_pid} has PPID {child.ppid()} but expected {ppid}")
-                    f=1
-            except psutil.NoSuchProcess:
-                continue
-    if f==0:
-                print("No Anomalies Detected")
-        
-def list_processes():
-    for proc in psutil.process_iter(['pid', 'name', 'ppid']):
-        try:
-            print(f"PID: {proc.info['pid']}, Name: {proc.info['name']}, PPID: {proc.info['ppid']}")
-        except (psutil.NoSuchProcess, psutil.AccessDenied):
-            pass
+    # Iterate over all parent processes and their child processes to detect anomalies
+    for parent_pid, child_pids in process_tree.items():
+        parent_process = psutil.Process(parent_pid)
 
-if __name__ == "__main__":
-    #list_processes()
-    detect_anomalies()
+        # Check if the parent process has any child processes with different parent process ID
+        for child_pid in child_pids:
+            child_process = psutil.Process(child_pid)
+            if child_process.ppid() != parent_pid:
+                print(f'Anomaly detected: Parent process {parent_process.name()} (PID: {parent_pid}) has child process {child_process.name()} (PID: {child_pid}) with different PPID.')
+                anomalies_found = True
+
+    if not anomalies_found:
+        print('No anomalies detected in process tree.')
+
+def map_process():
+    process_tree = {}
+    # Iterate over all running processes and map each process to its parent process
+    for process in psutil.process_iter(['pid', 'ppid']):
+        pid = process.info['pid']
+        ppid = process.info['ppid']
+
+        if ppid not in process_tree:
+            process_tree[ppid] = []
+        process_tree[ppid].append(pid)
+
+    return process_tree
+
+if __name__ == '__main__':
+    # list_process()
+    scan_process()

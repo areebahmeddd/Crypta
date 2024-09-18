@@ -1,5 +1,3 @@
-/* src/components/Dashboard.css */
-
 .dashboard__title {
   font-size: 2rem;
   margin-bottom: 10px;
@@ -10,43 +8,44 @@
 .dashboard__separator {
   width: 100%;
   border: 0;
-  border-top: 3px solid #ccc; /* Customize color and thickness */
-  margin-bottom: 20px; /* Add space below the line */
+  border-top: 3px solid #ccc;
+  margin-bottom: 20px;
 }
 
 .dashboard__container {
-    width: 80%;
-    margin: 0 auto;
-    padding: 20px;
-  }
+  width: 80%;
+  margin: 0 auto;
+  padding: 20px;
+}
 
-  .dashboard__search-bar-wrapper {
-    display: flex;
-    align-items: center;
-    background-color:#fdfdfd;
-    border-radius: 25px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 6px 16px;
-    width: 100%;
-    margin-bottom: 40px;
-  }
-  
-  .dashboard__search-bar {
-    flex-grow: 1;
-    border: none;
-    outline: none;
-    border-radius: 25px;
-    padding: 8px;
-    font-size: 16px;
-  }
-  
-  .dashboard__search-icon, .dashboard__search-clear, .dashboard__search-filter {
-    margin-left: 10px;
-    margin-right: 10px;
-    cursor: pointer;
-    color: #757474;
-  }
-  
+.dashboard__search-bar-wrapper {
+  display: flex;
+  align-items: center;
+  background-color: #fdfdfd;
+  border-radius: 25px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 6px 16px;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.dashboard__search-bar {
+  flex-grow: 1;
+  border: none;
+  outline: none;
+  border-radius: 25px;
+  padding: 8px;
+  font-size: 16px;
+}
+
+.dashboard__search-icon,
+.dashboard__search-clear,
+.dashboard__search-filter {
+  margin-left: 10px;
+  margin-right: 10px;
+  cursor: pointer;
+  color: #757474;
+}
 
 .dashboard__card {
   position: relative;
@@ -60,7 +59,7 @@
 
 .dashboard__card-header {
   display: flex;
-  justify-content: space-between; /* Distribute columns evenly */
+  justify-content: space-between;
   align-items: center;
   background: #f5f5f5;
   padding: 10px;
@@ -74,7 +73,7 @@
 
 .dashboard__card-row {
   display: flex;
-  justify-content: space-between; /* Distribute columns evenly */
+  justify-content: space-between;
   align-items: center;
   padding: 10px 0;
   border-bottom: 1px solid #e0e0e0;
@@ -93,7 +92,7 @@
   flex: 1;
   padding: 5px;
   text-align: center;
-   align-items: center;
+  align-items: center;
 }
 
 .sort-button-custom {
@@ -106,10 +105,9 @@
   position: relative;
 }
 
-
 .icon-container {
-  width: 16px; /* Width of the icon */
-  height: 16px; /* Height of the icon */
+  width: 16px;
+  height: 16px;
   display: inline-block;
   text-align: center;
 }
@@ -121,19 +119,19 @@
 }
 
 .sort-button-custom:hover {
-  color: #457d58; /* Optional: Change color on hover */
+  color: #457d58;
 }
 
-.vul_count{
+.vul_count {
   width: 50%;
 }
 
 .total-files {
   position: absolute;
-  bottom: 10px; /* Adjust as needed */
-  left: 10px;   /* Adjust as needed */
-  font-size: 16px; /* Adjust as needed */
-  color: #7a7878; /* Adjust color as needed */
+  bottom: 10px;
+  left: 10px;
+  font-size: 16px;
+  color: #7a7878;
 }
 
 .dashboard_v_card {
@@ -148,7 +146,7 @@
 
 .dashboard_v_card-header {
   display: flex;
-  justify-content: space-between; /* Distribute columns evenly */
+  justify-content: space-between;
   align-items: center;
   background: #f5f5f5;
   padding: 10px;
@@ -162,7 +160,7 @@
 
 .dashboard_v_card-row {
   display: flex;
-  justify-content: space-between; /* Distribute columns evenly */
+  justify-content: space-between;
   align-items: center;
   padding: 10px 0;
   border-bottom: 1px solid #e0e0e0;
@@ -185,14 +183,14 @@
 
 .total-v-files {
   position: absolute;
-  bottom: 10px; /* Adjust as needed */
-  left: 10px;   /* Adjust as needed */
-  font-size: 16px; /* Adjust as needed */
-  color: #7a7878; /* Adjust color as needed */
+  bottom: 10px;
+  left: 10px;
+  font-size: 16px;
+  color: #7a7878;
 }
 
 .dashboard__view-btn {
-  background:  #457d58; /* Primary blue color */
+  background: #457d58;
   border: none;
   color: #fff;
   padding: 6px 28px;
@@ -207,8 +205,8 @@
 }
 
 .dashboard__view-btn:hover {
-  background: #45a049; /* Darker blue for hover */
-  transform: scale(1.05); /* Slightly enlarge the button */
+  background: #45a049;
+  transform: scale(1.05);
 }
 
 .dashboard__view-btn:focus {
@@ -231,8 +229,8 @@
   border-radius: 4px;
   cursor: pointer;
   margin-bottom: 10px;
-  width: 40px; /* Fixed width for consistency */
-  height: 40px; /* Fixed height */
+  width: 40px;
+  height: 40px;
 }
 
 .pagination-btn-r {
@@ -244,8 +242,8 @@
   border-radius: 4px;
   cursor: pointer;
   margin-bottom: 10px;
-  width: 40px; /* Fixed width for consistency */
-  height: 40px; /* Fixed height */
+  width: 40px;
+  height: 40px;
   margin-right: 50px;
 }
 
@@ -268,8 +266,8 @@
   border-radius: 4px;
   cursor: pointer;
   margin-bottom: 10px;
-  width: 38px; /* Fixed width for consistency */
-  height: 38px; /* Fixed height */
+  width: 38px;
+  height: 38px;
 }
 
 .pagination-number.active {
@@ -282,7 +280,7 @@
 }
 
 .dashboard__alert-section {
-  margin-bottom: 40px; /* Space from other sections */
+  margin-bottom: 40px;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -293,7 +291,6 @@
   margin-bottom: 10px;
   color: #333;
   font-weight: bold;
-  
 }
 
 .dashboard__alert-separator {
@@ -315,51 +312,48 @@
 }
 
 .dashboard__alert-list {
-  list-style-type: disc; /* Bullet points for the list */
-  padding-left: 20px; /* Space for bullet points */
-  margin: 0; /* Remove default margin */
+  list-style-type: disc;
+  padding-left: 20px;
+  margin: 0;
 }
 
 .dashboard__alert-item {
-  margin-bottom: 10px; /* Space between alert items */
-  font-size: 16px; /* Font size for alert text */
+  margin-bottom: 10px;
+  font-size: 16px;
 }
 
 .dashboard__show-more {
-  background: none; /* No background */
-  border: none; /* Remove border */
-  color: #457d58; /* Button color */
-  cursor: pointer; /* Pointer cursor on hover */
-  font-size: 16px; /* Font size */
-  margin-top: 10px; /* Space above button */
+  background: none;
+  border: none;
+  color: #457d58;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
 }
 
 .dashboard__show-more:hover {
-  text-decoration: underline; /* Underline on hover */
+  text-decoration: underline;
 }
 
-/* Container for download and export sections */
 .dashboard__buttons-container {
   display: flex;
-  justify-content: center; /* Center the whole container */
-  align-items: center; /* Vertically center */
-  gap: 20px; /* Adds spacing between the buttons and dropdowns */
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
   padding: 20px;
-  flex-wrap: wrap; /* Ensures responsive wrapping */
+  flex-wrap: wrap;
 }
 
-/* Download and Export Sections */
 .dashboard__download-section,
 .dashboard__export-section {
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  gap: 10px; /* Spacing between button and dropdown */
+  gap: 10px;
 }
 
-/* Button styles */
-.dashboard__download-btn, 
+.dashboard__download-btn,
 .dashboard__export-btn {
   padding: 10px 50px;
   background-color: #457d58;
@@ -368,23 +362,21 @@
   border-radius: 4px;
   cursor: pointer;
   text-align: center;
-  width: auto; /* Remove width constraints */
-  white-space: nowrap; /* Prevent text wrapping */
+  width: auto;
+  white-space: nowrap;
 }
 
-.dashboard__download-icon, 
+.dashboard__download-icon,
 .dashboard__export-icon {
   margin-left: 8px;
   font-size: 18px;
 }
 
-/* Hover effect */
-.dashboard__download-btn:hover, 
+.dashboard__download-btn:hover,
 .dashboard__export-btn:hover {
   background-color: #45a049;
 }
 
-/* Dropdown container */
 .dashboard__dropdown {
   position: relative;
   display: flex;
@@ -395,7 +387,6 @@
   margin-left: 5px;
 }
 
-/* Dropdown toggle button */
 .dashboard__dropdown-toggle {
   padding: 10px 20px;
   background-color: rgb(161, 155, 155);
@@ -407,12 +398,10 @@
   align-items: center;
 }
 
-/* Hover effect for dropdown toggle */
 .dashboard__dropdown-toggle:hover {
   background-color: rgb(179, 175, 175);
 }
 
-/* Dropdown menu */
 .dashboard__dropdown-menu,
 .dashboard__dropdown-export-menu {
   position: absolute;
@@ -424,30 +413,27 @@
   z-index: 1;
 }
 
-/* Dropdown items */
-.dashboard__dropdown-menu div, 
+.dashboard__dropdown-menu div,
 .dashboard__dropdown-export-menu div {
   padding: 10px;
   cursor: pointer;
   text-align: center;
 }
 
-/* Hover effect for dropdown items */
-.dashboard__dropdown-menu div:hover, 
+.dashboard__dropdown-menu div:hover,
 .dashboard__dropdown-export-menu div:hover {
   background-color: #ddd;
 }
 
-/* Make the layout responsive */
 @media screen and (max-width: 768px) {
   .dashboard__buttons-container {
     flex-direction: column;
     gap: 10px;
   }
 
-  .dashboard__download-btn, 
-  .dashboard__export-btn, 
+  .dashboard__download-btn,
+  .dashboard__export-btn,
   .dashboard__dropdown-toggle {
-    width: 100%; /* Ensure full width on small screens */
+    width: 100%;
   }
 }

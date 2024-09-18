@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import "../styles/Rules.css";
-import LoadingPage from '../pages/Loading'; 
+import LoadingPage from "../pages/Loading";
 import uploadIcon from "../assets/upload.png";
 import defaultRulesLogo from "../assets/logo/defaultIcon.png";
 import defaultRulesFile from "../assets/static/security.yara";
@@ -127,11 +127,10 @@ function Rules() {
             navigate("/dashboard", {
               state: {
                 filesFromHome: location.state.files,
-                results: responseData.results, // Assuming responseData is the data you received from the backend
-                gemini: responseData.gemini, // If you also need to pass gemini data
-              }
-              }
-            );            
+                results: responseData.results,
+                gemini: responseData.gemini,
+              },
+            });
           }
         } else {
           setErrorMessage(
@@ -142,7 +141,7 @@ function Rules() {
         setErrorMessage(`Error: ${error.message}`);
       } finally {
         setLoading(false);
-        setIsNavigating(false); 
+        setIsNavigating(false);
       }
     } else {
       setErrorMessage("Please select a file to analyze.");
@@ -151,118 +150,124 @@ function Rules() {
 
   return (
     <>
-    {isNavigating ? <LoadingPage /> : (
-    <div className="options-containers">
-      <div className="options-wrappers">
-        <h2 className="headers">Upload YARA Rules</h2>
-        <div className="optionss">
-          <div
-            className={`upload-boxs ${dragging ? "dragging" : ""}`}
-            onDrop={onDrop}
-            onDragOver={onDragOver}
-            onDragLeave={onDragLeave}
-          >
-            <form onSubmit={onSubmit}>
-              <div className="upload-areas">
-                <label htmlFor="file-upload" className="upload-labels">
-                  <img
-                    src={uploadIcon}
-                    alt="Upload Icon"
-                    className="upload-icons"
-                  />
-                  <span className="upload-texts">Drag & Drop Your File</span>
-                  <span className="upload-texts choose-files">Choose File</span>
-                  <input
-                    id="file-upload"
-                    type="file"
-                    className="hidden"
-                    key={inputKey}
-                    onChange={onChange}
-                    multiple
-                  />
-                </label>
-              </div>
-            </form>
-          </div>
-          <span className="or">————— OR —————</span>
-          <div className="default-rules">
-            <img
-              src={defaultRulesLogo}
-              alt="Default Rules Logo"
-              className="default-rules-logo"
-            />
-            <div className="default-rules-info">
-              <div className="default-rules-para">
-                <code>security.yara</code>
-              </div>
+      {isNavigating ? (
+        <LoadingPage />
+      ) : (
+        <div className="options-containers">
+          <div className="options-wrappers">
+            <h2 className="headers">Upload YARA Rules</h2>
+            <div className="optionss">
               <div
-                className={`default-rules-option ${
-                  selectedOption === "default-file" ? "selected" : ""
-                }`}
-                onClick={handleFileSelection}
+                className={`upload-boxs ${dragging ? "dragging" : ""}`}
+                onDrop={onDrop}
+                onDragOver={onDragOver}
+                onDragLeave={onDragLeave}
               >
-                <span className="radio-button">
-                  {selectedOption === "default-file" && (
-                    <span className="radio-inner"></span>
-                  )}
-                </span>
-                {selectedOption === "default-file"
-                  ? "Default Rules"
-                  : "Default Rules"}
+                <form onSubmit={onSubmit}>
+                  <div className="upload-areas">
+                    <label htmlFor="file-upload" className="upload-labels">
+                      <img
+                        src={uploadIcon}
+                        alt="Upload Icon"
+                        className="upload-icons"
+                      />
+                      <span className="upload-texts">
+                        Drag & Drop Your File
+                      </span>
+                      <span className="upload-texts choose-files">
+                        Choose File
+                      </span>
+                      <input
+                        id="file-upload"
+                        type="file"
+                        className="hidden"
+                        key={inputKey}
+                        onChange={onChange}
+                        multiple
+                      />
+                    </label>
+                  </div>
+                </form>
               </div>
+              <span className="or">————— OR —————</span>
+              <div className="default-rules">
+                <img
+                  src={defaultRulesLogo}
+                  alt="Default Rules Logo"
+                  className="default-rules-logo"
+                />
+                <div className="default-rules-info">
+                  <div className="default-rules-para">
+                    <code>security.yara</code>
+                  </div>
+                  <div
+                    className={`default-rules-option ${
+                      selectedOption === "default-file" ? "selected" : ""
+                    }`}
+                    onClick={handleFileSelection}
+                  >
+                    <span className="radio-button">
+                      {selectedOption === "default-file" && (
+                        <span className="radio-inner"></span>
+                      )}
+                    </span>
+                    {selectedOption === "default-file"
+                      ? "Default Rules"
+                      : "Default Rules"}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="buttons">
+              <button className="cancel-buttons" onClick={handleCancel}>
+                Back
+              </button>
+              <button
+                className="submit-buttons"
+                onClick={handleAnalyze}
+                disabled={!rulesFile}
+              >
+                Analyze
+              </button>
             </div>
           </div>
-        </div>
-        <div className="buttons">
-          <button className="cancel-buttons" onClick={handleCancel}>
-            Back
-          </button>
-          <button
-            className="submit-buttons"
-            onClick={handleAnalyze}
-            disabled={!rulesFile}
-          >
-            Analyze
-          </button>
-        </div>
-      </div>
-      <div className={`file-infoo ${!rulesFile ? "hidden" : ""}`}>
-        {rulesFile ? (
-          <div className="files-details">
-            <div>
-              <div className="name">
-                <strong>Name</strong>
+          <div className={`file-infoo ${!rulesFile ? "hidden" : ""}`}>
+            {rulesFile ? (
+              <div className="files-details">
+                <div>
+                  <div className="name">
+                    <strong>Name</strong>
+                  </div>
+                  <div>{rulesFile.name}</div>
+                </div>
+                <div>
+                  <div className="size">
+                    <strong>Size</strong>
+                  </div>
+                  <div>{(rulesFile.size / 1024).toFixed(2)} KB</div>
+                </div>
+                <div>
+                  <div className="type">
+                    <strong>Type</strong>
+                  </div>
+                  <div>{rulesFile.type}</div>
+                </div>
+                <div>
+                  <div className="modify">
+                    <strong>Last Modified</strong>
+                  </div>
+                  <div>
+                    {rulesFile.lastModifiedDate
+                      ? rulesFile.lastModifiedDate.toLocaleDateString()
+                      : "N/A"}
+                  </div>
+                </div>
               </div>
-              <div>{rulesFile.name}</div>
-            </div>
-            <div>
-              <div className="size">
-                <strong>Size</strong>
-              </div>
-              <div>{(rulesFile.size / 1024).toFixed(2)} KB</div>
-            </div>
-            <div>
-              <div className="type">
-                <strong>Type</strong>
-              </div>
-              <div>{rulesFile.type}</div>
-            </div>
-            <div>
-              <div className="modify">
-                <strong>Last Modified</strong>
-              </div>
-              <div>
-                {rulesFile.lastModifiedDate
-                  ? rulesFile.lastModifiedDate.toLocaleDateString()
-                  : "N/A"}
-              </div>
-            </div>
+            ) : null}
           </div>
-        ) : null}
-      </div>
-    </div>
-     )}
-     </>
+        </div>
+      )}
+    </>
   );
 }
 

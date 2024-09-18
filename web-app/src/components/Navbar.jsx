@@ -36,7 +36,7 @@ function Navbar() {
             <span style={{ marginRight: "12px" }}>Download</span>
             <FontAwesomeIcon icon={faArrowCircleDown} />
           </a>
-          <a href="https://youtu.be/ToXUq-NSkUg?si=b6PRGx4nwImTz-li" className="yt-icon">
+          <a href="https://youtube.com/watch?v=ToXUq-NSkUg" className="yt-icon">
             <FontAwesomeIcon icon={faYoutube} />
           </a>
           <a
