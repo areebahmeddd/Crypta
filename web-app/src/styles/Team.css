@@ -19,8 +19,9 @@
 }
 
 .team-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
   gap: 20px;
   max-width: 1200px;
   margin: 0 auto;
@@ -40,12 +41,18 @@
 
 .team-card {
   background-color: #ffffff;
-  border-radius: 10px;
+  border-radius: 16px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 20px;
   text-align: center;
   max-width: 300px;
   margin: 0;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.team-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #e6f2eb;
 }
 
 .team-photo {
@@ -57,11 +64,13 @@
 
 .team-info {
   margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .team-info h3 {
   font-size: 1.5em;
-  margin: 10px 0;
 }
 
 .team-info h4 {
@@ -81,8 +90,7 @@
 
 .team-links {
   display: flex;
-  justify-content: center;
-  gap: 10px;
+  justify-content: space-evenly;
   margin-top: 15px;
 }
 

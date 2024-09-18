@@ -37,7 +37,7 @@ const Team = () => {
     },
     {
       name: "Yuktha PS",
-      role: "Machine Learning Developer",
+      role: "AI/ML Developer",
       email: "psyuktha@gmail.com",
       image: yukthaImage,
       github: "https://github.com/psyuktha",
@@ -58,7 +58,7 @@ const Team = () => {
       image: rishiImage,
       github: "https://github.com/rishichirchi",
       linkedin: "https://linkedin.com/in/rishiraj-chirchi",
-    },
+    }
   ];
 
   return (
@@ -72,40 +72,7 @@ const Team = () => {
       </div>
 
       <div className="team-grid">
-        {teamMembers.slice(0, 4).map((member, index) => (
-          <div className="team-card" key={index}>
-            <img src={member.image} alt={member.name} className="team-photo" />
-            <div className="team-info">
-              <h3>{member.name}</h3>
-              <h4>{member.role}</h4>
-              <p className="team-email">
-                <a href={`mailto:${member.email}`}>{member.email}</a>
-              </p>
-              <div className="team-links">
-                <a
-                  href={member.github}
-                  className="btn github-btn"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <FontAwesomeIcon icon={faGithub} /> GitHub
-                </a>
-                <a
-                  href={member.linkedin}
-                  className="btn linkedin-btn"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <FontAwesomeIcon icon={faLinkedin} /> LinkedIn
-                </a>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="team-bottom-row">
-        {teamMembers.slice(4).map((member, index) => (
+        {teamMembers.slice(0, 6).map((member, index) => (
           <div className="team-card" key={index}>
             <img src={member.image} alt={member.name} className="team-photo" />
             <div className="team-info">

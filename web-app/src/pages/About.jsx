@@ -6,52 +6,63 @@ const About = () => {
     <div className="about-page">
       <div className="about-header">
         <h1>Welcome to Crypta</h1>
-        <p>
-          Empowering you to unlock deeper insights into file vulnerabilities
-          with advanced technology.
-        </p>
       </div>
 
       <div className="about-content">
         <section className="about-section">
           <h2>What is Crypta?</h2>
           <p>
-            Crypta is a sophisticated platform designed to help individuals and
-            organizations assess file vulnerabilities and understand data risks
-            in a streamlined, effective way. With Crypta, you can easily scan
-            files for potential risks and take the necessary steps to ensure
-            security.
+            An automated digital forensics and incident response system designed
+            for anomaly detection and pattern recognition across system data and
+            network activity. The tool integrates AI/ML models to classify
+            system risk levels, identify indicators of compromise (IoCs), and
+            generate actionable insights from forensic disk images, memory
+            dumps, and network traffic.
+          </p>
+          <p>
+            Additionally, the tool supports live drive detection, allowing
+            investigators to connect drives and perform real-time forensic
+            analysis. It also features a chatbot that provides detailed
+            explanations of detected anomalies, offering further insights.
           </p>
         </section>
 
         <section className="about-section interactive-section">
-          <h2>How Crypta Works</h2>
+          <h2>Why Crypta?</h2>
           <ul className="interactive-list">
             <li>
-              <strong>File Analysis:</strong> Upload your files for real-time
-              vulnerability analysis and risk assessment.
+              <strong>Automated Forensic Data Collection:</strong> Automates FTK
+              Imager, Volatility, RegRipper, and Sysinternals Suite through
+              Python libraries (PyEWF, MemProcFS, Regipy, and PSUtil) for
+              forensic images, memory dumps, registry hives, and background
+              processes.
             </li>
             <li>
-              <strong>Data Insights:</strong> Crypta provides clear, actionable
-              insights on potential vulnerabilities, enabling smarter decisions.
+              <strong>Network Traffic Analysis:</strong> Leverages Wireshark and
+              Scapy to analyze packet captures and identify suspicious network
+              activities.
             </li>
             <li>
-              <strong>Advanced Security:</strong> Stay ahead of potential
-              threats by leveraging Crypta's state-of-the-art vulnerability
-              detection.
+              <strong>IoC Identification:</strong> Utilizes custom YARA rules
+              and MISP databases for detecting file anomalies and correlating
+              known IoCs.
+            </li>
+            <li>
+              <strong>AI/ML Integration:</strong> Implements TensorFlow models
+              for anomaly detection and risk classification, offering
+              investigators prioritized analysis of critical artifacts.
+            </li>
+            <li>
+              <strong>Cross-Platform Dashboards:</strong> Provides real-time
+              data visualization, interactive timelines, and detailed reports
+              with export options in PDF, JSON, and CSV formats.
+            </li>
+            <li>
+              <strong>Scalable Architecture:</strong> Built with FastAPI,
+              Next.js, and Flutter, ensuring high performance and easy
+              deployment across environments.
             </li>
           </ul>
-        </section>
-
-        <section className="about-section">
-          <h2>Why Crypta?</h2>
-          <p>
-            We believe that data security should be both accessible and
-            powerful. Whether you're an individual concerned about your files or
-            an enterprise managing sensitive information, Crypta equips you with
-            the tools needed to maintain your peace of mind. Our platform is
-            designed with simplicity, reliability, and efficiency at its core.
-          </p>
         </section>
       </div>
     </div>
