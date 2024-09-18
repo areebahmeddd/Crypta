@@ -29,10 +29,10 @@ def predict_type(new_text):
     predicted_class_name = label_encoder.inverse_transform([predicted_class])[0]
     return predicted_class_name
 
-model=tf.keras.models.load_model(r'app\models\risk\risk_type98.h5')
+model=tf.keras.models.load_model(r'models/risk/risk_type98.h5')
 
 # Load the dataset
-risk=pd.read_csv('app/models/risk/risk.csv')
+risk=pd.read_csv('models/risk/risk.csv')
 class_names={11: 'General System Logs', 2: 'Authentication Logs', 8: 'Error/Crash Logs', 1: 'Audit Logs', 9: 'Event Logs', 14: 'Network Traffic Logs', 19: 'Update/Configuration Logs', 13: 'Module/Component Loading Logs', 3: 'Authorization and Access Control Logs', 5: 'Boot/Shutdown Logs', 16: 'Process Initialization/Termination Logs', 0: 'Application Logs', 17: 'Resource Management Logs', 18: 'Service/Daemon Logs', 15: 'Performance Logs', 6: 'Configuration/Settings Logs', 10: 'File Integrity Monitoring Logs', 7: 'Driver/Hardware Logs', 12: 'Incident Detection and Response Logs', 4: 'Backup and Recovery Logs'}
 concatenated_df = shuffle(risk)
 l=len(class_names)
@@ -115,7 +115,7 @@ max_sequence_length = max(len(seq) for seq in sequences)
 # # Save the model
 # #model.save('/content/drive/MyDrive/risk_type98.h5')
 # #Load the model
-# model=tf.keras.models.load_model('app/models/risk/risk_type98.h5')
+# model=tf.keras.models.load_model('models/risk/risk_type98.h5')
 
 # # Make predictions
 if __name__ == "__main__":

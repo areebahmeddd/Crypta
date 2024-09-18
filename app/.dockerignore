@@ -1,0 +1,19 @@
+# Exclude virtual environments
+.venv/
+__pycache__/
+
+# Exclude environment files
+.env
+
+# Exclude test files
+*.raw
+*.mem
+*.e01
+
+# Exclude output files
+*.pdf
+*.docx
+temp/
+
+# Exclude Dockerfile itself
+Dockerfile

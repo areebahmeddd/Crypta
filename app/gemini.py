@@ -9,7 +9,14 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 
 # Load the API key from the .env file
 load_dotenv()
-genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
+
+gemini_api_key = os.getenv('GEMINI_API_KEY')
+if gemini_api_key:
+    print(f'GEMINI_API_KEY is set: {gemini_api_key}')
+else:
+    print('GEMINI_API_KEY is not set')
+    
+genai.configure(api_key=gemini_api_key)
 
 # Generation settings to control the model's output
 generation_config = {

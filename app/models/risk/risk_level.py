@@ -27,11 +27,11 @@ def predict_level(new_text):
     # predicted_class_name = label_encoder.inverse_transform([predicted_class])[0]
     return class_names[predicted_class]
 
-model=tf.keras.models.load_model('app/models/risk/logsfinal95.h5')
+model=tf.keras.models.load_model('models/risk/logsfinal95.h5')
 
 class_names=['High','Low','Low to Medium','Medium']
 # Load the dataset
-risk=pd.read_csv('app/models/risk/risk.csv')
+risk=pd.read_csv('models/risk/risk.csv')
 risk = shuffle(risk)
 # Convert the Risk_Label to numerical values
 label_encoder = LabelEncoder()

@@ -21,6 +21,7 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=['*'],
+    allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*']
 )
@@ -171,5 +172,10 @@ async def chat(request: Request):
     bot_response = predict(user_message, 'Chat')
     return JSONResponse(content={'response': bot_response})
 
+@app.get('/')
+async def index():
+    return JSONResponse(content={'message': 'Welcome to the API!'})
+
+
 if __name__ == '__main__':
-    uvicorn.run('run:app', host='127.0.0.1', port=8000, reload=True)
+    uvicorn.run('run:app', host='0.0.0.0', port=8000, reload=True)
