@@ -6,16 +6,22 @@
 
 .team-header {
   margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .team-header h1 {
   color: #457d58;
   font-size: 2.5em;
+  margin: 0 0 40px 0;
+  max-width: 960px;
 }
 
 .team-header p {
   color: #555;
   font-size: 1.2em;
+  max-width: 960px;
 }
 
 .team-grid {
@@ -23,7 +29,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  max-width: 1200px;
+  max-width: 960px;
   margin: 0 auto;
 }
 

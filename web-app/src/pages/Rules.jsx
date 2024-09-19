@@ -111,7 +111,7 @@ function Rules() {
         }
 
         const response = await axios.post(
-          "http://127.0.0.1:8000/api/analyze",
+          "http://52.172.6.186:8000/api/analyze",
           formData,
           {
             headers: {

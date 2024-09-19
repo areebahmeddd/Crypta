@@ -58,17 +58,19 @@ const Team = () => {
       image: rishiImage,
       github: "https://github.com/rishichirchi",
       linkedin: "https://linkedin.com/in/rishiraj-chirchi",
-    }
+    },
   ];
 
   return (
     <div className="team-page">
-      <div className="team-header">
-        <h1>Meet the Crypta Team</h1>
-        <p>
-          We're a group of computer science undergraduate students united by a
-          shared passion for open source and all things tech :)
-        </p>
+      <div className="team-header-container">
+        <div className="team-header">
+          <h1>Meet the Crypta Team</h1>
+          <p>
+            We're a group of computer science undergraduate students united by a
+            shared passion for open source and all things tech :)
+          </p>
+        </div>
       </div>
 
       <div className="team-grid">

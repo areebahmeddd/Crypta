@@ -765,7 +765,8 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-
+      <h1 className="graph__title">Graphs</h1>
+      <hr className="dashboard__separator" />
       <div>
         <DashboardCharts
           fileData={fileData}

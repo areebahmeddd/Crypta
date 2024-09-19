@@ -5,6 +5,13 @@
   width: 100%;
 }
 
+.graph__title {
+  font-size: 2rem;
+  margin: 10px;
+  text-align: center;
+  width: 100%;
+}
+
 .dashboard__separator {
   width: 100%;
   border: 0;

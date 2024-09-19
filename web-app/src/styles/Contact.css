@@ -1,7 +1,7 @@
 .contact-page {
   max-width: 900px;
   margin: 60px auto;
-  padding: 20px;
+  padding: 48px;
   background-color: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -15,6 +15,8 @@
 .contact-header h1 {
   color: #457d58;
   font-size: 2.5rem;
+  padding: 0;
+  margin: 0;
 }
 
 .contact-header p {
@@ -26,11 +28,11 @@
 .contact-form-container {
   display: flex;
   justify-content: center;
+  margin: 0;
 }
 
 .contact-form {
   width: 100%;
-  max-width: 700px;
 }
 
 .form-group {
