@@ -79,7 +79,7 @@ class _UploadRulesPageState extends ConsumerState<UploadRulesPage> {
   }
 
   void _goToYoutube() async {
-    const url = 'https://www.youtube.com/@areebahmeddd';
+    const url = 'https://youtube.com/watch?v=-SN-jaTEgIE';
     try {
       await launchUrl(Uri.parse(url));
     } catch (e) {

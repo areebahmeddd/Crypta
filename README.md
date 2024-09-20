@@ -2,9 +2,17 @@
   <img src="assets/logo-transparent.png" alt="Project Logo">
 </p>
 
+## Project Archived
+
+This repository has been archived and is no longer actively maintained here. The project has been split and is now maintained under the [1Mind Labs](https://github.com/1MindLabs) organization.
+
+For the latest updates and continued development, please visit the respective repositories within the 1Mind Labs organization.
+
 ## Project Description
 
 An automated digital forensics and incident response system designed for anomaly detection and pattern recognition across system data and network activity. The tool integrates AI/ML models to classify system risk levels, identify indicators of compromise (IoCs), and generate actionable insights from forensic disk images, memory dumps, and network traffic.
+
+**Built for** [Smart India Hackathon - 2024](https://sih.gov.in)
 
 ### Key Features
 
@@ -20,6 +28,7 @@ Additionally, the tool supports live drive detection, allowing investigators to 
 ## Project Milestones
 
 ### Completed:
+
 - [x] Automate disk image processing
 - [x] Analyze system logs using YARA rules
   - [x] Display system logs results on the dashboard
@@ -32,6 +41,7 @@ Additionally, the tool supports live drive detection, allowing investigators to 
 - [x] Detect external drives
 
 ### In Progress:
+
 - [ ] Automate memory dumping
 - [ ] Train network traffic ML model to identify more attack patterns
 - [ ] Integrate MISP IoC database for improved threat identification 
@@ -44,12 +54,14 @@ Additionally, the tool supports live drive detection, allowing investigators to 
 - [ ] Integrate blockchain technology for secure and immutable audit trails
 
 ### Other:
+
 - [ ] Support desktop app download
 - [ ] Implement responsive web design
 - [ ] Improve loading animations
 - [ ] Add chatbot functionality and background image
 
 ### Bugs:
+
 - [ ] Add YARA analysis support for additional file types: .doc, .docx, .xls, .xlsx, .ppt, .pptx
 - [ ] Implement multithreading for faster file and folder scanning within disk images and memory dumps
 
@@ -85,30 +97,30 @@ Additionally, the tool supports live drive detection, allowing investigators to 
    - We utilized a pre-trained XGBoost classifier from `scikit-learn` to evaluate network traffic patterns.
    - The model was optimized for multiclass classification using log loss as the evaluation metric.
    - Model performance indicates no signs of overfitting, as the training and validation results are closely aligned. (Shown in Graph 1)
-   - Achieved 98% accuracy on both the training set and the new test dataset, ensuring robust generalization.
+   - Achieved 98% accuracy on both the training set and the new test [dataset](https://kaggle.com/datasets/tarundhamor/cicids-2019-dataset), ensuring robust generalization.
 
 <p align="center">
-  <img src="assets/ai/network.jpg" alt="Network Graph">
+  <img src="assets/ai/network.jpg" alt="Network Graph 1">
   <br>
-  XGBoost Multiclass Log Loss stabilizes over boosting rounds for training and validation datasets
+  XGBoost Multiclass Log Loss stabilizes over boosting rounds for training and validation datasets (Graph 1)
 </p>
 
 2. **Risk Level and Type Classification Model**:
    - Implemented an RNN model with tokenization and GloVe embedding (100-dimensional vector embeddings) for text data.
    - The LSTM layer is used to capture temporal patterns in the data, enabling better classification of risk types.
    - A dropout layer was incorporated to prevent overfitting, leading to close alignment between training and validation data. (Shown in Graph 2 and Graph 3)
-   - The model achieved 95% accuracy, demonstrating strong performance across the dataset.
+   - The model achieved 95% accuracy, demonstrating strong performance across the [dataset](https://kaggle.com/datasets/tarundhamor/cicids-2019-dataset).
 
 <p align="center">
-  <img src="assets/ai/risk_level-1.jpg" alt="Risk Level Graph 1">
+  <img src="assets/ai/risk_level-1.jpg" alt="Risk Level Graph 2">
   <br>
-  Model accuracy over training epochs for both training and validation datasets
+  Model accuracy over training epochs for both training and validation datasets (Graph 2)
 </p>
 
 <p align="center">
-  <img src="assets/ai/risk_level-2.jpg" alt="Risk Level Graph 2">
+  <img src="assets/ai/risk_level-2.jpg" alt="Risk Level Graph 3">
   <br>
-    Model loss over training epochs for both training and validation datasets
+    Model loss over training epochs for both training and validation datasets (Graph 3)
 </p>
 
 ## Project Vision
@@ -119,7 +131,7 @@ Looking ahead, the tool is designed with global scalability in mind, aiming to s
 
 ## Getting Started
 
-Follow these steps to set up and run the Crypta system on your local machine, or you can watch the [demo video](https://youtube.com/watch?v=ToXUq-NSkUg).
+Follow these steps to set up and run the Crypta system on your local machine, or you can watch the [demo video](https://youtube.com/watch?v=-SN-jaTEgIE).
 
 ### Installation
 
@@ -226,17 +238,17 @@ After setting up the application using Docker or running it locally, you can ver
 ---
 
 <p align="center">
-  <img src="assets/web/summary1.png" alt="Summary Page 1">
+  <img src="assets/web/dashboard1.png" alt="Dashboard Page 1">
   <br>
-  Summary Page (File Summary)
+  Dashboard Page (File Summary)
 </p>
 
 ---
 
 <p align="center">
-  <img src="assets/web/summary2.png" alt="Summary Page 2">
+  <img src="assets/web/dashboard2.png" alt="Dashboard Page 2">
   <br>
-  Summary Page (Vulnerability Summary)
+  Dashboard Page (Vulnerability Summary)
 </p>
 
 ---
@@ -244,15 +256,15 @@ After setting up the application using Docker or running it locally, you can ver
 <p align="center">
   <img src="assets/web/modal.png" alt="Modal Page">
   <br>
-  Modal Page (Detailed IoCs)
+  Modal Page (Detected IoCs)
 </p>
 
 ---
 
 <p align="center">
-  <img src="assets/web/graph.png" alt="Graph Page">
+  <img src="assets/web/dashboard3.png" alt="Graph Page">
   <br>
-  Graph Page
+  Dashboard Page (Graphs)
 </p>
 
 ### Flutter Application UI
@@ -276,7 +288,7 @@ After setting up the application using Docker or running it locally, you can ver
 <p align="center">
   <img src="assets/app/dashboard2.jpg" alt="Dashboard Page 2">
   <br>
-  Dashboard Page (Detailed IoCs)
+  Dashboard Page (Detected IoCs)
 </p>
 
 ## License

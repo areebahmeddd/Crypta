@@ -270,7 +270,7 @@ const Dashboard = () => {
     try {
       // Send POST request to the backend
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/download",
+        "https://crypta-bwgaebf7acgrdufv.southindia-01.azurewebsites.net/api/download",
         requestData,
         {
           responseType: "blob", // Important for handling file downloads
