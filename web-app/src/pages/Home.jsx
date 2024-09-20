@@ -17,15 +17,15 @@ function Home() {
   // Detect connected drives and fetch files from the backend
   const detectDrives = async () => {
     try {
-      const postResponse = await axios.post("http://52.172.6.186:8000/api/detect");
+      const postResponse = await axios.post("https://crypta-bwgaebf7acgrdufv.southindia-01.azurewebsites.net/api/detect");
       console.log(postResponse.data);
-      const getResponse = await axios.get("http://52.172.6.186:8000/api/files");
+      const getResponse = await axios.get("https://crypta-bwgaebf7acgrdufv.southindia-01.azurewebsites.net/api/files");
       console.log("File Metadata:", getResponse.data);
 
       if (getResponse.data.length > 0) {
         const filePromises = getResponse.data.map(async (file) => {
           const fileResponse = await axios.get(
-            `http://52.172.6.186:8000/api/files/${file.name}`,
+            `https://crypta-bwgaebf7acgrdufv.southindia-01.azurewebsites.net/api/files/${file.name}`,
             { responseType: "blob" }
           );
           const fileBlob = new Blob([fileResponse.data]);

@@ -111,7 +111,7 @@ function Rules() {
         }
 
         const response = await axios.post(
-          "http://52.172.6.186:8000/api/analyze",
+          "https://crypta-bwgaebf7acgrdufv.southindia-01.azurewebsites.net/api/analyze",
           formData,
           {
             headers: {
