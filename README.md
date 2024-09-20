@@ -88,7 +88,7 @@ Additionally, the tool supports live drive detection, allowing investigators to 
    - Achieved 98% accuracy on both the training set and the new test dataset, ensuring robust generalization.
 
 <p align="center">
-  <img src="assets/ai/network.png" alt="Network Graph">
+  <img src="assets/ai/network.jpg" alt="Network Graph">
   <br>
   XGBoost Multiclass Log Loss stabilizes over boosting rounds for training and validation datasets
 </p>
@@ -100,13 +100,13 @@ Additionally, the tool supports live drive detection, allowing investigators to 
    - The model achieved 95% accuracy, demonstrating strong performance across the dataset.
 
 <p align="center">
-  <img src="assets/ai/risk_level-1.png" alt="Risk Level Graph 1">
+  <img src="assets/ai/risk_level-1.jpg" alt="Risk Level Graph 1">
   <br>
   Model accuracy over training epochs for both training and validation datasets
 </p>
 
 <p align="center">
-  <img src="assets/ai/risk_level-2.png" alt="Risk Level Graph 2">
+  <img src="assets/ai/risk_level-2.jpg" alt="Risk Level Graph 2">
   <br>
     Model loss over training epochs for both training and validation datasets
 </p>
@@ -258,7 +258,7 @@ After setting up the application using Docker or running it locally, you can ver
 ### Flutter Application UI
 
 <p align="center">
-  <img src="assets/app/landing.png" alt=Landing Page">
+  <img src="assets/app/landing.jpg" alt=Landing Page">
   <br>
   Landing Page
 </p>
@@ -266,7 +266,7 @@ After setting up the application using Docker or running it locally, you can ver
 ---
 
 <p align="center">
-  <img src="assets/app/dashboard1.png" alt="Dashboard Page 1">
+  <img src="assets/app/dashboard1.jpg" alt="Dashboard Page 1">
   <br>
   Dashboard Page (Overall Summary)
 </p>
@@ -274,7 +274,7 @@ After setting up the application using Docker or running it locally, you can ver
 ---
 
 <p align="center">
-  <img src="assets/app/dashboard2.png" alt="Dashboard Page 2">
+  <img src="assets/app/dashboard2.jpg" alt="Dashboard Page 2">
   <br>
   Dashboard Page (Detailed IoCs)
 </p>
